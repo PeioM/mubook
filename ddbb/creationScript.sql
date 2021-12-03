@@ -1,12 +1,5 @@
-#TipoUser
-#User
-#tipo
-#itemmodel
-#item
-#especificacion
-#sala
-#listaespecificacion
-#reserva
+CREATE DATABASE IF NOT EXISTS mubook;
+USE mubook;
 
 CREATE TABLE IF NOT EXISTS USER_TYPE
 (
