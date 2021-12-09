@@ -135,13 +135,13 @@ public class Mubook extends JFrame implements WindowListener{
 		bHome.setActionCommand("inicio");
 		bHome.addActionListener(controlador);
 		
-		bReservas = new JButton(new ImageIcon("images/reservas.png"));
+		bReservas = new JButton(new ImageIcon("images/reservation.png"));
 		bReservas.setSize(new Dimension(300,100));
 		panel.add(bReservas);
 		bReservas.setActionCommand("reserva");
 		bReservas.addActionListener(controlador);
 		
-		bDatos = new JButton(new ImageIcon("images/datos.png"));
+		bDatos = new JButton(new ImageIcon("images/items.png"));
 		bDatos.setSize(new Dimension(300,100));
 		panel.add(bDatos);
 		bDatos.addActionListener(controlador);
