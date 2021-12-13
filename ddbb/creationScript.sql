@@ -1,74 +1,93 @@
+#TipoUser
+#User
+#tipo
+#itemmodel
+#item
+#especificacion
+#sala
+#listaespecificacion
+#reserva
+
+DROP DATABASE IF EXISTS  mubook;
 CREATE DATABASE IF NOT EXISTS mubook;
 USE mubook;
 
 CREATE TABLE IF NOT EXISTS USER_TYPE
 (
-    userTypeId              NUMERIC,
+    userTypeId      INT,
     description     VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS USER
 (
-    userId              NUMERIC,
-    ptrUserType     NUMERIC,
-    name            VARCHAR(20),
-    surname         VARCHAR(30),
+    userId          BIGINT,
+    userTypeId      INT,
+    name            VARCHAR(32),
+    surname         VARCHAR(32),
     DNI             VARCHAR(9),
     bornDate        DATE,
     validated       BOOLEAN,
-    dniImg          VARCHAR(100)
+    dniImg          VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS ITEM_TYPE
 (
-    itemTypeId              NUMERIC,
-    name            VARCHAR(30)
+    itemTypeId      INT,
+    name            VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS ITEM_MODEL
 (
-    itemModelId              NUMERIC,
-    ptrItemType     NUMERIC,
-    description     VARCHAR(2000),
-    name            VARCHAR(100),
-    identifyer      VARCHAR(30),
-    img             VARCHAR(100)
+    itemModelId     BIGINT,
+    itemTypeId      INT,
+    description     VARCHAR(2048),
+    name            VARCHAR(128),
+    identifier      VARCHAR(64),
+    img             VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS ITEM
 (
-    itemId              NUMERIC,
-    ptrItemModel    NUMERIC,
-    serialNum       VARCHAR(100)
+    itemId          BIGINT,
+    itemModelId     BIGINT,
+    serialNum       VARCHAR(64)
 );
 
 CREATE TABLE IF NOT EXISTS SPECIFICATION
 (
-    specId              NUMERIC,
-    description     VARCHAR(100)
+    specId          INT,
+    description     VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS ROOM
 (
-    roomId              NUMERIC,
-    description     VARCHAR(100)
+    roomId          INT,
+    description     VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS SPECIFICATION_LIST
 (
-    ptrItemModel    NUMERIC,
-    ptrSpec         NUMERIC,
-    value           VARCHAR(100)
+    itemModelId    BIGINT,
+    specId         INT,
+    value          VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS RESERVATION
 (
-    reservationId   NUMERIC,
-    ptrUser         NUMERIC,
-    ptrItem         NUMERIC,
-    ptrRoom         NUMERIC,
+    reservationId   BIGINT,
+    userID          BIGINT,
+    itemId          BIGINT,
+    roomId          INT,
     initDate        DATE,
     finalDate       DATE
+);
+
+CREATE TABLE IF NOT EXISTS OPINION
+(
+    userId          BIGINT,
+    itemModelId     BIGINT,
+    rate            INT CHECK ( rate > 0 AND rate <= 5 ),
+    description     VARCHAR(2048)
 );
 
 #Create primary key
@@ -80,14 +99,24 @@ ALTER TABLE ITEM_MODEL ADD CONSTRAINT pk_item_model PRIMARY KEY (itemModelId);
 ALTER TABLE ITEM_TYPE ADD CONSTRAINT pk_item_type PRIMARY KEY (itemTypeId);
 ALTER TABLE ROOM ADD CONSTRAINT pk_room PRIMARY KEY (roomId);
 ALTER TABLE SPECIFICATION ADD CONSTRAINT pk_spec PRIMARY KEY (specId);
-ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT pk_spec_list PRIMARY KEY (ptrItemModel, ptrSpec);
+ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT pk_spec_list PRIMARY KEY (itemModelId, specId);
+ALTER TABLE OPINION ADD CONSTRAINT pk_opinion PRIMARY KEY (userId, itemModelId);
+
+#Set Auto Increments
+ALTER TABLE USER MODIFY COLUMN userId BIGINT auto_increment;
+ALTER TABLE ITEM_MODEL MODIFY COLUMN itemModelId BIGINT auto_increment;
+ALTER TABLE ITEM MODIFY COLUMN itemId BIGINT auto_increment;
+ALTER TABLE SPECIFICATION MODIFY COLUMN specId INT auto_increment;
+ALTER TABLE RESERVATION MODIFY COLUMN reservationId BIGINT auto_increment;
 
 #Create foreign key
-ALTER TABLE USER ADD CONSTRAINT fk_user_type FOREIGN KEY (ptrUserType) REFERENCES USER_TYPE(userTypeId);
-ALTER TABLE RESERVATION ADD CONSTRAINT fk_reservation_user FOREIGN KEY (ptrUser) REFERENCES USER (userId);
-ALTER TABLE RESERVATION ADD CONSTRAINT fk_reservation_item FOREIGN KEY (ptrItem) REFERENCES ITEM (itemId);
-ALTER TABLE RESERVATION ADD CONSTRAINT fk_reservation_room FOREIGN KEY (ptrRoom) REFERENCES ROOM (roomId);
-ALTER TABLE ITEM ADD CONSTRAINT fk_item_model FOREIGN KEY (ptrItemModel) REFERENCES ITEM_MODEL (itemModelId);
-ALTER TABLE ITEM_MODEL ADD CONSTRAINT fk_item_model_type FOREIGN KEY (ptrItemType) REFERENCES ITEM_TYPE (itemTypeId);
-ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT fk_spec_list_item FOREIGN KEY (ptrItemModel) REFERENCES ITEM_MODEL (itemModelId);
-ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT fk_spec_list_spec FOREIGN KEY (ptrSpec) REFERENCES SPECIFICATION (specId);
+ALTER TABLE USER ADD CONSTRAINT fk_user_type FOREIGN KEY (userTypeId) REFERENCES USER_TYPE(userTypeId);
+ALTER TABLE RESERVATION ADD CONSTRAINT fk_reservation_user FOREIGN KEY (userID) REFERENCES USER (userId);
+ALTER TABLE RESERVATION ADD CONSTRAINT fk_reservation_item FOREIGN KEY (itemId) REFERENCES ITEM (itemId);
+ALTER TABLE RESERVATION ADD CONSTRAINT fk_reservation_room FOREIGN KEY (roomId) REFERENCES ROOM (roomId);
+ALTER TABLE ITEM ADD CONSTRAINT fk_item_model FOREIGN KEY (itemModelId) REFERENCES ITEM_MODEL (itemModelId);
+ALTER TABLE ITEM_MODEL ADD CONSTRAINT fk_item_model_type FOREIGN KEY (itemTypeId) REFERENCES ITEM_TYPE (itemTypeId);
+ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT fk_spec_list_item FOREIGN KEY (itemModelId) REFERENCES ITEM_MODEL (itemModelId);
+ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT fk_spec_list_spec FOREIGN KEY (specId) REFERENCES SPECIFICATION (specId);
+ALTER TABLE OPINION ADD CONSTRAINT fk_opinion_user FOREIGN KEY (userId) REFERENCES USER (userId);
+ALTER TABLE OPINION ADD CONSTRAINT fk_opinion_item_model FOREIGN KEY (itemModelId) REFERENCES ITEM_MODEL (itemModelId);
