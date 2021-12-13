@@ -14,20 +14,23 @@ USE mubook;
 
 CREATE TABLE IF NOT EXISTS USER_TYPE
 (
-    userTypeId      INT,
+    userTypeId      VARCHAR(16),
     description     VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS USER
 (
     userId          BIGINT,
-    userTypeId      INT,
+    userTypeId      VARCHAR(16),
     name            VARCHAR(32),
     surname         VARCHAR(32),
     DNI             VARCHAR(9),
     bornDate        DATE,
     validated       BOOLEAN,
-    dniImg          VARCHAR(128)
+    dniImg          VARCHAR(128),
+    username        VARCHAR(32),
+    password        VARCHAR(62),
+    email           VARCHAR(62)
 );
 
 CREATE TABLE IF NOT EXISTS ITEM_TYPE
@@ -120,3 +123,18 @@ ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT fk_spec_list_item FOREIGN KEY (ite
 ALTER TABLE SPECIFICATION_LIST ADD CONSTRAINT fk_spec_list_spec FOREIGN KEY (specId) REFERENCES SPECIFICATION (specId);
 ALTER TABLE OPINION ADD CONSTRAINT fk_opinion_user FOREIGN KEY (userId) REFERENCES USER (userId);
 ALTER TABLE OPINION ADD CONSTRAINT fk_opinion_item_model FOREIGN KEY (itemModelId) REFERENCES ITEM_MODEL (itemModelId);
+
+
+INSERT INTO user_type values ('ADMIN', 'admin de sistema');
+INSERT INTO user_type values ('WORKER', 'trabajador de sistema');
+INSERT INTO user_type values ('USER', 'usuario de sistema');
+
+INSERT INTO  user (userTypeId, name, surname, DNI, bornDate, validated, dniImg, username, password, email) values (
+'ADMIN', 'admin', 'admin', null, null, true, null, 'admin', '$2a$10$QYMGkAPoOyJhWUnLqGQp/uqagrPtfZXVUJ7PNULrXAl9Yfx3TPazm', 'admin@mubook.org'
+);
+INSERT INTO  user (userTypeId, name, surname, DNI, bornDate, validated, dniImg, username, password, email) values (
+'USER', 'user', 'user', null, null, true, null, 'user', '$2a$10$LsFduoqNu.b6lMRlD0F2Z.6Gn9xQRGPnIerMKaXw97wkWbmbJu1Vq', 'user@mubook.org'
+);
+INSERT INTO  user (userTypeId, name, surname, DNI, bornDate, validated, dniImg, username, password, email) values (
+'WORKER', 'worker', 'worker', null, null, true, null, 'worker', '$2a$10$MX6ssoEPAr0yD1wXHvLYhue8JDBngHRdbDzMF58ZG2j.HXwAfB5Nq', 'worker@mubook.org'
+)

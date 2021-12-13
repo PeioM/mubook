@@ -17,13 +17,15 @@ public class UserController {
     private UserDao userDao;
 
     @PostMapping(path="/add")
-    public @ResponseBody String addNewUser (@RequestParam("user") User user, HttpServletRequest request) {
+    public @ResponseBody String addNewUser (HttpServletRequest request) {
+        User user = new User(request);
+
         userDao.addUser(user);
-        request.getSession().setAttribute("User", user);
+
         return "redirect:/home";
     }
     @GetMapping(path="/add")
-    public @ResponseBody String addNewUser (HttpServletRequest request) {
+    public String addNewUser () {
         return "userForm";
     }
 

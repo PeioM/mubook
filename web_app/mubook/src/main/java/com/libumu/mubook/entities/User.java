@@ -1,7 +1,10 @@
 package com.libumu.mubook.entities;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name= "user")
@@ -13,7 +16,7 @@ public class User {
     private Long userId;
 
     @Column(name = "usertypeid")
-    private int userTypeId;
+    private String userTypeId;
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -26,16 +29,60 @@ public class User {
     private boolean validated;
     @Column(name = "dniimg")
     private String dniImgPath;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "username")
+    private String username;
+    @Column(name = "password")
+    private String password;
+
+    public User(HttpServletRequest request){
+        this.userTypeId = "USER";
+        this.name = (String) request.getAttribute("name");
+        this.surname = (String) request.getAttribute("surname");
+        this.email = (String) request.getAttribute("email");
+        this.DNI = (String) request.getAttribute("dni");
+        this.username = (String) request.getAttribute("username");
+        this.password = String.valueOf(request.getAttribute("password").hashCode());
+        this.bornDate = (Date) request.getAttribute("birthDate");
+        this.dniImgPath = ((File) request.getAttribute("dniImg")).getPath();
+    }
+
+    public User() {}
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Long getUserId() {
         return userId;
     }
 
-    public int getUserTypeId() {
+    public String getUserTypeId() {
         return userTypeId;
     }
 
-    public void setUserTypeId(int userType) {
+    public void setUserTypeId(String userType) {
         this.userTypeId = userType;
     }
 
