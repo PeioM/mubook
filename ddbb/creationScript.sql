@@ -27,7 +27,10 @@ CREATE TABLE IF NOT EXISTS USER
     DNI             VARCHAR(9),
     bornDate        DATE,
     validated       BOOLEAN,
-    dniImg          VARCHAR(128)
+    dniImg          VARCHAR(128),
+    username        VARCHAR(64),
+    password        VARCHAR(128),
+    email           VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS ITEM_TYPE
