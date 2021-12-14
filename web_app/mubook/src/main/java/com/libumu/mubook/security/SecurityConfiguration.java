@@ -12,10 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    final static int REMEMBER_ME_TIME = 86400;  //1 day
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -28,13 +31,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin").hasAuthority("ADMIN")
-                .antMatchers("/worker").hasAnyAuthority("ADMIN", "WORKER")
-                .antMatchers("/normalUser", "/mainPage").hasAnyAuthority("ADMIN", "WORKER", "USER")
-                .antMatchers("/").permitAll()
+                //Filter pages based on the authority or role the user has
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/worker").hasAnyRole("ADMIN", "WORKER")
+                .antMatchers("/normalUser", "/mainPage").authenticated()
+                .antMatchers("/", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                //Login control
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .loginProcessingUrl("/login_process")
+                .usernameParameter("txtUsername")
+                .passwordParameter("txtPassword")
+                .and()
+                //Logout control
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .and()
+                //Login remember me control
+                .rememberMe()
+                .tokenValiditySeconds(REMEMBER_ME_TIME).key("mubookTheBestPBL")
+                .rememberMeParameter("checkRememberMe");
     }
 
     @Bean
@@ -42,13 +60,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(10));
+        provider.setPasswordEncoder(passwordEncoder());
 
         return provider;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10);
     }
 }
