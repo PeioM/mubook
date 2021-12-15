@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS USER
     bornDate        DATE,
     validated       BOOLEAN,
     dniImg          VARCHAR(128),
-    username        VARCHAR(32),
-    password        VARCHAR(62),
-    email           VARCHAR(62)
+    username        VARCHAR(64),
+    password        VARCHAR(128),
+    email           VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS ITEM_TYPE
