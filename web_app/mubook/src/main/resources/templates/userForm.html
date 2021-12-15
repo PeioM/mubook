@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Form</title>
+</head>
+<body>
+<form action="/user/add" method="post">
+    <table>
+        <tr>
+            <td>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" required>
+            </td>
+            <td>
+                <label for="surname">Surname:</label><br>
+                <input type="text" id="surname" name="surname" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required>
+            </td>
+            <td>
+                <label for="birthDate">Birth date:</label><br>
+                <input type="date" id="birthDate" name="birthDate" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="dni">ID Card number:</label><br>
+                <input type="text" id="dni" name="dni" required>
+            </td>
+            <td>
+                <label for="dniImg"> (verification photo to verify)</label><br>
+                <input type="file" name="dniImg" id="dniImg">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username" required>
+            </td>
+            <td>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="passwordRep">Repeat password:</label><br>
+                <input type="password" id="passwordRep" name="passwordRep" required>
+            </td>
+        </tr>
+    </table>
+    <input type="submit">
+</form>
+</body>
+</html>

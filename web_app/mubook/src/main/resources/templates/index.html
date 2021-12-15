@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head> <title>Index</title> </head>
+<body>
+
+<div>
+    <h1>This is the Index</h1>
+    <a sec:authorize= "isAnonymous()" th:href="@{/login}" type="submit">Log in</a>
+    <a sec:authorize= "isAuthenticated()" th:href="@{/logout}" type="submit">Log out</a>
+    <a sec:authorize= "isAuthenticated()" th:href="@{/mainPage}" type="submit">Profile</a>
+    <a sec:authorize= "hasAnyRole('USER','WORKER')" th:href="@{/normalUser}" type="submit">User area</a>
+    <a sec:authorize= "hasRole('WORKER')" th:href="@{/worker}" type="submit">Worker area</a>
+    <a sec:authorize= "hasRole('ADMIN')" th:href="@{/admin}" type="submit">Admin area</a>
+</div>
+</body>
+</html>
