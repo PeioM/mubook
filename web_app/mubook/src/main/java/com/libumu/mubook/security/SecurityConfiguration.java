@@ -44,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login_process")
                 .usernameParameter("txtUsername")
                 .passwordParameter("txtPassword")
+                .defaultSuccessUrl("/")
                 .and()
                 //Logout control
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
