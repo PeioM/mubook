@@ -14,7 +14,7 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        return (List<User>) repository.findAll();
+        return repository.findAll();
     }
 
     @Override
@@ -40,5 +40,10 @@ public class UserDataAccessService implements UserDao {
     @Override
     public void addUser(User user) {
         repository.save(user);
+    }
+
+    @Override
+    public User getUser(String username) {
+        return repository.findByUsername(username);
     }
 }

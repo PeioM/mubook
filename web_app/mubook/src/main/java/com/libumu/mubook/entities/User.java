@@ -35,6 +35,8 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "useractivityid")
+    private int userActivityId;
 
     public User(HttpServletRequest request){
         this.userTypeId = "USER";
@@ -136,5 +138,13 @@ public class User {
 
     public void setDniImgPath(String dniImgPath) {
         this.dniImgPath = dniImgPath;
+    }
+
+    public int getUserActivityId() {
+        return userActivityId;
+    }
+
+    public void setUserActivityId(int userActivityId) {
+        this.userActivityId = userActivityId;
     }
 }

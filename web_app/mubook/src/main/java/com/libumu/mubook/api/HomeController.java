@@ -1,5 +1,9 @@
 package com.libumu.mubook.api;
 
+import com.libumu.mubook.dao.user.UserDao;
+import com.libumu.mubook.dao.user.UserDataAccessService;
+import com.libumu.mubook.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,8 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class HomeController {
 
+    @Autowired
+    UserDao userDao;
+
     @GetMapping(path = {"/", "/index"})
     public String home(){
+        User user = userDao.getUser("admin");
         return "index";
     }
 
