@@ -11,15 +11,18 @@ public class UserType {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "usertypeid")
-    private Integer userTypeId;
+    private String userTypeId;
     @Column(name = "description")
     private String description;
 
-    public void setUserTypeId(Integer id) {
+    @OneToMany(mappedBy = "userType")
+    private List<User> users;
+
+    public void setUserTypeId(String id) {
         this.userTypeId = id;
     }
 
-    public int getUserTypeId() {
+    public String getUserTypeId() {
         return userTypeId;
     }
 

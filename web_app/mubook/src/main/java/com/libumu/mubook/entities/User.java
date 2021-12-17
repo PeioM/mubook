@@ -1,5 +1,7 @@
 package com.libumu.mubook.entities;
 
+import com.libumu.mubook.dao.userType.UserTypeDataAccessService;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -15,8 +17,8 @@ public class User {
     @Column(name = "userid")
     private Long userId;
 
-    @Column(name = "usertypeid")
-    private String userTypeId;
+   /* @Column(name = "usertypeid")
+    private String userTypeId;*/
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -36,8 +38,12 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "usertypeid", nullable = false/*, insertable = false, updatable = false*/)
+    private UserType userType;
+
     public User(HttpServletRequest request){
-        this.userTypeId = "USER";
+        this.userType = new UserTypeDataAccessService().getUserType("USER");
         this.name = (String) request.getAttribute("name");
         this.surname = (String) request.getAttribute("surname");
         this.email = (String) request.getAttribute("email");
@@ -78,13 +84,13 @@ public class User {
         return userId;
     }
 
-    public String getUserTypeId() {
+    /*public String getUserTypeId() {
         return userTypeId;
     }
 
     public void setUserTypeId(String userType) {
         this.userTypeId = userType;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -136,5 +142,13 @@ public class User {
 
     public void setDniImgPath(String dniImgPath) {
         this.dniImgPath = dniImgPath;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }
