@@ -89,7 +89,8 @@ CREATE TABLE IF NOT EXISTS RESERVATION
     itemId          BIGINT,
     roomId          INT,
     initDate        DATE,
-    finalDate       DATE
+    finalDate       DATE,
+    returnDate      DATE
 );
 
 CREATE TABLE IF NOT EXISTS OPINION

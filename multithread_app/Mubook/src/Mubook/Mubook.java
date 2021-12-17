@@ -77,12 +77,6 @@ public class Mubook extends JFrame implements WindowListener{
 		this.setBackground(Color.white);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		/*try {
-			this.generateInserts();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	}
 
 	private JMenuBar crearBarraMenu() {
@@ -214,77 +208,6 @@ public class Mubook extends JFrame implements WindowListener{
 	public JScrollPane getpDisplay() {
 		return pDisplay;
 	}
-	
-	public void generateInserts() throws SQLException {
-		int pk = 56;
-		ResultSet rs;
-		PreparedStatement ps = null;
-		Calendar c = Calendar.getInstance();
-		int randItem = -1;
-		int randUser = -1;
-		int id = -1;
-		Random rand = new Random();
-		String sqlIns="";
-			
-		for(int i = 0; i < 10000; i++) {
-			id = -1;
-			Date randomDate = createRandomDate(2011, 2021);
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			c.setTime(randomDate);
-			c.add(Calendar.DATE, 10);
-			Date finDate = c.getTime();
-			String initDate = df.format(randomDate);
-			String finalDate = df.format(finDate);
-			
-			randItem = (int) (Math.random() * 8 + 1);	
-			ps = conn.prepareStatement("SELECT reservationId FROM RESERVATION WHERE (DATE(?) BETWEEN initDate AND finalDate)"
-						+ "                                            OR (DATE(?) BETWEEN  initDate AND finalDate)"
-						+ "												AND ptrItem = ?;");
-			
-			ps.setString(1, initDate);
-            ps.setString(2, finalDate);
-            ps.setInt(3, randItem);
-            
-            rs = ps.executeQuery();
-            while(rs.next()) {
-            	id = rs.getInt(1);
-            }
-            
-            randUser = rand.nextInt((5 - 3) + 1) + 3;
-            
-            if(id != -1) {
-            	System.out.println("No se puede introducir");
-            }else {
-            	sqlIns = "INSERT INTO RESERVATION (reservationId, ptrUser, ptrItem, ptrRoom, initDate, finalDate)"
-            			+ "VALUES (?, ?, ?, NULL, DATE(?), DATE(?))";
-            	ps = conn.prepareStatement(sqlIns);
-            	ps.setInt(1, pk);
-            	ps.setInt(2, randUser);
-            	ps.setInt(3, randItem);
-            	ps.setString(4, initDate);
-            	ps.setString(5, finalDate);
-            	
-            	ps.executeUpdate();
-            	System.out.println("Introducido");
-            	pk++;
-            }
-		}
-	}
-	
-	public static int createRandomIntBetween(int start, int end) {
-        return start + (int) Math.round(Math.random() * (end - start));
-    }
-	
-	public static Date createRandomDate(int startYear, int endYear) {
-        int day = createRandomIntBetween(1, 28);
-        int month = createRandomIntBetween(1, 12);
-        int year = createRandomIntBetween(startYear, endYear);
-
-        Calendar c = new GregorianCalendar(year, month, day);
-        Date date = c.getTime();
-        
-        return date;
-    }
 	
 	public static void main(String[] args) {
 		try {
