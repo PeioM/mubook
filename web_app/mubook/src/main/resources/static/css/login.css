@@ -1,0 +1,17 @@
+:root{
+    --mublue-very-soft: #E0FBFC;
+    --mublue-soft: #98C1D9;
+    --mublue: #3D5A80;
+    --mublue-hard: #293241;
+    --musalmon: #EE6C4D;
+}
+
+.btn-login{
+background-color: var(--musalmon);
+color: black;
+}
+
+.btn-register{
+    background-color: lightgray;
+    color:black;
+    }
