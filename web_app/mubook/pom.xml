@@ -59,11 +59,6 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -73,6 +68,14 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+
+		<testResources>
+			<testResource>
+				<directory>src/main/resources/templates</directory>
+			</testResource>
+		</testResources>
 	</build>
+
+
 
 </project>

@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest {
 
-    /*LocalServerPort
+    @LocalServerPort
     private int port;
 
     @Autowired
@@ -33,5 +33,5 @@ public class HttpRequestTest {
         //The redirected html (login)
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/mainPage",
                 String.class)).contains("Log in with a username");
-    }*/
+    }
 }
