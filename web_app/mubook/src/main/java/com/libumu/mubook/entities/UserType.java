@@ -1,7 +1,6 @@
 package com.libumu.mubook.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,7 +9,7 @@ public class UserType {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "usertypeid")
+    @Column(name = "user_type_id")
     private String userTypeId;
     @Column(name = "description")
     private String description;
@@ -34,7 +33,7 @@ public class UserType {
         return description;
     }
 
-    /*public List<User> getUsers() {
+    public List<User> getUsers() {
         return users;
-    }*/
+    }
 }

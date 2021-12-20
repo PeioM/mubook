@@ -1,20 +1,20 @@
 package com.libumu.mubook.entities;
 
+import com.libumu.mubook.dao.userActivity.UserActivityDataAccessService;
 import com.libumu.mubook.dao.userType.UserTypeDataAccessService;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name= "user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "userid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Long userId;
 
    /* @Column(name = "usertypeid")
@@ -29,7 +29,7 @@ public class User {
     private Date bornDate;
     @Column(name = "validated")
     private boolean validated;
-    @Column(name = "dniimg")
+    @Column(name = "dni_img")
     private String dniImgPath;
     @Column(name = "email")
     private String email;
@@ -39,11 +39,16 @@ public class User {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "usertypeid", nullable = false/*, insertable = false, updatable = false*/)
+    @JoinColumn(name = "user_type_id", nullable = false/*, insertable = false, updatable = false*/)
     private UserType userType;
+
+    @ManyToOne
+    @JoinColumn(name = "user_activity_id", nullable = false)
+    private UserActivity userActivity;
 
     public User(HttpServletRequest request){
         this.userType = new UserTypeDataAccessService().getUserType("USER");
+        this.userActivity = new UserActivityDataAccessService().getUserActivity(3);
         this.name = (String) request.getAttribute("name");
         this.surname = (String) request.getAttribute("surname");
         this.email = (String) request.getAttribute("email");
@@ -55,6 +60,14 @@ public class User {
     }
 
     public User() {}
+
+    /*public String getUserTypeId() {
+        return userTypeId;
+    }
+
+    public void setUserTypeId(String userType) {
+        this.userTypeId = userType;
+    }*/
 
     public String getEmail() {
         return email;
@@ -83,14 +96,6 @@ public class User {
     public Long getUserId() {
         return userId;
     }
-
-    /*public String getUserTypeId() {
-        return userTypeId;
-    }
-
-    public void setUserTypeId(String userType) {
-        this.userTypeId = userType;
-    }*/
 
     public String getName() {
         return name;
@@ -150,5 +155,13 @@ public class User {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public UserActivity getUserActivity() {
+        return userActivity;
+    }
+
+    public void setUserActivity(UserActivity userActivity) {
+        this.userActivity = userActivity;
     }
 }
