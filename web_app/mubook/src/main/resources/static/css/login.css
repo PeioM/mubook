@@ -6,6 +6,18 @@
     --musalmon: #EE6C4D;
 }
 
+.logout-message{
+    background-color: lightgreen;
+    width: fit-content;
+    margin: 2vh;
+}
+
+.invalid-message{
+    background-color: rgb(250, 82, 82);
+    width: fit-content;
+    margin: 2vh;
+}
+
 .btn-login{
 background-color: var(--musalmon);
 color: black;
@@ -14,4 +26,9 @@ color: black;
 .btn-register{
     background-color: lightgray;
     color:black;
-    }
+}
+
+img{
+    max-width:100%;
+    height: auto;
+}

@@ -11,12 +11,12 @@
 <div id="login">
     <div class="container">
         <div class="notify-messages">
-            <div th:if="${param.error}">
-                Invalid username and password.
+            <div class="invalid-message" th:if="${param.error}">
+                Invalid username or password.
             </div>
-        <div th:if="${param.logout}">
-            You have been logged out.
-        </div>
+            <div class="logout-message" th:if="${param.logout}">
+                You have been logged out.
+            </div>
         </div>
         <div id="login-row" class="row justify-content-center align-items-center">
             <div id="login-column" class="col-md-6">
