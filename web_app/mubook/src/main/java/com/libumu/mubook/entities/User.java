@@ -6,7 +6,7 @@ import com.libumu.mubook.dao.userType.UserTypeDataAccessService;
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name= "user")

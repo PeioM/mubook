@@ -1,10 +1,15 @@
 package com.libumu.mubook.entities.SpecificationList;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class SpecificationListId implements Serializable{
-    private long itemModel;
-    private int specification;
+    @Column(name = "item_model_id")
+    private Long itemModel;
+    @Column(name = "specification_id")
+    private Integer specification;
 
     public SpecificationListId() {
     }
@@ -27,7 +32,7 @@ public class SpecificationListId implements Serializable{
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return specification.hashCode() + itemModel.hashCode();
     }
 
     @Override

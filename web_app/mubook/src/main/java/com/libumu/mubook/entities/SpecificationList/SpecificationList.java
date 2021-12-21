@@ -4,20 +4,23 @@ import com.libumu.mubook.entities.ItemModel;
 import com.libumu.mubook.entities.Specification;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "specification_list")
-@IdClass(SpecificationListId.class)
-public class SpecificationList {
+public class SpecificationList  implements Serializable {
 
-    @Id
+    @EmbeddedId
+    private SpecificationListId id;
+
     @ManyToOne
-    @JoinColumn(name = "item_model_id", referencedColumnName = "item_model_id")
+    @MapsId("itemModel")
+    @JoinColumn(name = "item_model_id")
     private ItemModel itemModel;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "specification_id", referencedColumnName = "specification_id")
+    @MapsId("specification")
+    @JoinColumn(name = "specification_id")
     private Specification specification;
 
     @Column(name = "value")
