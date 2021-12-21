@@ -14,9 +14,6 @@ public class UserType {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "userType")
-    private List<User> users;
-
     public void setUserTypeId(String id) {
         this.userTypeId = id;
     }
@@ -31,9 +28,5 @@ public class UserType {
 
     public String getDescription() {
         return description;
-    }
-
-    public List<User> getUsers() {
-        return users;
     }
 }

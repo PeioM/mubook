@@ -14,9 +14,6 @@ public class UserActivity {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "userActivity")
-    private List<User> users;
-
     public UserActivity() {
     }
 
@@ -41,11 +38,4 @@ public class UserActivity {
         this.description = description;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 }

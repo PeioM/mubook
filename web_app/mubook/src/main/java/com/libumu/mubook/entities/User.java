@@ -39,7 +39,7 @@ public class User {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "user_type_id", nullable = false/*, insertable = false, updatable = false*/)
+    @JoinColumn(name = "user_type_id", nullable = false)
     private UserType userType;
 
     @ManyToOne
