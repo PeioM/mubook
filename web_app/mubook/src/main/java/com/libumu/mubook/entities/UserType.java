@@ -1,6 +1,7 @@
 package com.libumu.mubook.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name= "user_type")
@@ -8,16 +9,16 @@ public class UserType {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "usertypeid")
-    private Integer userTypeId;
+    @Column(name = "user_type_id")
+    private String userTypeId;
     @Column(name = "description")
     private String description;
 
-    public void setUserTypeId(Integer id) {
+    public void setUserTypeId(String id) {
         this.userTypeId = id;
     }
 
-    public int getUserTypeId() {
+    public String getUserTypeId() {
         return userTypeId;
     }
 
@@ -28,8 +29,4 @@ public class UserType {
     public String getDescription() {
         return description;
     }
-
-    /*public List<User> getUsers() {
-        return users;
-    }*/
 }

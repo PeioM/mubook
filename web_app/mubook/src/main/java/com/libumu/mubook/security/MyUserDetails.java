@@ -1,6 +1,7 @@
 package com.libumu.mubook.security;
 
 import com.libumu.mubook.entities.User;
+import com.libumu.mubook.entities.UserType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,14 +17,13 @@ public class MyUserDetails implements UserDetails {
     public MyUserDetails(){}
 
     public MyUserDetails(User user) {
-        super();
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getUserTypeId()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getUserType().getUserTypeId()));
         return authorities;
     }
 
@@ -55,5 +55,9 @@ public class MyUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isValidated();
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -18,7 +18,7 @@ public class UserTypeDataAccessService implements UserTypeDao {
     }
 
     @Override
-    public UserType getUserType(int id) {
+    public UserType getUserType(String id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -28,7 +28,7 @@ public class UserTypeDataAccessService implements UserTypeDao {
     }
 
     @Override
-    public void deleteUserType(int id) {
+    public void deleteUserType(String id) {
         repository.deleteById(id);
     }
 

@@ -1,22 +1,24 @@
 package com.libumu.mubook.entities;
 
+import com.libumu.mubook.dao.userActivity.UserActivityDataAccessService;
+import com.libumu.mubook.dao.userType.UserTypeDataAccessService;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.Date;
-import java.util.List;
+import java.sql.Date;
 
 @Entity
 @Table(name= "user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "userid")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "usertypeid")
-    private String userTypeId;
+   /* @Column(name = "usertypeid")
+    private String userTypeId;*/
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -27,7 +29,7 @@ public class User {
     private Date bornDate;
     @Column(name = "validated")
     private boolean validated;
-    @Column(name = "dniimg")
+    @Column(name = "dni_img")
     private String dniImgPath;
     @Column(name = "email")
     private String email;
@@ -38,8 +40,17 @@ public class User {
     @Column(name = "useractivityid")
     private int userActivityId;
 
+    @ManyToOne
+    @JoinColumn(name = "user_type_id", nullable = false)
+    private UserType userType;
+
+    @ManyToOne
+    @JoinColumn(name = "user_activity_id", nullable = false)
+    private UserActivity userActivity;
+
     public User(HttpServletRequest request){
-        this.userTypeId = "USER";
+        this.userType = new UserTypeDataAccessService().getUserType("USER");
+        this.userActivity = new UserActivityDataAccessService().getUserActivity(3);
         this.name = (String) request.getAttribute("name");
         this.surname = (String) request.getAttribute("surname");
         this.email = (String) request.getAttribute("email");
@@ -51,6 +62,14 @@ public class User {
     }
 
     public User() {}
+
+    /*public String getUserTypeId() {
+        return userTypeId;
+    }
+
+    public void setUserTypeId(String userType) {
+        this.userTypeId = userType;
+    }*/
 
     public String getEmail() {
         return email;
@@ -78,14 +97,6 @@ public class User {
 
     public Long getUserId() {
         return userId;
-    }
-
-    public String getUserTypeId() {
-        return userTypeId;
-    }
-
-    public void setUserTypeId(String userType) {
-        this.userTypeId = userType;
     }
 
     public String getName() {
@@ -140,11 +151,19 @@ public class User {
         this.dniImgPath = dniImgPath;
     }
 
-    public int getUserActivityId() {
-        return userActivityId;
+    public UserType getUserType() {
+        return userType;
     }
 
-    public void setUserActivityId(int userActivityId) {
-        this.userActivityId = userActivityId;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public UserActivity getUserActivity() {
+        return userActivity;
+    }
+
+    public void setUserActivity(UserActivity userActivity) {
+        this.userActivity = userActivity;
     }
 }
