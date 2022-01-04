@@ -11,7 +11,7 @@
 	<groupId>com.libumu</groupId>
 	<artifactId>mubook</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>mubook</name>
 	<description>Mubook project from Libumu</description>
 	<properties>
