@@ -9,12 +9,12 @@ import java.io.File;
 import java.sql.Date;
 
 @Entity
-@Table(name= "user")
+@Table(name= "User")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+    @Column(name = "item_id")
     private Long userId;
 
    /* @Column(name = "usertypeid")

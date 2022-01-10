@@ -13,5 +13,7 @@ public interface UserDao {
     public void deleteUser(User user);
     public void addUser(User user);
     public User getUser(String username);
+    public int countUsersByAge(int low, int high);
+    public List<Object[]> countUsersByIncidence(int numIncidence);
 
 }

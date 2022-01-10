@@ -1,0 +1,50 @@
+package com.libumu.mubook.dao.itemModel;
+
+import com.libumu.mubook.entities.ItemModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ItemModelDataAccessService implements ItemModelDao {
+
+    @Autowired
+    private ItemModelRepository repository;
+
+    @Override
+    public List<ItemModel> getAllItemModels() {
+        return (List<ItemModel>) repository.findAll();
+    }
+
+    @Override
+    public ItemModel getItemModel(String id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void editItemModel(ItemModel itemModel) {
+        repository.save(itemModel);
+    }
+
+    @Override
+    public void deleteItemModel(String id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public void deleteItemModel(ItemModel itemModel) {
+        repository.delete(itemModel);
+    }
+
+    @Override
+    public void addItemModel(ItemModel itemModel) {
+        repository.save(itemModel);
+    }
+
+    @Override
+    public List<Integer> getAllItemModelId() {
+        return repository.getAllItemModelId();
+    }
+
+}

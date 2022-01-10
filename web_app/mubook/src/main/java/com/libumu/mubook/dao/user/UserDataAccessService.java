@@ -46,4 +46,14 @@ public class UserDataAccessService implements UserDao {
     public User getUser(String username) {
         return repository.findByUsername(username);
     }
+
+    @Override
+    public int countUsersByAge(int low, int high) {
+        return repository.countUsersByAge(low, high);
+    }
+
+    @Override
+    public List<Object[]> countUsersByIncidence(int numIncidence) {
+        return repository.countUsersByIncidence(numIncidence);
+    }
 }
