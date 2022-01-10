@@ -1,7 +1,6 @@
 package com.libumu.mubook.dao.userActivity;
 
 import com.libumu.mubook.entities.UserActivity;
-import com.libumu.mubook.entities.UserType;
 
 import java.util.List;
 

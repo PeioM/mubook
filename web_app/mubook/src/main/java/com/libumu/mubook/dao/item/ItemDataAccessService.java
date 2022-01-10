@@ -41,4 +41,9 @@ public class ItemDataAccessService implements ItemDao {
     public void addItem(Item item) {
         repository.save(item);
     }
+
+    @Override
+    public List<Integer> getItemWithModelId(long itemModelId) {
+        return null;
+    }
 }
