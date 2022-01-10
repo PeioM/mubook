@@ -17,8 +17,6 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-   /* @Column(name = "usertypeid")
-    private String userTypeId;*/
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -37,8 +35,6 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "useractivityid")
-    private int userActivityId;
 
     @ManyToOne
     @JoinColumn(name = "user_type_id", nullable = false)
@@ -58,18 +54,12 @@ public class User {
         this.username = (String) request.getAttribute("username");
         this.password = String.valueOf(request.getAttribute("password").hashCode());
         this.bornDate = (Date) request.getAttribute("birthDate");
-        this.dniImgPath = ((File) request.getAttribute("dniImg")).getPath();
+        File dniImg = (File) request.getAttribute("dniImg");
+
+        this.dniImgPath = dniImg.getPath();
     }
 
     public User() {}
-
-    /*public String getUserTypeId() {
-        return userTypeId;
-    }
-
-    public void setUserTypeId(String userType) {
-        this.userTypeId = userType;
-    }*/
 
     public String getEmail() {
         return email;

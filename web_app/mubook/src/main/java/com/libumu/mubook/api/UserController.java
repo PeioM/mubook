@@ -23,6 +23,7 @@ public class UserController {
 
         return "redirect:/home";
     }
+
     @GetMapping(path="/add")
     public String addNewUser () {
         return "userForm";
