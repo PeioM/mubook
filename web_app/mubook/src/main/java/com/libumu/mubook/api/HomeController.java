@@ -1,8 +1,10 @@
 package com.libumu.mubook.api;
 
 
+import com.libumu.mubook.dao.user.UserDao;
+import com.libumu.mubook.entities.User;
 import com.libumu.mubook.security.MyUserDetails;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
