@@ -12,48 +12,48 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String userName);
 
-    @Query(value = "SELECT COUNT(userId), '?1 - ?2' AS RANGO"+
-                    "FROM USER"+
-                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, bornDate)/365) BETWEEN ?1 AND ?2", nativeQuery = true)
+    @Query(value = "SELECT COUNT(user_id), '?1 - ?2' AS RANGO "+
+                    "FROM user "+
+                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN ?1 AND ?2", nativeQuery = true)
     public int countUsersByAge(int low, int high);
 
-    @Query(value = "SELECT COUNT(userId), '0 - 12' AS RANGO"+
-                    "FROM USER"+
-                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, bornDate)/365) BETWEEN 0 AND 12"+
-                    "UNION"+
-                    "SELECT COUNT(userId), '13 - 18' AS RANGO"+
-                    "FROM USER"+
-                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, bornDate)/365) BETWEEN 13 AND 18"+
-                    "UNION"+
-                    "SELECT COUNT(userId), '19 - 30' AS RANGO"+
-                    "FROM USER"+
-                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, bornDate)/365) BETWEEN 19 AND 30"+
-                    "UNION"+
-                    "SELECT COUNT(userId), '31 - 50' AS RANGO"+
-                    "FROM USER"+
-                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, bornDate)/365) BETWEEN 31 AND 50"+
-                    "UNION"+
-                    "SELECT COUNT(userId), '51+'  AS RANGO"+
-                    "FROM USER"+
-                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, bornDate)/365) > 50", nativeQuery = true)
+    @Query(value = "SELECT COUNT(user_id), '0 - 12' AS RANGO "+
+                    "FROM user "+
+                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN 0 AND 12 "+
+                    "UNION "+
+                    "SELECT COUNT(user_id), '13 - 18' AS RANGO "+
+                    "FROM user "+
+                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN 13 AND 18 "+
+                    "UNION "+
+                    "SELECT COUNT(user_id), '19 - 30' AS RANGO "+
+                    "FROM user "+
+                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN 19 AND 30 "+
+                    "UNION "+
+                    "SELECT COUNT(user_id), '31 - 50' AS RANGO "+
+                    "FROM user "+
+                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN 31 AND 50 "+
+                    "UNION "+
+                    "SELECT COUNT(user_id), '51+'  AS RANGO "+
+                    "FROM user "+
+                    "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) > 50 ", nativeQuery = true)
     public List<Object[]> countUsersByAgeWithoutMT();
 
-    @Query(value = "SELECT COUNT(a.userId), a.peso"+
-                    "FROM (SELECT u.userId, SUM(s.peso) AS peso"+
-                            "FROM user u"+
-                                "JOIN incidence i on u.userId = i.userId"+
-                                "JOIN incidence_severity s on s.incidenceSeverityId = i.incidenceSeverityId"+
-                            "WHERE peso = ?1"+
-                            "GROUP BY u.userId) AS a"+
+    @Query(value = "SELECT COUNT(a.user_id), a.peso "+
+                    "FROM (SELECT u.user_id, SUM(s.importance) AS peso "+
+                            "FROM user u "+
+                                "JOIN incidence i on u.user_id = i.user_id "+
+                                "JOIN incidence_severity s on s.incidence_severity_id = i.incidence_severity_id "+
+                            "WHERE s.importance = ?1 "+
+                            "GROUP BY u.user_id) AS a "+
                     "GROUP BY a.peso;", nativeQuery = true)
     public List<Object[]> countUsersByIncidence(int numIncidence);
 
-    @Query(value = "SELECT COUNT(a.userId), a.peso"+
-                    "FROM (SELECT u.userId, SUM(s.peso) AS peso"+
-                            "FROM user u"+
-                                "JOIN incidence i on u.userId = i.userId"+
-                                "JOIN incidence_severity s on s.incidenceSeverityId = i.incidenceSeverityId"+
-                            "GROUP BY u.userId) AS a"+
+    @Query(value = "SELECT COUNT(a.user_id), a.peso "+
+                    "FROM (SELECT u.user_id, SUM(s.importance) AS peso "+
+                            "FROM user u "+
+                                "JOIN incidence i on u.user_id = i.user_id "+
+                                "JOIN incidence_severity s on s.incidence_severity_id = i.incidence_severity_id "+
+                            "GROUP BY u.user_id) AS a "+
                     "GROUP BY a.peso;", nativeQuery = true)
     public List<Object[]> countUsersByIncidenceWithoutMT();
 }

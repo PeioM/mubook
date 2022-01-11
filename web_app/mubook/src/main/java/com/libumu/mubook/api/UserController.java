@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class UserController {
     final static int MAXNUMTHREADS = 10;
     final static int MAXBUFFER = 100;
-    final static int MAXINCIDENCES = 4;
+    final static int MAXINCIDENCES = 5;
 
     @Autowired
     private UserDao userDao;
@@ -53,7 +54,7 @@ public class UserController {
         HashMap<String, Integer> result = new HashMap<>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS];
 
-        for(int i = 0; i < ageList.length / 2; i++){
+        for(int i = 0; i < ageList.length; i++){
             try {
                 buffer.put(ageList[i]);
             } catch (InterruptedException e) {
@@ -99,7 +100,9 @@ public class UserController {
         resultList = userDao.countUsersByAgeWithoutMT();
 
         while(i < resultList.size()){
-            result.put((String) resultList.get(0)[i + 1], (int) resultList.get(0)[i]);
+            BigInteger num = (BigInteger) resultList.get(i)[0];
+            result.put((String) resultList.get(i)[1], num.intValue());
+            i++;
         }
 
         return "redirect:/home";
@@ -166,7 +169,9 @@ public class UserController {
                 threadId = threadsBuffer.get();
                 ubi[threadId].setNumIncidence(buffer.get());
                 ubi[threadId].run();
-                result.put(ubi[threadId].getKey(), ubi[threadId].getValue());
+                if(ubi[threadId].getResult().size() == 2){
+                    result.put(ubi[threadId].getKey(), ubi[threadId].getValue());
+                }
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -186,7 +191,8 @@ public class UserController {
         resultList = userDao.countUsersByIncidenceWithoutMT();
 
         while(i < resultList.size()){
-            result.put((int) resultList.get(0)[i + 1], (int) resultList.get(0)[i]);
+            result.put((int) resultList.get(i)[1], (int) resultList.get(i)[0]);
+            i++;
         }
 
         return "redirect:/home";
@@ -216,6 +222,10 @@ public class UserController {
 
         public int getValue(){
             return (int) result.get(0)[0];
+        }
+
+        public List<Object[]> getResult(){
+            return this.result;
         }
 
     }

@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 // CRUD refers Create, Read, Update, Delete
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    @Query(value = "SELECT item "+
-                    "FROM item "+
-                    "   JOIN item_model im on im.itemModelId = i.itemModelId "+
-                    "WHERE im.itemModelId = ?1", nativeQuery = true)
-    public List<Object> getItemWithModelId(long itemModelId);
+    @Query(value = "SELECT item_id "+
+                    "FROM item i"+
+                    "   JOIN item_model im on im.item_model_id = i.item_model_id "+
+                    "WHERE im.item_model_id = ?1", nativeQuery = true)
+    public List<Object[]> getItemWithModelId(long itemModelId);
 }
