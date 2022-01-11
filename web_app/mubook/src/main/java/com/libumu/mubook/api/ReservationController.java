@@ -13,7 +13,6 @@ import com.libumu.mubook.mt.Buffer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -30,15 +29,15 @@ public class ReservationController {
     private Buffer buffer = new Buffer(MAXBUFFER);
     private Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
-    @GetMapping(path="/reservationItemType")
+    @GetMapping(path="/itemType")
     public @ResponseBody String countReservationByType(){
         HashMap<String, Integer> result = new HashMap<>();
-        List<Integer> itemTypeId = itemTypeDao.getAllItemTypeId();
+        List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
         ReservationByType rbt[] = new ReservationByType[MAXNUMTHREADS];
 
         for(int i = 0; i < itemTypeId.size(); i++){
             try {
-                buffer.put(itemTypeId.get(i));
+                buffer.put((int) itemTypeId.get(i)[0]);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -71,6 +70,22 @@ public class ReservationController {
         return "redirect:/home";
     }
 
+    @GetMapping(path="/itemTypeWithoutMT")
+    public @ResponseBody String countReservationByTypeWithoutMT(){
+        HashMap<String, Integer> result = new HashMap<>();
+        List<Object[]> resultList;
+        int i = 0;
+
+        resultList = reservationDao.countReservationsByItemTypeWithoutMT();
+
+        while(i < resultList.size()){
+            result.put((String) resultList.get(0)[i], (int) resultList.get(0)[i + 1]);
+            i += 2;
+        }
+
+        return "redirect:/home";
+    }
+
     class ReservationByType extends Thread{
         int id;
         int threadId;
@@ -98,15 +113,15 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(path="/reservationItemModel")
+    @GetMapping(path="/itemModel")
     public @ResponseBody String countReservationByModel(){
         HashMap<String, Integer> result = new HashMap<>();
-        List<Integer> itemModelId = itemModelDao.getAllItemModelId();
+        List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
         ReservationByModel rbm[] = new ReservationByModel[MAXNUMTHREADS];
 
         for(int i = 0; i < itemModelId.size(); i++){
             try {
-                buffer.put(itemModelId.get(i));
+                buffer.put((int) itemModelId.get(i)[0]);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -140,6 +155,23 @@ public class ReservationController {
         return "redirect:/home";
     }
 
+    @GetMapping(path="/itemModelWithoutMT")
+    public @ResponseBody String countReservationByModelWithoutMT(){
+
+        HashMap<String, Integer> result = new HashMap<>();
+        List<Object[]> resultList;
+        int i = 0;
+
+        resultList = reservationDao.countReservationsByItemModelWithoutMT();
+
+        while(i < resultList.size()){
+            result.put((String) resultList.get(0)[i], (int) resultList.get(0)[i + 1]);
+            i += 2;
+        }
+
+        return "redirect:/home";
+    }
+
     class ReservationByModel extends Thread{
         int id;
         int threadId;
@@ -167,11 +199,10 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(path="/reservationItemMonth")
-    public @ResponseBody String countReservationOfModelByMonth(){
-        int itemModelId = 1;
+    @GetMapping(path="/itemMonth")
+    public @ResponseBody String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId){
         HashMap<Integer, Integer> result = new HashMap<>();
-        List<Integer> itemId = itemDao.getItemWithModelId(itemModelId);
+        List<Object> itemId = itemDao.getItemWithModelId(itemModelId);
         ReservationsByItem rbi[] = new ReservationsByItem[MAXNUMTHREADS];
 
         for(int i = 0; i < itemId.size(); i++){
@@ -207,6 +238,22 @@ public class ReservationController {
             }
         }
 
+        return "redirect:/home";
+    }
+
+    @GetMapping(path="/itemMonthWithoutMT")
+    public @ResponseBody String countReservationOfModelByMonthWithoutMT(@RequestParam("itemModelId") long itemModelId){
+        HashMap<Integer, Integer> result = new HashMap<>();
+        List<Object[]> resultList;
+        int i = 0;
+
+        resultList = reservationDao.countReservationsOfItemEachMonthWithoutMT(itemModelId);
+
+        while(i < resultList.size()){
+            result.put((int) resultList.get(0)[i + 1], (int) resultList.get(0)[i]);
+            i += 2;
+        }
+        
         return "redirect:/home";
     }
 

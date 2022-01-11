@@ -7,11 +7,11 @@ import java.util.List;
 public interface ItemTypeDao {
 
     public List<ItemType> getAllItemTypes();
-    public ItemType getItemType(String id);
+    public ItemType getItemType(int id);
     public void editItemType(ItemType itemType);
-    public void deleteItemType(String id);
+    public void deleteItemType(int id);
     public void deleteItemType(ItemType itemType);
     public void addItemType(ItemType itemType);
-    public List<Integer> getAllItemTypeId();
+    public List<Object[]> getAllItemTypeId();
 
 }

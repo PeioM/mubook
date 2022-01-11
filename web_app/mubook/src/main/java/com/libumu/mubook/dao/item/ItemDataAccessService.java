@@ -43,7 +43,7 @@ public class ItemDataAccessService implements ItemDao {
     }
 
     @Override
-    public List<Integer> getItemWithModelId(long itemModelId) {
-        return null;
+    public List<Object> getItemWithModelId(long itemModelId) {
+        return repository.getItemWithModelId(itemModelId);
     }
 }

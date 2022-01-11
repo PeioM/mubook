@@ -14,5 +14,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                     "FROM item "+
                     "   JOIN item_model im on im.itemModelId = i.itemModelId "+
                     "WHERE im.itemModelId = ?1", nativeQuery = true)
-    public List<Integer> getItemWithModelId(long itemModelId);
+    public List<Object> getItemWithModelId(long itemModelId);
 }

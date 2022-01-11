@@ -56,4 +56,20 @@ public class ReservationDataAccessService implements ReservationDao {
     public List<Object[]> countReservationsOfItemEachMonth(long itemId) {
         return repository.countReservationsOfItemEachMonth(itemId);
     }
+
+    @Override
+    public List<Object[]> countReservationsByItemTypeWithoutMT() {
+        return repository.countReservationsByItemTypeWithoutMT();
+    }
+
+    @Override
+    public List<Object[]> countReservationsByItemModelWithoutMT() {
+        return repository.countReservationsByItemModelWithoutMT();
+    }
+
+    @Override
+    public List<Object[]> countReservationsOfItemEachMonthWithoutMT(long itemModelId) {
+        return repository.countReservationsOfItemEachMonthWithoutMT(itemModelId);
+    }
+    
 }

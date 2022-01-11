@@ -18,7 +18,7 @@ public class ItemModelDataAccessService implements ItemModelDao {
     }
 
     @Override
-    public ItemModel getItemModel(String id) {
+    public ItemModel getItemModel(long id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -28,7 +28,7 @@ public class ItemModelDataAccessService implements ItemModelDao {
     }
 
     @Override
-    public void deleteItemModel(String id) {
+    public void deleteItemModel(long id) {
         repository.deleteById(id);
     }
 
@@ -43,7 +43,7 @@ public class ItemModelDataAccessService implements ItemModelDao {
     }
 
     @Override
-    public List<Integer> getAllItemModelId() {
+    public List<Object[]> getAllItemModelId() {
         return repository.getAllItemModelId();
     }
 

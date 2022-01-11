@@ -18,7 +18,7 @@ public class ItemTypeDataAccessService implements ItemTypeDao {
     }
 
     @Override
-    public ItemType getItemType(String id) {
+    public ItemType getItemType(int id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -28,7 +28,7 @@ public class ItemTypeDataAccessService implements ItemTypeDao {
     }
 
     @Override
-    public void deleteItemType(String id) {
+    public void deleteItemType(int id) {
         repository.deleteById(id);
     }
 
@@ -43,7 +43,7 @@ public class ItemTypeDataAccessService implements ItemTypeDao {
     }
 
     @Override
-    public List<Integer> getAllItemTypeId() {
+    public List<Object[]> getAllItemTypeId() {
         return repository.getAllItemTypeId();
     }
 

@@ -13,7 +13,10 @@ public interface ReservationDao {
     public void deleteReservation(Reservation Reservation);
     public void addReservation(Reservation Reservation);
     public List<Object[]> countReservationsByItemType(int itemTypeId);
+    public List<Object[]> countReservationsByItemTypeWithoutMT();
     public List<Object[]> countReservationsByItemModel(long itemModelId);
+    public List<Object[]> countReservationsByItemModelWithoutMT();
     public List<Object[]> countReservationsOfItemEachMonth(long itemId);
+    public List<Object[]> countReservationsOfItemEachMonthWithoutMT(long itemModelId);
 
 }
