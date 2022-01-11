@@ -8,6 +8,12 @@
 
 <div>
     <h1>This is the Index</h1>
+
+    <div th:if="${user != null}">
+        <div th:text="${user.name}"> has been created</div>
+    </div>
+
+
     <a sec:authorize= "isAnonymous()" th:href="@{/login}" type="submit"><button>Log in</button></a>
     <a sec:authorize= "isAuthenticated()" th:href="@{/logout}" type="submit"><button>Log out</button></a>
     <a sec:authorize= "isAuthenticated()" th:href="@{/mainPage}" type="submit"><button>Profile</button></a>

@@ -1,36 +1,39 @@
  <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User Form</title>
 </head>
 <body>
-<form action="/user/add" method="post">
+<div class="notify-messages" th:if="${error != null}">
+        <div th:text="${error}"></div>
+</div>
+<form th:action="@{/user/add}" th:object="${user}" enctype="multipart/form-data" method="post">
     <table>
         <tr>
             <td>
                 <label for="name">Name:</label><br>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" th:field="*{name}" required>
             </td>
             <td>
                 <label for="surname">Surname:</label><br>
-                <input type="text" id="surname" name="surname" required>
+                <input type="text" id="surname" name="surname" th:field="*{surname}" required>
             </td>
         </tr>
         <tr>
             <td>
                 <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" th:field="*{email}" required>
             </td>
             <td>
                 <label for="birthDate">Birth date:</label><br>
-                <input type="date" id="birthDate" name="birthDate" required>
+                <input type="date" id="birthDate" name="birthDate" th:field="*{bornDate}" required>
             </td>
         </tr>
         <tr>
             <td>
                 <label for="dni">ID Card number:</label><br>
-                <input type="text" id="dni" name="dni" required>
+                <input type="text" id="dni" name="dni" th:field="*{DNI}" required>
             </td>
             <td>
                 <label for="dniImg"> (verification photo to verify)</label><br>
@@ -40,7 +43,7 @@
         <tr>
             <td>
                 <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" th:field="*{username}" required>
             </td>
             <td>
                 <label for="password">Password:</label><br>

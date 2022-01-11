@@ -1,11 +1,7 @@
 package com.libumu.mubook.entities;
 
-import com.libumu.mubook.dao.userActivity.UserActivityDataAccessService;
-import com.libumu.mubook.dao.userType.UserTypeDataAccessService;
 
 import javax.persistence.*;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.sql.Date;
 
 @Entity
@@ -43,21 +39,6 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "user_activity_id", nullable = false)
     private UserActivity userActivity;
-
-    public User(HttpServletRequest request){
-        this.userType = new UserTypeDataAccessService().getUserType("USER");
-        this.userActivity = new UserActivityDataAccessService().getUserActivity(3);
-        this.name = (String) request.getAttribute("name");
-        this.surname = (String) request.getAttribute("surname");
-        this.email = (String) request.getAttribute("email");
-        this.DNI = (String) request.getAttribute("dni");
-        this.username = (String) request.getAttribute("username");
-        this.password = String.valueOf(request.getAttribute("password").hashCode());
-        this.bornDate = (Date) request.getAttribute("birthDate");
-        File dniImg = (File) request.getAttribute("dniImg");
-
-        this.dniImgPath = dniImg.getPath();
-    }
 
     public User() {}
 
