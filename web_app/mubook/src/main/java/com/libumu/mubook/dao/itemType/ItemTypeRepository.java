@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 // This will be AUTO IMPLEMENTED by Spring into a Bean called itemRepository
 // CRUD refers Create, Read, Update, Delete
 
-public interface ItemTypeRepository extends JpaRepository<ItemType, String> {
-    @Query("SELECT itemTypeId FROM item_type")
-    public List<Integer> getAllItemTypeId();
+public interface ItemTypeRepository extends JpaRepository<ItemType, Integer> {
+    @Query(value = "SELECT item_type_id"+
+                    "FROM item_type", nativeQuery = true)
+    public List<Object[]> getAllItemTypeId();
 }

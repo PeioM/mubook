@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +48,7 @@ public class UserController {
         return userDao.getAllUsers();
     }
 
-    @GetMapping(path="/usersByAge")
+    @GetMapping(path="/age")
     public @ResponseBody String countUsersByAge(){
         HashMap<String, Integer> result = new HashMap<>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS];
@@ -91,6 +90,21 @@ public class UserController {
         return "redirect:/home";
     }
 
+    @GetMapping(path="/ageWithoutMT")
+    public @ResponseBody String countUsersByAgeWithoutMT(){
+        HashMap<String, Integer> result = new HashMap<>();
+        List<Object[]> resultList;
+        int i = 0;
+
+        resultList = userDao.countUsersByAgeWithoutMT();
+
+        while(i < resultList.size()){
+            result.put((String) resultList.get(0)[i + 1], (int) resultList.get(0)[i]);
+        }
+
+        return "redirect:/home";
+    }
+
     class UsersByAge extends Thread{
         int high, low;
         int threadId;
@@ -122,7 +136,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(path="/usersByIncidence")
+    @GetMapping(path="/incidence")
     public @ResponseBody String countUsersByIncidence(){
         HashMap<Integer, Integer> result = new HashMap<>();
         UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS];
@@ -158,6 +172,21 @@ public class UserController {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+
+        return "redirect:/home";
+    }
+
+    @GetMapping(path="/incidenceWithoutMT")
+    public @ResponseBody String countUsersByIncidenceWithoutMT(){
+        HashMap<Integer, Integer> result = new HashMap<>();
+        List<Object[]> resultList;
+        int i = 0;
+
+        resultList = userDao.countUsersByIncidenceWithoutMT();
+
+        while(i < resultList.size()){
+            result.put((int) resultList.get(0)[i + 1], (int) resultList.get(0)[i]);
         }
 
         return "redirect:/home";

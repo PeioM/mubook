@@ -1,14 +1,11 @@
 package com.libumu.mubook.security;
 
 import com.libumu.mubook.entities.User;
-import com.libumu.mubook.entities.UserType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
