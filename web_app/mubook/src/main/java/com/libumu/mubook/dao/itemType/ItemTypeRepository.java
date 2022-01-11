@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 // CRUD refers Create, Read, Update, Delete
 
 public interface ItemTypeRepository extends JpaRepository<ItemType, Integer> {
-    @Query(value = "SELECT item_type_id"+
+    @Query(value = "SELECT item_type_id "+
                     "FROM item_type", nativeQuery = true)
     public List<Object[]> getAllItemTypeId();
 }

@@ -2,6 +2,7 @@ package com.libumu.mubook.api;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,18 +21,22 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController {
     final static int MAXNUMTHREADS = 10;
     final static int MAXBUFFER = 100;
+    final static int MAXMONTHS = 24;
 
     @Autowired
     private ReservationDao reservationDao;
+    @Autowired
     private ItemTypeDao itemTypeDao;
+    @Autowired
     private ItemModelDao itemModelDao;
+    @Autowired
     private ItemDao itemDao;
     private Buffer buffer = new Buffer(MAXBUFFER);
     private Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
     @GetMapping(path="/itemType")
     public @ResponseBody String countReservationByType(){
-        HashMap<String, Integer> result = new HashMap<>();
+        HashMap<String, Long> result = new HashMap<>();
         List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
         ReservationByType rbt[] = new ReservationByType[MAXNUMTHREADS];
 
@@ -72,15 +77,16 @@ public class ReservationController {
 
     @GetMapping(path="/itemTypeWithoutMT")
     public @ResponseBody String countReservationByTypeWithoutMT(){
-        HashMap<String, Integer> result = new HashMap<>();
+        HashMap<String, Long> result = new HashMap<>();
         List<Object[]> resultList;
         int i = 0;
 
         resultList = reservationDao.countReservationsByItemTypeWithoutMT();
 
         while(i < resultList.size()){
-            result.put((String) resultList.get(0)[i], (int) resultList.get(0)[i + 1]);
-            i += 2;
+            BigInteger num = (BigInteger) resultList.get(i)[1];
+            result.put((String) resultList.get(i)[0], num.longValue());
+            i++;
         }
 
         return "redirect:/home";
@@ -104,8 +110,9 @@ public class ReservationController {
             return (String) result.get(0)[0];
         }
 
-        public int getValue(){
-            return (int) result.get(0)[1];
+        public Long getValue(){
+            BigInteger num = (BigInteger) result.get(0)[1];
+            return num.longValue();
         }
 
         public void setId(int id) {
@@ -118,10 +125,10 @@ public class ReservationController {
         HashMap<String, Integer> result = new HashMap<>();
         List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
         ReservationByModel rbm[] = new ReservationByModel[MAXNUMTHREADS];
-
         for(int i = 0; i < itemModelId.size(); i++){
+            BigInteger num = (BigInteger) itemModelId.get(i)[0];
             try {
-                buffer.put((int) itemModelId.get(i)[0]);
+                buffer.put(num.intValue());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -165,8 +172,9 @@ public class ReservationController {
         resultList = reservationDao.countReservationsByItemModelWithoutMT();
 
         while(i < resultList.size()){
-            result.put((String) resultList.get(0)[i], (int) resultList.get(0)[i + 1]);
-            i += 2;
+            BigInteger num = (BigInteger) resultList.get(i)[1];
+            result.put((String) resultList.get(i)[0], num.intValue());
+            i ++;
         }
 
         return "redirect:/home";
@@ -183,7 +191,7 @@ public class ReservationController {
 
         @Override
         public void run() {
-            result = reservationDao.countReservationsByItemModel(id);
+            result = reservationDao.countReservationsByItemModel((long) id);
         }
 
         public String getKey(){
@@ -191,7 +199,8 @@ public class ReservationController {
         }
 
         public int getValue(){
-            return (int) result.get(0)[1];
+            BigInteger num = (BigInteger) result.get(0)[1];
+            return num.intValue();
         }
 
         public void setId(int id) {
@@ -201,13 +210,14 @@ public class ReservationController {
 
     @GetMapping(path="/itemMonth")
     public @ResponseBody String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId){
-        HashMap<Integer, Integer> result = new HashMap<>();
-        List<Object> itemId = itemDao.getItemWithModelId(itemModelId);
+        HashMap<String, Integer> result = new HashMap<>();
+        List<Object[]> itemId = itemDao.getItemWithModelId(itemModelId);
         ReservationsByItem rbi[] = new ReservationsByItem[MAXNUMTHREADS];
 
         for(int i = 0; i < itemId.size(); i++){
+            BigInteger num = (BigInteger) itemId.get(i)[0];
             try {
-                buffer.put(i);
+                buffer.put(num.intValue());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -230,7 +240,9 @@ public class ReservationController {
                 threadId = threadsBuffer.get();
                 rbi[threadId].setId(buffer.get());
                 rbi[threadId].run();
-                result.put(rbi[threadId].getKey(), rbi[threadId].getValue());
+                for(int i = 0; i < MAXMONTHS && i < rbi[threadId].getResult().size(); i++){
+                    result.put(rbi[threadId].getKey(i), rbi[threadId].getValue(i));
+                }
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -243,15 +255,16 @@ public class ReservationController {
 
     @GetMapping(path="/itemMonthWithoutMT")
     public @ResponseBody String countReservationOfModelByMonthWithoutMT(@RequestParam("itemModelId") long itemModelId){
-        HashMap<Integer, Integer> result = new HashMap<>();
+        HashMap<String, Integer> result = new HashMap<>();
         List<Object[]> resultList;
         int i = 0;
 
         resultList = reservationDao.countReservationsOfItemEachMonthWithoutMT(itemModelId);
 
         while(i < resultList.size()){
-            result.put((int) resultList.get(0)[i + 1], (int) resultList.get(0)[i]);
-            i += 2;
+            BigInteger num = (BigInteger) resultList.get(i)[0];
+            result.put((String) resultList.get(i)[1], num.intValue());
+            i ++;
         }
         
         return "redirect:/home";
@@ -268,19 +281,24 @@ public class ReservationController {
 
         @Override
         public void run() {
-            result = reservationDao.countReservationsOfItemEachMonth(id);
+            result = reservationDao.countReservationsOfItemEachMonth((long)id);
         }
 
-        public int getKey(){
-            return (int) result.get(0)[1];
+        public String getKey(int month){
+            return (String) result.get(month)[1];
         }
 
-        public int getValue(){
-            return (int) result.get(0)[0];
+        public int getValue(int month){
+            BigInteger num = (BigInteger) result.get(month)[0];
+            return (int) num.intValue();
         }
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public List<Object[]> getResult(){
+            return this.result;
         }
 
     }

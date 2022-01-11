@@ -12,6 +12,6 @@ public interface ItemDao {
     public void deleteItem(long id);
     public void deleteItem(Item item);
     public void addItem(Item item);
-    public List<Object> getItemWithModelId(long itemModelId);
+    public List<Object[]> getItemWithModelId(long itemModelId);
 
 }
