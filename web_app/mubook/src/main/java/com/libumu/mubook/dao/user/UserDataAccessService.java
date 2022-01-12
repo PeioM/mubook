@@ -43,8 +43,17 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public User getUser(String username) {
+    public User getUserByUsername(String username) {
         return repository.findByUsername(username);
+    }
+
+    public User getUserByDNI(String username) {
+        return repository.findByDNI(username);
+    }
+
+    @Override
+    public User getUserByEmail(String username) {
+        return repository.findByEmail(username);
     }
 
     @Override
@@ -66,5 +75,4 @@ public class UserDataAccessService implements UserDao {
     public List<Object[]> countUsersByIncidenceWithoutMT() {
         return repository.countUsersByIncidenceWithoutMT();
     }
-
 }

@@ -19,12 +19,15 @@ public class HomeController {
 
     @GetMapping(path = {"/", "/index"})
     public String home(){
-        User user = userDao.getUser("admin");
+        User user = userDao.getUserByUsername("admin");
         return "index";
     }
 
     @GetMapping("/login")
     public String login(){ return "login"; }
+
+    @GetMapping("/faq")
+    public String faq(){ return "faq"; }
 
     @RequestMapping("/login-error")
     public String loginError(Model model) {

@@ -18,7 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    final static int REMEMBER_ME_TIME = 86400;  //1 day
+    private final static int REMEMBER_ME_TIME = 86400;  //1 day
+    public final static int ENCRYPT_STRENGTH = 10;
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -35,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/worker").hasAnyRole("ADMIN", "WORKER")
                 .antMatchers("/normalUser", "/mainPage").authenticated()
-                .antMatchers("/*/*", "/*")
+                .antMatchers("/*", "/*/*")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -69,6 +70,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder(ENCRYPT_STRENGTH);
     }
 }

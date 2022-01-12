@@ -135,6 +135,24 @@
         </button>
     </div>
 
+    <div id="pruebasSec">
+         <div th:if="${user != null}">
+        <div th:text="${user.name}"> has been created</div>
+    </div>
+
+
+    <a sec:authorize= "isAnonymous()" th:href="@{/login}" type="submit"><button>Log in</button></a>
+    <a sec:authorize= "isAuthenticated()" th:href="@{/logout}" type="submit"><button>Log out</button></a>
+    <a sec:authorize= "isAuthenticated()" th:href="@{/mainPage}" type="submit"><button>Profile</button></a>
+    <a sec:authorize= "hasAnyRole('USER','WORKER')" th:href="@{/normalUser}" type="submit"><button>User area</button></a>
+    <a sec:authorize= "hasRole('WORKER')" th:href="@{/worker}" type="submit"><button>Worker area</button></a>
+    <a sec:authorize= "hasRole('ADMIN')" th:href="@{/admin}" type="submit"><button>Admin area</button></a>
+
+    <br><br>
+    <a th:href="@{/faq}" type="submit"><button>FAQ</button></a>
+    <a th:href="@{/user/add}" type="submit"><button>Create User</button></a>
+    </div>
+   
 </body>
 
 </html>

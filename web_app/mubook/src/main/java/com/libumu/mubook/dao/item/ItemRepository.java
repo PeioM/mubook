@@ -6,9 +6,6 @@ import com.libumu.mubook.entities.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-
 public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query(value = "SELECT item_id "+
                     "FROM item i"+

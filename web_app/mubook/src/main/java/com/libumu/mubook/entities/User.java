@@ -1,11 +1,7 @@
 package com.libumu.mubook.entities;
 
-import com.libumu.mubook.dao.userActivity.UserActivityDataAccessService;
-import com.libumu.mubook.dao.userType.UserTypeDataAccessService;
 
 import javax.persistence.*;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.sql.Date;
 
 @Entity
@@ -17,8 +13,6 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-   /* @Column(name = "usertypeid")
-    private String userTypeId;*/
     @Column(name = "name")
     private String name;
     @Column(name = "surname")
@@ -46,28 +40,7 @@ public class User {
     @JoinColumn(name = "user_activity_id", nullable = false)
     private UserActivity userActivity;
 
-    public User(HttpServletRequest request){
-        this.userType = new UserTypeDataAccessService().getUserType("USER");
-        this.userActivity = new UserActivityDataAccessService().getUserActivity(3);
-        this.name = (String) request.getAttribute("name");
-        this.surname = (String) request.getAttribute("surname");
-        this.email = (String) request.getAttribute("email");
-        this.DNI = (String) request.getAttribute("dni");
-        this.username = (String) request.getAttribute("username");
-        this.password = String.valueOf(request.getAttribute("password").hashCode());
-        this.bornDate = (Date) request.getAttribute("birthDate");
-        this.dniImgPath = ((File) request.getAttribute("dniImg")).getPath();
-    }
-
     public User() {}
-
-    /*public String getUserTypeId() {
-        return userTypeId;
-    }
-
-    public void setUserTypeId(String userType) {
-        this.userTypeId = userType;
-    }*/
 
     public String getEmail() {
         return email;
