@@ -5,7 +5,12 @@
     --mublue-hard: #293241;
     --musalmon: #EE6C4D;
 }
-.btn {
+.salmon {
     background-color: var(--musalmon);
     color: white;
+}
+
+.item * {
+    text-decoration: none;
+    color: black;
 }
