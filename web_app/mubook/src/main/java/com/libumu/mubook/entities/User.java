@@ -37,8 +37,6 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "useractivityid")
-    private int userActivityId;
 
     @ManyToOne
     @JoinColumn(name = "user_type_id", nullable = false)
