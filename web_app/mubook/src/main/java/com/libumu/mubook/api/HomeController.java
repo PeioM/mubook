@@ -18,7 +18,7 @@ public class HomeController {
 
     @GetMapping(path = {"/", "/index"})
     public String home(){
-        User user = userDao.getUser("admin");
+        User user = userDao.getUserByUsername("admin");
         return "index";
     }
 

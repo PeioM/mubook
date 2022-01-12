@@ -12,6 +12,7 @@ public interface UserDao {
     public void deleteUser(long id);
     public void deleteUser(User user);
     public void addUser(User user);
-    public User getUser(String username);
-
+    public User getUserByUsername(String username);
+    public User getUserByDNI(String username);
+    public User getUserByEmail(String username);
 }
