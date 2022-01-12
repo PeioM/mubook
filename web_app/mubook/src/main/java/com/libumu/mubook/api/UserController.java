@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -40,32 +42,32 @@ public class UserController {
     }
 
     @PostMapping(path="/add")
-    public String createNewUser (Model model,
-                                               @ModelAttribute User user,
-                                               @RequestParam("dniImg") MultipartFile file,
-                                               WebRequest request) {
-        String returnStr;
-        returnStr = checkUserDuplicated(user);
-        if(returnStr.length()==0){
-            if (file.isEmpty()) {
-                returnStr = "redirect:/user/add?error=Please upload the DNI photo";
-            }
-            else if(!passwordsMatch(request)){
-                returnStr = "redirect:/user/add?error=Password mismatch";
-            }
-            else{
+    public ModelAndView createNewUser (Model model,
+                                       @ModelAttribute User user,
+                                       @RequestParam("dniImg") MultipartFile file,
+                                       WebRequest request) {
+        //Return to user form in case there is any error
+        String returnStr = "userForm";
+        String error = checkUserDuplicated(user);
+        if(error.length()==0) {
+            if (file == null || file.isEmpty() || file.getOriginalFilename()==null || file.getOriginalFilename().equals("")) {
+                error = "Please upload the DNI photo";
+            } else if (!passwordsMatch(request)) {
+                error = "Password mismatch";
+            } else {
                 // save the file on the local file system
                 String filename = file.getOriginalFilename();
                 String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
                 try {
-                    String pathStr = LOCAL_UPLOAD_DIR + user.getName()+"_"+user.getSurname()+extension;
+                    String pathStr = LOCAL_UPLOAD_DIR + user.getName() + "_" + user.getSurname() + extension;
                     new File(pathStr);  //Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                     user.setDniImgPath(path.toString());
-                    returnStr = "redirect:/";
+                    //In case there is no error redirect to home
+                    returnStr = "index";
                 } catch (IOException e) {
-                    returnStr = "redirect:/user/add?error=Error uploading file";
+                    error = "Error uploading file";
                 }
                 //Obtain encrypted password and save other parameters
                 BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
@@ -76,30 +78,30 @@ public class UserController {
                 userDao.addUser(user);
             }
         }
-
         //Si se añade usuario notificar informacion sobre el
         //Sino, rellenar campos con los valores introducidos
         model.addAttribute("user", user);
+        if(error.length()!=0)model.addAttribute("error",error);
 
-        return returnStr;
+        return new ModelAndView(returnStr, new ModelMap(model));
     }
 
     private String checkUserDuplicated(User user){
-        String returnStr = "redirect:/user/add?error=User already exists: ";
+        String errorStr = "User already exists: ";
         User u = userDao.getUserByUsername(user.getUsername());
         if(userDao.getUserByUsername(user.getUsername())!=null){
-            returnStr += "Username already in use";
+            errorStr += "Username already in use";
         }
         else if(userDao.getUserByDNI(user.getDNI())!=null){
-            returnStr += "DNI already in use";
+            errorStr += "DNI already in use";
         }
         else if(userDao.getUserByEmail(user.getEmail())!=null){
-            returnStr += "Email already in use";
+            errorStr += "Email already in use";
         }
         else{
-            returnStr = "";
+            errorStr = "";
         }
-        return returnStr;
+        return errorStr;
     }
 
     private boolean passwordsMatch(WebRequest request){
@@ -113,12 +115,7 @@ public class UserController {
     }
 
     @GetMapping(path="/add")
-    public String addNewUser (Model model, HttpServletRequest request) {
-
-        String error = request.getParameter("error");
-        if(error != null){
-            model.addAttribute("error", error);
-        }
+    public String addNewUser (Model model) {
         model.addAttribute("user", new User());
 
         return "userForm";

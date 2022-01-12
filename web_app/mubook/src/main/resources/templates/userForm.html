@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -6,44 +6,50 @@
 </head>
 <body>
 <div class="notify-messages" th:if="${error != null}">
-        <div th:text="${error}"></div>
+    <div th:text="${error}"></div>
 </div>
 <form th:action="@{/user/add}" th:object="${user}" enctype="multipart/form-data" method="post">
     <table>
         <tr>
             <td>
                 <label for="name">Name:</label><br>
-                <input type="text" id="name" name="name" th:field="*{name}" required>
+                <input type="text" id="name" name="name"
+                       th:field="*{name}" th:attr="value=${user.name != null? user.name:''}" required>
             </td>
             <td>
                 <label for="surname">Surname:</label><br>
-                <input type="text" id="surname" name="surname" th:field="*{surname}" required>
+                <input type="text" id="surname" name="surname"
+                       th:field="*{surname}" th:attr="value=${user.surname != null? user.surname:''}" required>
             </td>
         </tr>
         <tr>
             <td>
                 <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" th:field="*{email}" required>
+                <input type="email" id="email" name="email"
+                       th:field="*{email}" th:attr="value=${user.email != null? user.email:''}" required>
             </td>
             <td>
                 <label for="birthDate">Birth date:</label><br>
-                <input type="date" id="birthDate" name="birthDate" th:field="*{bornDate}" required>
+                <input type="date" id="birthDate" name="birthDate"
+                       th:field="*{bornDate}" th:attr="value=${user.bornDate != null? user.bornDate:''}" required>
             </td>
         </tr>
         <tr>
             <td>
                 <label for="dni">ID Card number:</label><br>
-                <input type="text" id="dni" name="dni" th:field="*{DNI}" required>
+                <input type="text" id="dni" name="dni"
+                       th:field="*{DNI}" th:attr="value=${user.DNI != null? user.DNI:''}" required>
             </td>
             <td>
-                <label for="dniImg"> (verification photo to verify)</label><br>
-                <input type="file" name="dniImg" id="dniImg">
+                <label for="dniImg"> (verification photo of the DNI)</label><br>
+                <input type="file" name="dniImg" id="dniImg" required>
             </td>
         </tr>
         <tr>
             <td>
                 <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username" th:field="*{username}" required>
+                <input type="text" id="username" name="username"
+                       th:field="*{username}" th:attr="value=${user.username != null? user.username:''}" required>
             </td>
             <td>
                 <label for="password">Password:</label><br>
