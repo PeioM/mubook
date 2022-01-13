@@ -23,13 +23,13 @@
     <!--header.css-->
     <link rel="stylesheet" href="css/header.css"/>
     <link rel="stylesheet" href="css/footer.css"/>
-    <link rel="stylesheet" href="css/login.css" />
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" href="images/logo_trasp.png" />
     <title th:replace=" :: #Ptitle"></title>
 </head>
 <body>
-  <header class="p-3 mb-3 border-bottom" th:fragment="headercontent">
-    <div class="container d-lg-flex align-items-center">
+  <header class="mb-3 border-bottom" th:fragment="headercontent">
+    <div class="d-lg-flex align-items-center container">
       <div class="d-flex align-items-center justify-content-center justify-content-lg-start col">
         <a href="" class="d-flex  justify-content-center">
           <img src="images/logo_mubook.png" alt="Logo MUBook" class="bi me-2 w-50 d-none d-lg-flex"
@@ -62,7 +62,7 @@
         </ul>
       </div>
     </div>
-    <nav class="navbar navbar-expand-lg navbar-dark container">
+    <nav class="navbar navbar-expand-lg navbar-dark">
       <!-- container for responsiveness -->
       <div class="container">
         <!-- first item: brand name -->
@@ -76,20 +76,20 @@
         <div class="collapse navbar-collapse menu-items" id="navbarSupportedContent">
           <!-- this list contains the "menu options (items)" such as download, contact, pricing, etc. -->
           <ul id="my-ul" class="navbar-nav w-100">
-            <li class="nav-item">
-              <a class="nav-link text-white active" aria-current="page" href="#">Home</a>
+            <li class="nav-item"><!--actualPage==Main Page  th:classappend="${1}? active"-->
+              <a class="nav-link text-white"  th:classappend="${true}? active" sec:authorize= "isAnonymous()" th:href="@{/}" >Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="search.html">Search</a>
+            <li class="nav-item"><!--actualPage==Search  th:classappend="${0}? active"-->
+              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "isAnonymous()" th:href="@{/search}">Search</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="faq.html">FAQ</a>
+            <li class="nav-item"><!--actualPage==FAQ  th:classappend="${0}? active"-->
+              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "isAnonymous()" th:href="@{/faq}">FAQ</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="aboutUs.html">About Us</a>
+            <li class="nav-item"><!--actualPage==AboutUs  th:classappend="${0}? active"-->
+              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "isAnonymous()" th:href="@{/aboutUs}">About Us</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="users.html">Users</a>
+            <li class="nav-item"><!--actualPage==User Search  th:classappend="${0}? active"-->
+              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/userSearch}">Users</a>
             </li>
             <hr>
             <li><a class="nav-link text-white d-lg-none" href="myReservations.html">My Reservations</a></li>
