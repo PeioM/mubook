@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bootstrap import-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!--js import-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+        integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
+
+    <!--DATEPICKER-->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script>
+        $(function () {
+            $('.dp').datepicker();
+        });
+    </script>
+
+    <link rel="stylesheet" href="../static/css/styles.css" />
+    <title>MUBook - Reserve Item</title>
+    <link rel="icon" href="../static/images/logo_trasp.png" />
+</head>
+
+<body>
+    <div class="container rounded bg-white mt-3 mb-3 border center">
+        <div class="row justify-content-center">
+            <div class="col-md-2 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <b style="font-size: large;">Reservation ID: </b><label>55567556</label>
+                    
+                    <!--Session scope current reservation-->
+                    <div class="user-img-div">
+                        <img class="rounded mt-5 img-fluid" src="../static/images/computadora.png" alt="Item image">
+                    </div>
+                    <span class="font-weight-bold">User: </span>
+                    <span class="text-black-50"><span class="user-name">jonastiguarraga</span> </span>
+                </div>
+            </div>
+            <div class="col-md-6 border-right">
+                <div class="p-3 py-5">
+                    <form name="user-profile-form" th:action="@{/user_profile_process}" method="post">
+                        <!--<div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Reservation</h4>
+                        </div>-->
+                        <div class="row mt">
+                            <div class="col-md-6" ><label class="labels">Service</label>
+                                <select class="form-select w-50">
+                                    <optgroup label="Select item type" >
+										<option selected> - </option>
+										<option value="1">Laptop</option>
+										<option value="2">Book</option>
+										<option value="3">3D Printing</option>
+									</optgroup>
+                                </select>
+                            </div>
+                            <div class="col-md-6"><label class="labels">Model</label><input type="text"
+                                class="form-control" value="" placeholder="Example1" disabled></div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col"><label class="labels">Start Date</label>
+                                <div class="input-group date dp" id="start-datepicker">
+                                    <input type="text" class="form-control">
+                                    <span class="input-group-append">
+                                        <span class="input-group-text bg-white d-block">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col"><label class="labels">End Date</label>
+                                <div class="input-group date dp" id="end-datepicker">
+                                    <input type="text" class="form-control">
+                                    <span class="input-group-append">
+                                        <span class="input-group-text bg-white d-block">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                                <div class="col"><label class="labels">Return Date</label>
+                                    <div class="input-group date dp" id="returm-datepicker">
+                                        <input type="text" class="form-control">
+                                        <span class="input-group-append">
+                                            <span class="input-group-text bg-white d-block">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="scales">Active</label><br/>
+                                    <input class="form-check-input" type="checkbox" id="scales" name="scales" checked>  
+                                </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <button class="btn salmon" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+	    </div>
+    </div>
+</body>
+
+</html>
