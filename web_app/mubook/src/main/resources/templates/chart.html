@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
+    <!--<script src="js/chart.js" th:inline="javascript"></script>-->
+    <link rel="stylesheet" href="css/chart.css"/>
+</head>
+<body>
+    <canvas id="chart-can" width="400" height="400"></canvas>
+</body>
+<script th:inline="javascript">
+    var labels = /*[[${key}]]*/ [];
+    var data = /*[[${value}]]*/ [];
+    var name = '[[${name}]]';
+    name = name.replace(/["']/g, "");
+    var chartType = '[[${type}]]';
+    chartType = chartType.replace(/["']/g, "");
+    
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: name,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: data,
+            }]
+        };
+        
+        var config = {
+        type: chartType,
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+        };
+    
+        var myChart = new Chart(
+            document.getElementById('chart-can'),
+            config
+        );
+</script>
+</html>

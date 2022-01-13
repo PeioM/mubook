@@ -52,22 +52,22 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     "LIMIT 15", nativeQuery =  true)
     public List<Object[]> countReservationsByItemModelWithoutMT();
 
-    @Query(value = "SELECT COUNT(r.reservation_id) AS num, date_format(r.init_date, '%Y-%M') AS Date "+
+    @Query(value = "SELECT COUNT(r.reservation_id) AS num, YEAR(r.init_date) AS Year, MONTH(r.init_date) AS Month "+
     "FROM item i "+
         "JOIN reservation r on i.item_id = r.item_id "+
     "WHERE FLOOR(DATEDIFF(CURRENT_DATE, r.init_date)/365) < 2 "+
     "AND i.item_id = ?1 "+
-    "GROUP BY Date, i.item_id "+
-    "ORDER BY Date", nativeQuery = true)
+    "GROUP BY Year, Month, i.item_id "+
+    "ORDER BY Year, Month", nativeQuery = true)
     public List<Object[]> countReservationsOfItemEachMonth(long item_id);
 
-    @Query(value = "SELECT COUNT(r.reservation_id) AS num, date_format(r.init_date, '%Y-%M') AS Date "+
+    @Query(value = "SELECT COUNT(r.reservation_id) AS num, YEAR(r.init_date) AS Year, MONTH(r.init_date) AS Month "+
     "FROM item i "+
         "JOIN item_model im on im.item_model_id = i.item_model_id "+
         "JOIN reservation r on i.item_id = r.item_id "+
     "WHERE FLOOR(DATEDIFF(CURRENT_DATE, r.init_date)/365) < 2 "+
     "AND im.item_model_id = ?1 "+
-    "GROUP BY Date "+
-    "ORDER BY Date ", nativeQuery = true)
+    "GROUP BY Year, Month "+
+    "ORDER BY Year, Month ", nativeQuery = true)
     public List<Object[]> countReservationsOfItemEachMonthWithoutMT(long item_model_id);
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 import java.math.BigInteger;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -50,8 +50,9 @@ public class UserController {
     }
 
     @GetMapping(path="/age")
-    public @ResponseBody String countUsersByAge(){
-        HashMap<String, Integer> result = new HashMap<>();
+    public String countUsersByAge(Model model){
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS];
 
         for(int i = 0; i < ageList.length; i++){
@@ -80,7 +81,8 @@ public class UserController {
                 uba[threadId].setLow(buffer.get());
                 uba[threadId].setHigh(buffer.get());
                 uba[threadId].run();
-                result.put(uba[threadId].getKey(), uba[threadId].getValue());
+                key.add(uba[threadId].getKey());
+                value.add(uba[threadId].getValue());
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -88,12 +90,18 @@ public class UserController {
             }
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Number of users by age");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     @GetMapping(path="/ageWithoutMT")
-    public @ResponseBody String countUsersByAgeWithoutMT(){
-        HashMap<String, Integer> result = new HashMap<>();
+    public String countUsersByAgeWithoutMT(Model model){
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         List<Object[]> resultList;
         int i = 0;
 
@@ -101,11 +109,17 @@ public class UserController {
 
         while(i < resultList.size()){
             BigInteger num = (BigInteger) resultList.get(i)[0];
-            result.put((String) resultList.get(i)[1], num.intValue());
+            key.add((String) resultList.get(i)[1]);
+            value.add(num.intValue());
             i++;
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Number of users by age");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     class UsersByAge extends Thread{
@@ -140,8 +154,9 @@ public class UserController {
     }
 
     @GetMapping(path="/incidence")
-    public @ResponseBody String countUsersByIncidence(){
-        HashMap<Integer, Integer> result = new HashMap<>();
+    public String countUsersByIncidence(Model model){
+        List<Integer> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS];
 
         for(int i = 0; i < MAXINCIDENCES; i++){
@@ -170,7 +185,8 @@ public class UserController {
                 ubi[threadId].setNumIncidence(buffer.get());
                 ubi[threadId].run();
                 if(ubi[threadId].getResult().size() == 2){
-                    result.put(ubi[threadId].getKey(), ubi[threadId].getValue());
+                    key.add(ubi[threadId].getKey());
+                    value.add(ubi[threadId].getValue());
                 }
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
@@ -179,23 +195,35 @@ public class UserController {
             }
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Number of users by incidence");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     @GetMapping(path="/incidenceWithoutMT")
-    public @ResponseBody String countUsersByIncidenceWithoutMT(){
-        HashMap<Integer, Integer> result = new HashMap<>();
+    public String countUsersByIncidenceWithoutMT(Model model){
+        List<Integer> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         List<Object[]> resultList;
         int i = 0;
 
         resultList = userDao.countUsersByIncidenceWithoutMT();
 
         while(i < resultList.size()){
-            result.put((int) resultList.get(i)[1], (int) resultList.get(i)[0]);
+            key.add((int) resultList.get(i)[1]);
+            value.add((int) resultList.get(i)[0]);
             i++;
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Number of users by incidence");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     class UsersByIncidence extends Thread{
