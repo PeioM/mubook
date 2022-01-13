@@ -3,8 +3,15 @@ package com.libumu.mubook.api;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
@@ -14,12 +21,13 @@ import com.libumu.mubook.mt.Buffer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(path="/reservations")
 public class ReservationController {
-    final static int MAXNUMTHREADS = 10;
+    final static int MAXNUMTHREADS = 5;
     final static int MAXBUFFER = 100;
     final static int MAXMONTHS = 24;
 
@@ -32,13 +40,14 @@ public class ReservationController {
     @Autowired
     private ItemDao itemDao;
     private Buffer buffer = new Buffer(MAXBUFFER);
-    private Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
     @GetMapping(path="/itemType")
-    public @ResponseBody String countReservationByType(){
-        HashMap<String, Long> result = new HashMap<>();
+    public String countReservationByType(Model model){
         List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
+        List<String> key = new ArrayList<>();
+        List<Long> value = new ArrayList<>();
         ReservationByType rbt[] = new ReservationByType[MAXNUMTHREADS];
+        Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
         for(int i = 0; i < itemTypeId.size(); i++){
             try {
@@ -64,32 +73,45 @@ public class ReservationController {
                 threadId = threadsBuffer.get();
                 rbt[threadId].setId(buffer.get());
                 rbt[threadId].run();
-                result.put(rbt[threadId].getKey(), rbt[threadId].getValue());
+                key.add(rbt[threadId].getKey());
+                value.add(rbt[threadId].getValue());
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
+            model.addAttribute("key", key.toArray(new String[0]));
+            model.addAttribute("value", value.toArray(new Long[0]));
+            model.addAttribute("name", "Reservations of item model each month");
+            model.addAttribute("type", "bar");
         }
 
-        return "redirect:/home";
+        return "chart";
     }
 
     @GetMapping(path="/itemTypeWithoutMT")
-    public @ResponseBody String countReservationByTypeWithoutMT(){
-        HashMap<String, Long> result = new HashMap<>();
+    public String countReservationByTypeWithoutMT(Model model){
         List<Object[]> resultList;
+        List<String> key = new ArrayList<>();
+        List<Long> value = new ArrayList<>();
         int i = 0;
 
         resultList = reservationDao.countReservationsByItemTypeWithoutMT();
 
         while(i < resultList.size()){
             BigInteger num = (BigInteger) resultList.get(i)[1];
-            result.put((String) resultList.get(i)[0], num.longValue());
+            key.add((String) resultList.get(i)[0]);
+            value.add(num.longValue());
             i++;
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Long[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     class ReservationByType extends Thread{
@@ -121,10 +143,13 @@ public class ReservationController {
     }
 
     @GetMapping(path="/itemModel")
-    public @ResponseBody String countReservationByModel(){
-        HashMap<String, Integer> result = new HashMap<>();
+    public String countReservationByModel(Model model){
         List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         ReservationByModel rbm[] = new ReservationByModel[MAXNUMTHREADS];
+        Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
+
         for(int i = 0; i < itemModelId.size(); i++){
             BigInteger num = (BigInteger) itemModelId.get(i)[0];
             try {
@@ -151,7 +176,8 @@ public class ReservationController {
                 threadId = threadsBuffer.get();
                 rbm[threadId].setId(buffer.get());
                 rbm[threadId].run();
-                result.put(rbm[threadId].getKey(), rbm[threadId].getValue());
+                key.add(rbm[threadId].getKey());
+                value.add(rbm[threadId].getValue());
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -159,25 +185,36 @@ public class ReservationController {
             }
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     @GetMapping(path="/itemModelWithoutMT")
-    public @ResponseBody String countReservationByModelWithoutMT(){
-
-        HashMap<String, Integer> result = new HashMap<>();
+    public String countReservationByModelWithoutMT(Model model){
         List<Object[]> resultList;
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         int i = 0;
 
         resultList = reservationDao.countReservationsByItemModelWithoutMT();
 
         while(i < resultList.size()){
             BigInteger num = (BigInteger) resultList.get(i)[1];
-            result.put((String) resultList.get(i)[0], num.intValue());
+            key.add((String) resultList.get(i)[0]);
+            value.add(num.intValue());
             i ++;
         }
 
-        return "redirect:/home";
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "bar");
+
+        return "chart";
     }
 
     class ReservationByModel extends Thread{
@@ -209,10 +246,14 @@ public class ReservationController {
     }
 
     @GetMapping(path="/itemMonth")
-    public @ResponseBody String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId){
-        HashMap<String, Integer> result = new HashMap<>();
+    public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model){
         List<Object[]> itemId = itemDao.getItemWithModelId(itemModelId);
+        Map<String, Integer> results = new HashMap<String, Integer>();
+        Map<String, Integer> sortedResult = new TreeMap<String, Integer>();
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         ReservationsByItem rbi[] = new ReservationsByItem[MAXNUMTHREADS];
+        Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
         for(int i = 0; i < itemId.size(); i++){
             BigInteger num = (BigInteger) itemId.get(i)[0];
@@ -241,7 +282,13 @@ public class ReservationController {
                 rbi[threadId].setId(buffer.get());
                 rbi[threadId].run();
                 for(int i = 0; i < MAXMONTHS && i < rbi[threadId].getResult().size(); i++){
-                    result.put(rbi[threadId].getKey(i), rbi[threadId].getValue(i));
+                    String keyStr = rbi[threadId].getKey(i);
+                    int valueInt = rbi[threadId].getValue(i);
+                    if(results.containsKey(keyStr)){
+                        results.put(keyStr, results.get(keyStr) + valueInt);
+                    }else{
+                        results.put(keyStr, valueInt);
+                    }
                 }
                 threadsBuffer.put(threadId);
             } catch (InterruptedException e) {
@@ -250,24 +297,40 @@ public class ReservationController {
             }
         }
 
-        return "redirect:/home";
+        sortedResult.putAll(results);
+        key = new ArrayList<String>(sortedResult.keySet());
+        value = new ArrayList<Integer>(sortedResult.values());
+
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "line");
+
+        return "chart";
     }
 
     @GetMapping(path="/itemMonthWithoutMT")
-    public @ResponseBody String countReservationOfModelByMonthWithoutMT(@RequestParam("itemModelId") long itemModelId){
-        HashMap<String, Integer> result = new HashMap<>();
+    public String countReservationOfModelByMonthWithoutMT(@RequestParam("itemModelId") long itemModelId, Model model){
         List<Object[]> resultList;
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
         int i = 0;
 
         resultList = reservationDao.countReservationsOfItemEachMonthWithoutMT(itemModelId);
 
         while(i < resultList.size()){
             BigInteger num = (BigInteger) resultList.get(i)[0];
-            result.put((String) resultList.get(i)[1], num.intValue());
+            key.add(String.valueOf(resultList.get(i)[1]) + "-" + String.valueOf(resultList.get(i)[2]));
+            value.add(num.intValue());
             i ++;
         }
+
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "line");
         
-        return "redirect:/home";
+        return "chart";
     }
 
     class ReservationsByItem extends Thread{
@@ -285,7 +348,23 @@ public class ReservationController {
         }
 
         public String getKey(int month){
-            return (String) result.get(month)[1];
+            String year =  String.valueOf(result.get(month)[1]);
+            String mon = String.valueOf(result.get(month)[2]);
+            String dateStr=year + "-";
+            SimpleDateFormat format = new SimpleDateFormat("MM");
+            try {
+                Date date = format.parse(mon);
+                if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue() < 10){
+                    String newMonth = "0" + mon.substring(0);
+                    dateStr = dateStr + newMonth;
+                }else{
+                    dateStr = dateStr + mon;
+                }
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return dateStr;
         }
 
         public int getValue(int month){
@@ -300,7 +379,5 @@ public class ReservationController {
         public List<Object[]> getResult(){
             return this.result;
         }
-
     }
 }
-
