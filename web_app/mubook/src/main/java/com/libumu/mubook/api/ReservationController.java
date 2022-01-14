@@ -1,5 +1,6 @@
 package com.libumu.mubook.api;
 
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigInteger;
@@ -17,12 +18,16 @@ import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.reservation.ReservationDao;
+import com.libumu.mubook.entities.Reservation;
 import com.libumu.mubook.mt.Buffer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.persistence.Convert;
 
 @Controller
 @RequestMapping(path="/reservations")
@@ -41,13 +46,64 @@ public class ReservationController {
     private ItemDao itemDao;
     private Buffer buffer = new Buffer(MAXBUFFER);
 
+    @GetMapping(path="/all")
+    public @ResponseBody Iterable<Reservation> getActiveReservations(@RequestParam("username") String username,
+                                                                     @RequestParam("itemModelName") String itemModelName,
+                                                                     @RequestParam("active") Boolean active,
+                                                                     Model model){
+        Date now = new Date();
+        java.sql.Date date = new java.sql.Date(now.getTime());
+
+        if(itemModelName.equals("") && !username.equals("") && !active){
+            return reservationDao.findAllByUserUsername(username);
+        }else if(username.equals("") && !itemModelName.equals("") && !active){
+            return reservationDao.findAllByItemItemModelName(itemModelName);
+        }else if(username.equals("") && itemModelName.equals("") && !active){
+            return reservationDao.getAllReservations();
+        }else if(itemModelName.equals("") && !username.equals("") && active){
+            return reservationDao.findAllByUserUsernameAndEndDateIsAfter(username, date);
+        }else if(username.equals("") && !itemModelName.equals("") && active){
+            return reservationDao.findAllByItemItemModelNameAndEndDateIsAfter(itemModelName, date);
+        }else{
+            return reservationDao.findAllByEndDateIsAfter(date);
+        }
+    }
+
+    @GetMapping(path="/reservation")
+    public @ResponseBody Reservation getActiveReservations(@RequestParam("reservationId") long reservationId,
+                                                                     Model model){
+        return reservationDao.getReservation(reservationId);
+    }
+
+    @PostMapping(path="/add")
+    public String addReservation(Reservation reservation, Model model){
+        reservationDao.addReservation(reservation);
+
+        return "redirect:/index";
+    }
+
+    @PostMapping(path="/edit")
+    public String editReservation(Reservation reservation, Model model){
+        reservationDao.editReservation(reservation);
+
+        return "redirect:/index";
+    }
+
+    @PostMapping(path="/delete")
+    public String deleteReservation(@RequestParam("reservationId") long reservationId,
+                                                           Model model){
+        reservationDao.deleteReservation(reservationId);
+
+        return "redirect:/index";
+    }
+
     @GetMapping(path="/itemType")
     public String countReservationByType(Model model){
         long start = System.currentTimeMillis();
         List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
         List<String> key = new ArrayList<>();
         List<Long> value = new ArrayList<>();
-        ReservationByType rbt[] = new ReservationByType[MAXNUMTHREADS];
+        ReservationByType[] rbt = new ReservationByType[MAXNUMTHREADS];
         Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
         for(int i = 0; i < itemTypeId.size(); i++){
