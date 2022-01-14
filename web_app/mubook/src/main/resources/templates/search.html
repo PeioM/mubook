@@ -6,8 +6,23 @@
 <body>
 <header th:replace="include.html :: headercontent"></header>
 
-<div th:each="itemType : ${itemTypes}">
-    <button th:text="${itemType.description}" style="font-size: 15px"></button>
+<img src="images/Logos/logo_prueba.png" alt="logo prueba">
+<div id="ItemTypesSelection">
+    <div th:each="itemType : ${itemTypes}">
+        <form th:action="@{/search/} + ${itemType.description}" method="get">
+            <input type="submit" th:value="${itemType.description}" style="font-size: 15px"
+                   th:name="buttonType"></input>
+        </form>
+    </div>
+</div>
+<br><br><br>
+<div id="SpecificationSelection">
+    <div th:each="entry : ${specifications}">
+        <h4 th:text="${entry.key.description}"></h4>
+        <ul>
+            <li th:each="especValue : ${entry.value}" th:text="${especValue}"></li>
+        </ul>
+    </div>
 </div>
 <br><br><br>
 <div style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">

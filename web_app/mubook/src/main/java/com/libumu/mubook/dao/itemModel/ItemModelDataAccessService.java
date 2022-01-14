@@ -1,6 +1,7 @@
 package com.libumu.mubook.dao.itemModel;
 
 import com.libumu.mubook.entities.ItemModel;
+import com.libumu.mubook.entities.ItemType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,11 @@ public class ItemModelDataAccessService implements ItemModelDao {
     @Override
     public List<ItemModel> getAllItemModels() {
         return (List<ItemModel>) repository.findAll();
+    }
+
+    @Override
+    public List<ItemModel> getItemModelsByType(int itemTypeId) {
+        return repository.findAllByItemTypeItemTypeId(itemTypeId);
     }
 
     @Override

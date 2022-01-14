@@ -3,6 +3,7 @@ package com.libumu.mubook.dao.itemModel;
 import java.util.List;
 
 import com.libumu.mubook.entities.ItemModel;
+import com.libumu.mubook.entities.ItemType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,4 +13,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
     @Query(value = "SELECT item_model_id FROM item_model", nativeQuery = true)
     public List<Object[]> getAllItemModelId();
+    List<ItemModel> findAllByItemTypeItemTypeId(Integer itemType_itemTypeId);
 }
