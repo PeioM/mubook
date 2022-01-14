@@ -43,6 +43,7 @@ public class ReservationController {
 
     @GetMapping(path="/itemType")
     public String countReservationByType(Model model){
+        long start = System.currentTimeMillis();
         List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
         List<String> key = new ArrayList<>();
         List<Long> value = new ArrayList<>();
@@ -87,11 +88,16 @@ public class ReservationController {
             model.addAttribute("type", "bar");
         }
 
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
         return "chart";
     }
 
     @GetMapping(path="/itemTypeWithoutMT")
     public String countReservationByTypeWithoutMT(Model model){
+        long start = System.currentTimeMillis();
         List<Object[]> resultList;
         List<String> key = new ArrayList<>();
         List<Long> value = new ArrayList<>();
@@ -110,6 +116,10 @@ public class ReservationController {
         model.addAttribute("value", value.toArray(new Long[0]));
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "bar");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
 
         return "chart";
     }
@@ -144,6 +154,7 @@ public class ReservationController {
 
     @GetMapping(path="/itemModel")
     public String countReservationByModel(Model model){
+        long start = System.currentTimeMillis();
         List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
@@ -190,11 +201,16 @@ public class ReservationController {
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "bar");
 
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
         return "chart";
     }
 
     @GetMapping(path="/itemModelWithoutMT")
     public String countReservationByModelWithoutMT(Model model){
+        long start = System.currentTimeMillis();
         List<Object[]> resultList;
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
@@ -213,6 +229,10 @@ public class ReservationController {
         model.addAttribute("value", value.toArray(new Integer[0]));
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "bar");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
 
         return "chart";
     }
@@ -247,6 +267,7 @@ public class ReservationController {
 
     @GetMapping(path="/itemMonth")
     public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model){
+        long start = System.currentTimeMillis();
         List<Object[]> itemId = itemDao.getItemWithModelId(itemModelId);
         Map<String, Integer> results = new HashMap<String, Integer>();
         Map<String, Integer> sortedResult = new TreeMap<String, Integer>();
@@ -306,11 +327,16 @@ public class ReservationController {
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "line");
 
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
         return "chart";
     }
 
     @GetMapping(path="/itemMonthWithoutMT")
     public String countReservationOfModelByMonthWithoutMT(@RequestParam("itemModelId") long itemModelId, Model model){
+        long start = System.currentTimeMillis();
         List<Object[]> resultList;
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
@@ -329,6 +355,10 @@ public class ReservationController {
         model.addAttribute("value", value.toArray(new Integer[0]));
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "line");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
         
         return "chart";
     }

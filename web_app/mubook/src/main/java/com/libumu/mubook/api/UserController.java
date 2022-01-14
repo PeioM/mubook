@@ -17,8 +17,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +55,9 @@ public class UserController {
 
     @PostMapping(path="/add")
     public ModelAndView createNewUser (Model model,
-                                       @ModelAttribute User user,
-                                       @RequestParam("dniImg") MultipartFile file,
-                                       WebRequest request) {
+        @ModelAttribute User user,
+        @RequestParam("dniImg") MultipartFile file,
+        WebRequest request) {
         //Return to user form in case there is any error
         String returnStr = "userForm";
         String error = checkUserDuplicated(user);
@@ -143,6 +141,7 @@ public class UserController {
 
     @GetMapping(path="/age")
     public String countUsersByAge(Model model){
+        long start = System.currentTimeMillis();
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS];
@@ -187,11 +186,16 @@ public class UserController {
         model.addAttribute("name", "Number of users by age");
         model.addAttribute("type", "bar");
 
+        long end = System.currentTimeMillis();
+
+        System.out.println((end - start + "ms"));
+
         return "chart";
     }
 
     @GetMapping(path="/ageWithoutMT")
     public String countUsersByAgeWithoutMT(Model model){
+        long start = System.currentTimeMillis();
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
         List<Object[]> resultList;
@@ -210,6 +214,10 @@ public class UserController {
         model.addAttribute("value", value.toArray(new Integer[0]));
         model.addAttribute("name", "Number of users by age");
         model.addAttribute("type", "bar");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
 
         return "chart";
     }
@@ -247,6 +255,7 @@ public class UserController {
 
     @GetMapping(path="/incidence")
     public String countUsersByIncidence(Model model){
+        long start = System.currentTimeMillis();
         List<Integer> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
         UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS];
@@ -292,11 +301,16 @@ public class UserController {
         model.addAttribute("name", "Number of users by incidence");
         model.addAttribute("type", "bar");
 
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
         return "chart";
     }
 
     @GetMapping(path="/incidenceWithoutMT")
     public String countUsersByIncidenceWithoutMT(Model model){
+        long start = System.currentTimeMillis();
         List<Integer> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
         List<Object[]> resultList;
@@ -314,6 +328,10 @@ public class UserController {
         model.addAttribute("value", value.toArray(new Integer[0]));
         model.addAttribute("name", "Number of users by incidence");
         model.addAttribute("type", "bar");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
 
         return "chart";
     }
