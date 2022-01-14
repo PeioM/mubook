@@ -1,9 +1,12 @@
 package com.libumu.mubook.dao.reservation;
 
+import com.libumu.mubook.entities.ItemModel;
 import com.libumu.mubook.entities.Reservation;
+import com.libumu.mubook.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -14,7 +17,7 @@ public class ReservationDataAccessService implements ReservationDao {
 
     @Override
     public List<Reservation> getAllReservations() {
-        return (List<Reservation>) repository.findAll();
+        return repository.findAll();
     }
 
     @Override
@@ -71,5 +74,30 @@ public class ReservationDataAccessService implements ReservationDao {
     public List<Object[]> countReservationsOfItemEachMonthWithoutMT(long itemModelId) {
         return repository.countReservationsOfItemEachMonthWithoutMT(itemModelId);
     }
-    
+
+    @Override
+    public List<Reservation> findAllByUserUsername(String user_username) {
+        return repository.findAllByUserUsername(user_username);
+    }
+
+    @Override
+    public List<Reservation> findAllByItemItemModelName(String item_itemModel_name) {
+        return repository.findAllByItemItemModelName(item_itemModel_name);
+    }
+
+    @Override
+    public List<Reservation> findAllByEndDateIsAfter(Date date) {
+        return repository.findAllByEndDateIsAfter(date);
+    }
+
+    @Override
+    public List<Reservation> findAllByUserUsernameAndEndDateIsAfter(String user_username, Date date) {
+        return repository.findAllByUserUsernameAndEndDateIsAfter(user_username, date);
+    }
+
+    @Override
+    public List<Reservation> findAllByItemItemModelNameAndEndDateIsAfter(String item_itemModel_name, Date date) {
+        return repository.findAllByItemItemModelNameAndEndDateIsAfter(item_itemModel_name, date);
+    }
+
 }
