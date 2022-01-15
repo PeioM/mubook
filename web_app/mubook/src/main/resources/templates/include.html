@@ -53,12 +53,13 @@
           <img src="images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile">
-          <li><a class="dropdown-item" href="myReservations.html">My Reservations</a></li>
-          <li><a class="dropdown-item" href="myProfile.html">My Profile</a></li>
-          <li>
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="myReservations.html">My Reservations</a></li>
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="myProfile.html">My Profile</a></li>
+          <li sec:authorize= "isAuthenticated()">
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" href="login.html">Sign out</a></li>
+          <li sec:authorize= "isAnonymous()"><a class="dropdown-item" th:href="@{/login}">Sign in</a></li>
+          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" th:href="@{/login}">Sign out</a></li>
         </ul>
       </div>
     </div>
@@ -92,12 +93,13 @@
               <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/userSearch}">Users</a>
             </li>
             <hr>
-            <li><a class="nav-link text-white d-lg-none" href="myReservations.html">My Reservations</a></li>
-            <li><a class="nav-link text-white d-lg-none" href="myProfile.html">My Profile</a></li>
-            <li>
+            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="myReservations.html">My Reservations</a></li>
+            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="myProfile.html">My Profile</a></li>
+            <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
             </li>
-            <li><a class="nav-link text-white d-lg-none" href="login.html">Sign out</a></li>
+            <li sec:authorize= "isAnonymous()"><a class="nav-link text-white d-lg-none" th:href="@{/login}">Sign in</a></li>
+            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" th:href="@{/login}">Sign out</a></li>
             <hr>
           </ul>
           <ul class="navbar-nav float-right">
