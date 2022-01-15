@@ -26,5 +26,5 @@ public interface ReservationDao {
     List<Reservation> findAllByEndDateIsAfter(Date date);
     List<Reservation> findAllByUserUsernameAndEndDateIsAfter(String user_username, Date date);
     List<Reservation> findAllByItemItemModelNameAndEndDateIsAfter(String item_itemModel_name, Date date);
-
+    List<Object[]> getFirstReservationDate(long item_model_id);
 }

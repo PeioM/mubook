@@ -100,4 +100,9 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.findAllByItemItemModelNameAndEndDateIsAfter(item_itemModel_name, date);
     }
 
+    @Override
+    public List<Object[]> getFirstReservationDate(long item_model_id) {
+        return repository.getFirstReservationDate(item_model_id);
+    }
+
 }

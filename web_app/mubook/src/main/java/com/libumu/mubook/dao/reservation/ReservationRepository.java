@@ -18,6 +18,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByUserUsernameAndEndDateIsAfter(String user_username, Date date);
     List<Reservation> findAllByItemItemModelNameAndEndDateIsAfter(String item_itemModel_name, Date date);
 
+
+    @Query(value = "SELECT MAX(r2.end_date) fecha, i2.item_id " +
+            "    FROM reservation r2 "+
+            "        JOIN item i2 on i2.item_id = r2.item_id " +
+            "        JOIN item_model m on m.item_model_id = i2.item_model_id " +
+            "    WHERE m.item_model_id = ?1 " +
+            "GROUP BY i2.item_id " +
+            "ORDER BY fecha ASC " +
+            "LIMIT 1", nativeQuery = true)
+    List<Object[]> getFirstReservationDate(long item_model_id);
+
     @Query(value = "SELECT it.description, COUNT(r.reservation_id) "+
             "FROM item_type it "+
             "   JOIN item_model im on it.item_type_id = im.item_type_id "+
