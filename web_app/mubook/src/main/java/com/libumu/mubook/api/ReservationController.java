@@ -1,5 +1,12 @@
 package com.libumu.mubook.api;
 
+import com.libumu.mubook.dao.user.UserDao;
+import com.libumu.mubook.entities.Item;
+import com.libumu.mubook.entities.ItemModel;
+import com.libumu.mubook.entities.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -7,12 +14,7 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
@@ -26,8 +28,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.persistence.Convert;
 
 @Controller
 @RequestMapping(path="/reservations")
@@ -44,6 +44,8 @@ public class ReservationController {
     private ItemModelDao itemModelDao;
     @Autowired
     private ItemDao itemDao;
+    @Autowired
+    private UserDao userDao;
     private Buffer buffer = new Buffer(MAXBUFFER);
 
     @GetMapping(path="/all")
@@ -67,6 +69,43 @@ public class ReservationController {
         }else{
             return reservationDao.findAllByEndDateIsAfter(date);
         }
+    }
+
+    @GetMapping(path="/offer")
+    public ModelAndView makeReservationOffer(ItemModel itemModel, Model model){
+        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userDao.getUserByUsername(username);*/
+
+        User user = userDao.getUserByUsername("jon"); //Esto luego se coge del spring
+        if(itemModel.getItemModelId() == null){
+            itemModel = itemModelDao.getItemModel(1); //Esto luego se manda al controlador
+        }
+        List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
+        Date initDate = (Date) result.get(0)[0];
+        BigInteger itemId = (BigInteger) result.get(0)[1];
+        Item item = itemDao.getItem(itemId.longValue());
+
+        Date actualDate = new Date();
+        if(initDate.compareTo(actualDate) < 0){
+            initDate = actualDate;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(initDate);
+        c.add(Calendar.DATE, 10);
+        Date endDate = c.getTime();
+
+        Reservation reservation = new Reservation();
+
+        reservation.setItem(item);
+        reservation.setInitDate(new java.sql.Date(initDate.getTime()));
+        reservation.setEndDate(new java.sql.Date(endDate.getTime()));
+        reservation.setUser(user);
+
+        model.addAttribute("reserve", reservation);
+
+        return new ModelAndView("reservation", new ModelMap(model));
     }
 
     @GetMapping(path="/reservation")

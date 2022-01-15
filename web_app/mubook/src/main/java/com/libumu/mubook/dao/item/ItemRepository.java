@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
+
+
+
     @Query(value = "SELECT item_id "+
                     "FROM item i"+
                     "   JOIN item_model im on im.item_model_id = i.item_model_id "+
