@@ -31,8 +31,8 @@ public class HomeController implements ServletContextAware {
     @GetMapping("/login")
     public String login(){ return "login"; }
 
-    @GetMapping("/faq")
-    public String faq(){ return "faq"; }
+    @GetMapping("/aboutUs")
+    public String aboutUs(){ return "aboutUs"; }
 
     @GetMapping("/normalUser")
     @ResponseBody
