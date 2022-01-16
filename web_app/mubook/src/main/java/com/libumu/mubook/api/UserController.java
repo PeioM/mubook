@@ -107,8 +107,9 @@ public class UserController {
     }
 
     @PostMapping(path = "/edit")
-    public ModelAndView editUser(Model model,
+    public String editUser(Model model,
                                 @ModelAttribute User editedUser,
+                                 @ModelAttribute List<Incidence> incidences,
                                  WebRequest request) {
 
         String error = "";
@@ -124,33 +125,42 @@ public class UserController {
             error = error + " Email already in use";
         }
 
-        editedUser.setValidated((Boolean) model.getAttribute("validated"));
+        editedUser.setValidated(Boolean.valueOf(request.getParameter("validated")));
 
-        if(model.getAttribute("incidenceSeverity") != null && error.length() == 0){
-            IncidenceSeverity incidenceSeverity = incidenceSeverityDao.getIncidenceSeverityByDescription((String) model.getAttribute("incidenceSeverity"));
-            String description = (String)model.getAttribute("incidenceDescription");
-            Date initDate = new Date();
-            Calendar c = Calendar.getInstance();
-            c.setTime(initDate);
-            c.add(Calendar.MONTH, incidenceSeverity.getDuration());
-            Date endDate = c.getTime();
-            Incidence incidence = new Incidence();
-            incidence.setIncidenceSeverity(incidenceSeverity);
-            incidence.setDescription(description);
-            incidence.setInitDate(new java.sql.Date(initDate.getTime()));
-            incidence.setEndDate(new java.sql.Date(endDate.getTime()));
-            incidence.setUser(editedUser);
-            incidenceDao.addIncidence(incidence);
+        if(incidences.size() > 0 && error.length() == 0){
+            String incidenceError = "";
+            for(Incidence incidence : incidences.toArray(new Incidence[0])){
+                if(incidence.getIncidenceSeverity() == null){
+                    incidenceError = incidenceError + " Incidence severity is empty";
+                }
+                if(incidence.getDescription().equals("")){
+                    incidenceError = incidenceError + " Incidence description is empty";
+                }
+
+                if(incidenceError.length() == 0){
+                    Date initDate = new Date();
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(initDate);
+                    c.add(Calendar.MONTH, incidence.getIncidenceSeverity().getDuration());
+                    Date endDate = c.getTime();
+                    incidence.setInitDate(new java.sql.Date(initDate.getTime()));
+                    incidence.setEndDate(new java.sql.Date(endDate.getTime()));
+                    incidence.setUser(editedUser);
+                    incidenceDao.addIncidence(incidence);
+                }
+            }
+            incidenceError = "";
         }
 
-        model.addAttribute("user", editedUser);
         if(error.length() > 0){
             model.addAttribute("error", error);
         }else{
             userDao.editUser(editedUser);
         }
 
-        return new ModelAndView("userForm", new ModelMap(model));
+        model.addAttribute("users", userDao.getAllUsers());
+
+        return "redirect:/searchUser";
     }
 
     private String checkUserDuplicated(User user){
