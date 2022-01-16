@@ -4,7 +4,7 @@ import com.libumu.mubook.entities.IncidenceSeverity;
 
 import java.util.List;
 
-public interface incidenceSeverityDao {
+public interface IncidenceSeverityDao {
 
     public List<IncidenceSeverity> getAllIncidenceSeverities();
     public IncidenceSeverity getIncidenceSeverity(int id);
@@ -12,5 +12,6 @@ public interface incidenceSeverityDao {
     public void deleteIncidenceSeverity(int id);
     public void deleteIncidenceSeverity(IncidenceSeverity incidence);
     public void addIncidenceSeverity(IncidenceSeverity incidence);
+    IncidenceSeverity getIncidenceSeverityByDescription(String description);
 
 }

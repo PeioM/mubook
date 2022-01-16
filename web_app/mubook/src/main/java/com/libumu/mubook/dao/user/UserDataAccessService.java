@@ -75,4 +75,15 @@ public class UserDataAccessService implements UserDao {
     public List<Object[]> countUsersByIncidenceWithoutMT() {
         return repository.countUsersByIncidenceWithoutMT();
     }
+
+    @Override
+    public int countUserByUsernameAndUserIdIsNot(String username, Long userId) {
+        return repository.countUserByUsernameAndUserIdIsNot(username, userId);
+    }
+
+    @Override
+    public int countUserByEmailAndUserIdIsNot(String email, Long userId) {
+        return repository.countUserByEmailAndUserIdIsNot(email, userId);
+    }
+
 }

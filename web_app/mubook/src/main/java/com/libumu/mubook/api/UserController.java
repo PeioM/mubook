@@ -1,8 +1,13 @@
 package com.libumu.mubook.api;
 
+import com.libumu.mubook.dao.incidence.IncidenceDao;
+import com.libumu.mubook.dao.incidenceSeverity.IncidenceSeverityDao;
+import com.libumu.mubook.dao.incidenceSeverity.IncidenceSeverityDataAccessService;
 import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.dao.userActivity.UserActivityDao;
 import com.libumu.mubook.dao.userType.UserTypeDao;
+import com.libumu.mubook.entities.Incidence;
+import com.libumu.mubook.entities.IncidenceSeverity;
 import com.libumu.mubook.entities.User;
 import com.libumu.mubook.mt.Buffer;
 
@@ -18,15 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Objects;
 
 @Controller
 @RequestMapping(path="/user")
@@ -37,6 +40,11 @@ public class UserController {
 
     public final String LOCAL_UPLOAD_DIR = "C:/IMAGENES_DNI_PRUEBA/";
     public final String SERVER_UPLOAD_DIR = "/home/dniImg/";
+
+    @Autowired
+    IncidenceSeverityDao incidenceSeverityDao;
+    @Autowired
+    IncidenceDao incidenceDao;
 
     private final UserDao userDao;
     private final UserTypeDao userTypeDao;
@@ -85,7 +93,7 @@ public class UserController {
                 BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
                 user.setPassword(encrypt.encode(request.getParameter("password")));
                 user.setUserType(userTypeDao.getUserType("USER"));
-                user.setUserActivity(userActivityDao.getUserActivity(3));
+                user.setUserActivity(userActivityDao.getUserActivity(1));
 
                 userDao.addUser(user);
             }
@@ -96,6 +104,53 @@ public class UserController {
         if(error.length()!=0)model.addAttribute("error",error);
 
         return new ModelAndView(returnStr, new ModelMap(model));
+    }
+
+    @PostMapping(path = "/edit")
+    public ModelAndView editUser(Model model,
+                                @ModelAttribute User editedUser,
+                                 WebRequest request) {
+
+        String error = "";
+        if(!passwordsMatch(request)){
+            error = error + "Password mismatch";
+        }
+
+        if(userDao.countUserByUsernameAndUserIdIsNot(editedUser.getUsername(), editedUser.getUserId()) > 0){
+            error = error + " Username already in use";
+        }
+
+        if(userDao.countUserByEmailAndUserIdIsNot(editedUser.getEmail(), editedUser.getUserId()) > 0){
+            error = error + " Email already in use";
+        }
+
+        editedUser.setValidated((Boolean) model.getAttribute("validated"));
+
+        if(model.getAttribute("incidenceSeverity") != null && error.length() == 0){
+            IncidenceSeverity incidenceSeverity = incidenceSeverityDao.getIncidenceSeverityByDescription((String) model.getAttribute("incidenceSeverity"));
+            String description = (String)model.getAttribute("incidenceDescription");
+            Date initDate = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(initDate);
+            c.add(Calendar.MONTH, incidenceSeverity.getDuration());
+            Date endDate = c.getTime();
+            Incidence incidence = new Incidence();
+            incidence.setIncidenceSeverity(incidenceSeverity);
+            incidence.setDescription(description);
+            incidence.setInitDate(new java.sql.Date(initDate.getTime()));
+            incidence.setEndDate(new java.sql.Date(endDate.getTime()));
+            incidence.setUser(editedUser);
+            incidenceDao.addIncidence(incidence);
+        }
+
+        model.addAttribute("user", editedUser);
+        if(error.length() > 0){
+            model.addAttribute("error", error);
+        }else{
+            userDao.editUser(editedUser);
+        }
+
+        return new ModelAndView("userForm", new ModelMap(model));
     }
 
     private String checkUserDuplicated(User user){
@@ -129,6 +184,14 @@ public class UserController {
     @GetMapping(path="/add")
     public String addNewUser (Model model) {
         model.addAttribute("user", new User());
+
+        return "userForm";
+    }
+
+    @GetMapping(path="/edit")
+    public String editUser (Model model, @RequestParam("userId") long userId) {
+        User user = userDao.getUser(userId);
+        model.addAttribute("user", user);
 
         return "userForm";
     }

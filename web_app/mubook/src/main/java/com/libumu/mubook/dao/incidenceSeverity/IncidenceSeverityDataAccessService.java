@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IncidenceSeverityDataAccessService implements incidenceSeverityDao {
+public class IncidenceSeverityDataAccessService implements IncidenceSeverityDao {
 
     @Autowired
     private IncidenceSeverityRepository repository;
@@ -42,5 +42,9 @@ public class IncidenceSeverityDataAccessService implements incidenceSeverityDao 
         repository.save(incidence);
     }
 
-    
+    @Override
+    public IncidenceSeverity getIncidenceSeverityByDescription(String description) {
+        return repository.getIncidenceSeverityByDescription(description);
+    }
+
 }
