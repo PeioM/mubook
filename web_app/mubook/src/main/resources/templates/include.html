@@ -20,6 +20,15 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
       integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script>
+        $(function () {
+            $('.dp').datepicker();
+        });
+    </script>
     <!--header.css-->
     <link rel="stylesheet" href="css/header.css"/>
     <link rel="stylesheet" href="css/footer.css"/>
@@ -78,16 +87,16 @@
           <!-- this list contains the "menu options (items)" such as download, contact, pricing, etc. -->
           <ul id="my-ul" class="navbar-nav w-100">
             <li class="nav-item"><!--actualPage==Main Page  th:classappend="${1}? active"-->
-              <a class="nav-link text-white"  th:classappend="${true}? active" sec:authorize= "isAnonymous()" th:href="@{/}" >Home</a>
+              <a class="nav-link text-white"  th:classappend="${true}? active"  th:href="@{/}" >Home</a>
             </li>
             <li class="nav-item"><!--actualPage==Search  th:classappend="${0}? active"-->
-              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "isAnonymous()" th:href="@{/search}">Search</a>
+              <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/search}">Search</a>
             </li>
             <li class="nav-item"><!--actualPage==FAQ  th:classappend="${0}? active"-->
-              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "isAnonymous()" th:href="@{/faq}">FAQ</a>
+              <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/faq}">FAQ</a>
             </li>
             <li class="nav-item"><!--actualPage==AboutUs  th:classappend="${0}? active"-->
-              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "isAnonymous()" th:href="@{/aboutUs}">About Us</a>
+              <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/aboutUs}">About Us</a>
             </li>
             <li class="nav-item"><!--actualPage==User Search  th:classappend="${0}? active"-->
               <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/userSearch}">Users</a>

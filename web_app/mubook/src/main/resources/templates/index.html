@@ -20,6 +20,16 @@
         <div class="carousel-inner">
             <div th:each="actualNew, iterator: ${news}" class="carousel-item" th:classappend="${iterator.first}? active">
                 <div class="carousel-caption h-120 d-flex flex-column align-items-center justify-content-center">
+                    <form sec:authorize= "hasAnyRole('ADMIN','WORKER')" name="new-delete" th:action="@{'/news/delete?id=' + ${actualNew.newsid}}"  method="post">
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-trash fluid" viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                            <path fill-rule="evenodd"
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                        </svg></button>
+                    </form>
                     <img th:src="@{${actualNew.image}}" class="d-block h-50 p-3" alt="First Slide...">
                     <h5 th:text="${actualNew.title}"></h5>
                     <div class="accordion" id="accordionExample">
@@ -140,7 +150,9 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
+        <button sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="btn btn-primary salmon" id="create-new-btn" href="/new/add">Create new</button>
     </div>
+
     <footer th:replace="include.html :: footercontent"></footer>
 <!--
     <div id="pruebasSec">
