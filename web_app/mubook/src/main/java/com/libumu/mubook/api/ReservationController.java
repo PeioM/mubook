@@ -71,6 +71,37 @@ public class ReservationController {
         }
     }
 
+    @GetMapping(path="/reserves")
+    public ModelAndView getUserReservations(@RequestParam("type") String type,
+                                                                    @RequestParam("active") Boolean active, Model model){
+        List<Reservation> reservations;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userDao.getUserByUsername(username);
+
+        Date now = new Date();
+        java.sql.Date date = new java.sql.Date(now.getTime());
+
+        if(type.equals("") && !active){
+            reservations = reservationDao.findAllByUserUsername(user.getUsername());
+        }else if(!type.equals("") && !active){
+            reservations = reservationDao.findAllByItemItemModelItemTypeDescriptionAndUserUsername(type, user.getUsername());
+        }else if(!type.equals("") && active){
+            reservations = reservationDao.findAllByItemItemModelItemTypeDescriptionAndEndDateIsAfterAndUserUsername(type, date, user.getUsername());
+        }else{
+            reservations = reservationDao.findAllByUserUsernameAndEndDateIsAfter(user.getUsername(), date);
+        }
+
+        model.addAttribute("reserves", reservations);
+
+        return new ModelAndView("myReservations", new ModelMap(model));
+    }
+
+    @GetMapping(path="/reserve")
+    public Reservation getReservation(@RequestParam("reservationId") long reservationId){
+        return reservationDao.getReservation(reservationId);
+    }
+
     @GetMapping(path="/offer")
     public ModelAndView makeReservationOffer(ItemModel itemModel, Model model){
         /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
