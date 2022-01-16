@@ -129,24 +129,27 @@ public class UserController {
 
         if(incidences.size() > 0 && error.length() == 0){
             String incidenceError = "";
+            List<Incidence> previousIncidences = incidenceDao.getAllByUser(editedUser);
             for(Incidence incidence : incidences.toArray(new Incidence[0])){
-                if(incidence.getIncidenceSeverity() == null){
-                    incidenceError = incidenceError + " Incidence severity is empty";
-                }
-                if(incidence.getDescription().equals("")){
-                    incidenceError = incidenceError + " Incidence description is empty";
-                }
+                if(!previousIncidences.contains(incidence)){
+                    if(incidence.getIncidenceSeverity() == null){
+                        incidenceError = incidenceError + " Incidence severity is empty";
+                    }
+                    if(incidence.getDescription().equals("")){
+                        incidenceError = incidenceError + " Incidence description is empty";
+                    }
 
-                if(incidenceError.length() == 0){
-                    Date initDate = new Date();
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(initDate);
-                    c.add(Calendar.MONTH, incidence.getIncidenceSeverity().getDuration());
-                    Date endDate = c.getTime();
-                    incidence.setInitDate(new java.sql.Date(initDate.getTime()));
-                    incidence.setEndDate(new java.sql.Date(endDate.getTime()));
-                    incidence.setUser(editedUser);
-                    incidenceDao.addIncidence(incidence);
+                    if(incidenceError.length() == 0){
+                        Date initDate = new Date();
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(initDate);
+                        c.add(Calendar.MONTH, incidence.getIncidenceSeverity().getDuration());
+                        Date endDate = c.getTime();
+                        incidence.setInitDate(new java.sql.Date(initDate.getTime()));
+                        incidence.setEndDate(new java.sql.Date(endDate.getTime()));
+                        incidence.setUser(editedUser);
+                        incidenceDao.addIncidence(incidence);
+                    }
                 }
             }
             incidenceError = "";

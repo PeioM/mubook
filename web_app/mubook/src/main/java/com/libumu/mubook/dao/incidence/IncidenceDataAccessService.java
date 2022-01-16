@@ -1,6 +1,7 @@
 package com.libumu.mubook.dao.incidence;
 
 import com.libumu.mubook.entities.Incidence;
+import com.libumu.mubook.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +50,10 @@ public class IncidenceDataAccessService implements IncidenceDao {
     @Override
     public List<Integer> getIncidenceWithUserId(long incidenceUserId) {
         return null;
+    }
+
+    @Override
+    public List<Incidence> getAllByUser(User user) {
+        return repository.getAllByUser(user);
     }
 }
