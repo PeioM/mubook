@@ -144,10 +144,59 @@ public class ItemModelController {
             }*/
         }
 
-        return "redirect:/index";
+        model.addAttribute("items", itemModelDao.getAllItemModels());
+
+        return "redirect:/searchItems";
     }
 
+    @PostMapping(path="/edit")
+    public String editItemModel(Model model,
+                                @ModelAttribute ItemModel itemModelEdited,
+                                @ModelAttribute List<Item> items,
+                                @ModelAttribute List<Specification> specifications){
+        String error = "";
+        if(!itemModelEdited.getIdentifier().equals("")){
+            if(itemModelDao.countItemModelByIdentifierAndItemModelIdNotLike(itemModelEdited.getIdentifier(), itemModelEdited.getItemModelId()) > 0){
+                error = error + " Item model identifier already exists";
+            }
+        }else{
+            error = error + " Item model identifier is empty";
+        }
+        if(itemModelEdited.getItemType() == null){
+            error = error + " Item model type is empty";
+        }
+        if(itemModelEdited.getName().equals("")){
+            error = error + " Item model name is empty";
+        }
+        if(itemModelEdited.getDescription().equals("")){
+            error = error + " Item model description is empty";
+        }
 
+        if(error.length() == 0){
+            String itemError = "";
+            List<Item> previousItems = itemDao.getItemByItemModelItemModelId(itemModelEdited.getItemModelId());
+            for(Item item : items.toArray(new Item[0])){
+                if(!previousItems.contains(item)){
+                    if(item.getSerialNum().equals("")){
+                        itemError = itemError + " Item serial number is empty";
+                    }
+                    if(item.getStatus() == null){
+                        itemError = itemError + " Item status is empty";
+                    }
+                    if(itemError.length() == 0){
+                        item.setItemModel(itemModelEdited);
+                        itemDao.addItem(item);
+                    }
+                }
+                itemError = "";
+            }
+        }
+
+
+        model.addAttribute("items", itemModelDao.getAllItemModels());
+
+        return "redirect:/searchItems";
+    }
 
     /*@PostMapping(path="/delete")
     public String deleteItemModel(Model model,
