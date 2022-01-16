@@ -3,6 +3,7 @@ package com.libumu.mubook.dao.reservation;
 import java.sql.Date;
 import java.util.List;
 
+import com.libumu.mubook.entities.ItemType;
 import com.libumu.mubook.entities.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByItemItemModelName(String item_itemModel_name);
     List<Reservation> findAllByUserUsernameAndEndDateIsAfter(String user_username, Date date);
     List<Reservation> findAllByItemItemModelNameAndEndDateIsAfter(String item_itemModel_name, Date date);
-
+    List<Reservation> findAllByItemItemModelItemTypeDescriptionAndUserUsername(String itemType_description, String user_username);
+    List<Reservation> findAllByItemItemModelItemTypeDescriptionAndEndDateIsAfterAndUserUsername(String itemType_description, Date endDate, String user_username);
 
     @Query(value = "SELECT MAX(r2.end_date) fecha, i2.item_id " +
             "    FROM reservation r2 "+
