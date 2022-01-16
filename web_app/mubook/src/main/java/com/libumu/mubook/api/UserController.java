@@ -193,7 +193,7 @@ public class UserController {
         User user = userDao.getUser(userId);
         model.addAttribute("user", user);
 
-        return "userForm";
+        return "editCreateUser";
     }
 
     @GetMapping(path="/all")
