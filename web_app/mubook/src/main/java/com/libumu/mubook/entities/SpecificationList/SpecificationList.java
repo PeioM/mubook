@@ -25,4 +25,16 @@ public class SpecificationList  implements Serializable {
 
     @Column(name = "value")
     private String value;
+
+    public Specification getSpecification(){
+        return this.specification;
+    }
+
+    public String getValue(){
+        return this.value;
+    }
+
+    public void setItemModel(ItemModel itemModel){
+        this.itemModel = itemModel;
+    }
 }

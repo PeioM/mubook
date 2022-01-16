@@ -13,5 +13,6 @@ public interface ItemDao {
     public void deleteItem(Item item);
     public void addItem(Item item);
     public List<Object[]> getItemWithModelId(long itemModelId);
+    List<Item> getItemByItemModelItemModelId(Long itemModel_itemModelId);
 
 }
