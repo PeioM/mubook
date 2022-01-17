@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/search")
@@ -47,7 +44,7 @@ public class SearchController {
         List<ItemModel> itemModels = itemModelDao.getItemModelsByType(itemType.getItemTypeId());
 
         //Specifications
-        Map<Specification, List<String>> specifications = new HashMap<>();
+        Map<Specification, List<String>> specifications = new TreeMap<>();
         itemModels.forEach(
                 im -> im.getSpecificationLists().forEach(
                         sl -> loadSpecifications(sl, specifications)));

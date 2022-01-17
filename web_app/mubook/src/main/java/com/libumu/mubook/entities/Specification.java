@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "specification")
-public class Specification {
+public class Specification implements Comparable<Specification>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,5 +46,15 @@ public class Specification {
 
     public void setSpecificationLists(List<SpecificationList> specificationLists) {
         this.specificationLists = specificationLists;
+    }
+
+    @Override
+    public String toString() {
+        return this.description + " " + this.specificationId;
+    }
+
+    @Override
+    public int compareTo(Specification o) {
+        return this.description.compareTo(o.description);
     }
 }
