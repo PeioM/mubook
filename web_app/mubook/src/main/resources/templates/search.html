@@ -16,7 +16,7 @@
 </div>
 <br><br><br>
 <div id="SpecificationSelection">
-    <form th:action="@{/search/filter}" method="get">
+    <form th:action="@{/ajax/filter/} + ${actualItemType}" method="get">
         <div th:each="entry, stat : ${specifications}">
             <h4 th:text="${entry.key.description}"></h4>
             <ul>
@@ -29,8 +29,8 @@
     </form>
 </div>
 <br><br><br>
-<div id="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
-    <div th:fragment="itemModelList" th:each="itemModel : ${itemModels}">
+<div id="resultBlock" th:fragment="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
+    <div th:each="itemModel : ${itemModels}">
         <button th:text="${itemModel.name}" style="font-size: 15px"></button>
     </div>
 </div>

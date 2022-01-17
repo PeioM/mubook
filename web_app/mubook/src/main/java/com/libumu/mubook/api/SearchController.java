@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -38,28 +37,21 @@ public class SearchController {
         return "search";
     }
 
-    @GetMapping("/filter")
-    public String testFilter(Model model, WebRequest request){
-
-        Map<String, String[]> parameters = request.getParameterMap();
-
-        
-
-        return "search :: itemModelList";
-    }
-
     @GetMapping("/*")
     public String searchPage(Model model, HttpServletRequest request){
+
         //ItemModels filtered by ItemType
         String url = request.getRequestURL().toString();
         String itemTypeDesc = url.substring(url.lastIndexOf("/")+1);
         ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
         List<ItemModel> itemModels = itemModelDao.getItemModelsByType(itemType.getItemTypeId());
+
         //Specifications
         Map<Specification, List<String>> specifications = new HashMap<>();
         itemModels.forEach(
                 im -> im.getSpecificationLists().forEach(
                         sl -> loadSpecifications(sl, specifications)));
+
         //Save in model
         model.addAttribute("actualItemType", itemType.getItemTypeId());
         model.addAttribute("itemModels", itemModels);
