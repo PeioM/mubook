@@ -9,13 +9,9 @@ import com.libumu.mubook.entities.SpecificationList.SpecificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -42,14 +38,15 @@ public class SearchController {
         return "search";
     }
 
-    /*@PostMapping("/*")
-    public ModelAndView searchPage(Model model, @RequestParam(value = "buttonType") String itemTypeDesc){
-        ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
-        model.addAttribute("actualItemType", itemType.getItemTypeId());
-        model.addAttribute("itemModels", itemModelDao.getItemModelsByType(itemType.getItemTypeId()));
+    @GetMapping("/filter")
+    public String testFilter(Model model, WebRequest request){
 
-        return new ModelAndView("search", new ModelMap(model));
-    }*/
+        Map<String, String[]> parameters = request.getParameterMap();
+
+        
+
+        return "search :: itemModelList";
+    }
 
     @GetMapping("/*")
     public String searchPage(Model model, HttpServletRequest request){
