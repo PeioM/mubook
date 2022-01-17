@@ -28,7 +28,7 @@ public class NewsController {
     @GetMapping(path="/add")
     public String addNew(Model model){
         News news = new News();
-        model.addAttribute("new", news);
+        model.addAttribute("newEntity", news);
 
         return "createNew";
     }
@@ -67,13 +67,13 @@ public class NewsController {
             }
         }
 
-        return "index";
+        return "redirect:/index";
     }
 
     @PostMapping("/delete")
     public String deleteNew(@RequestParam("id") long newId){
         newsDao.deleteNews(newId);
 
-        return "index";
+        return "redirect:/index";
     }
 }

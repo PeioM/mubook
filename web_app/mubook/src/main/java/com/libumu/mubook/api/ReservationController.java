@@ -103,15 +103,12 @@ public class ReservationController {
     }
 
     @GetMapping(path="/offer")
-    public ModelAndView makeReservationOffer(ItemModel itemModel, Model model){
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ModelAndView makeReservationOffer(Model model,
+                                             @ModelAttribute ItemModel itemModel){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userDao.getUserByUsername(username);*/
+        User user = userDao.getUserByUsername(username);
 
-        User user = userDao.getUserByUsername("jon"); //Esto luego se coge del spring
-        if(itemModel.getItemModelId() == null){
-            itemModel = itemModelDao.getItemModel(1); //Esto luego se manda al controlador
-        }
         List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
         Date initDate = (Date) result.get(0)[0];
         BigInteger itemId = (BigInteger) result.get(0)[1];

@@ -47,4 +47,9 @@ public class ItemModelDataAccessService implements ItemModelDao {
         return repository.getAllItemModelId();
     }
 
+    @Override
+    public int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId) {
+        return repository.countItemModelByIdentifierAndItemModelIdNotLike(identifier, itemModelId);
+    }
+
 }

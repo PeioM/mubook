@@ -13,5 +13,6 @@ public interface ItemModelDao {
     public void deleteItemModel(ItemModel itemModel);
     public void addItemModel(ItemModel itemModel);
     public List<Object[]> getAllItemModelId();
+    int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId);
 
 }

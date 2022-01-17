@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-
+    List<Item> getItemByItemModelItemModelId(Long itemModel_itemModelId);
 
     @Query(value = "SELECT item_id "+
                     "FROM item i"+
