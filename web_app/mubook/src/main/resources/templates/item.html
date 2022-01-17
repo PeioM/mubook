@@ -11,7 +11,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <h5 th:text="${itemModel.title}">BOOK - Title1</h5>
+                    <h5 th:text="${itemModel.name}" th:value="${itemModel.itemModelId}" th:name="itemModelId">BOOK - Title1</h5>
                     <div class="user-img-div">
                         <img class="mt-5 img-fluid" th:src="@{${itemModel.img}}" alt="Item image">
                     </div>
@@ -107,12 +107,12 @@
                 <div class="row m-4 descripion-div">
                     <h3>Description</h3>
                     <textarea class="form-control mt-2" id="textAreaDescription" rows="10"
-                        style="min-height:100px;height:100%;width:100%;" disabled th:text="${actualNew.description}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+                        style="min-height:100px;height:100%;width:100%;" disabled th:text="${itemModel.description}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
                     </textarea>
                 </div>
                 <hr>
                 <div class="d-flex justify-content-center">
-                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" href="/reserve"
+                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" th:href="@{'/reservations/offer?itemModelId=' +${itemModel.itemModelId}}"
                         role="button">BOOK NOW</a>
                 </div>
                 <div class="row m-4  accordion" id="accordionExample">

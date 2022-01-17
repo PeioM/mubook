@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping(path="itemModel")
+@RequestMapping(path="/itemModel")
 public class ItemModelController {
     public final String LOCAL_UPLOAD_DIR = "C:/IMAGENES_ITEM_MODEL_PRUEBA/";
 
