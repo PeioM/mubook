@@ -39,7 +39,7 @@ public class SearchController {
     public String searchPage(Model model){
         model.addAttribute("itemTypes", itemTypeDao.getAllItemTypes());
         model.addAttribute("itemModels", itemModelDao.getAllItemModels());
-        return "search";
+        return "searchItems";
     }
 
     /*@PostMapping("/*")
@@ -68,7 +68,7 @@ public class SearchController {
         model.addAttribute("itemModels", itemModels);
         model.addAttribute("specifications", specifications);
 
-        return "search";
+        return "searchItems";
     }
 
     private void loadSpecifications(SpecificationList sl, Map<Specification, List<String>> specifications){
