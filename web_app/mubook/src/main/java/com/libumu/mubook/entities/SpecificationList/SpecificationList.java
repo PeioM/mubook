@@ -1,5 +1,6 @@
 package com.libumu.mubook.entities.SpecificationList;
 
+import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.entities.ItemModel;
 import com.libumu.mubook.entities.Specification;
 
@@ -34,7 +35,15 @@ public class SpecificationList  implements Serializable {
         return this.value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public void setItemModel(ItemModel itemModel){
         this.itemModel = itemModel;
+    }
+
+    public ItemModel getItemModel(){
+        return this.itemModel;
     }
 }

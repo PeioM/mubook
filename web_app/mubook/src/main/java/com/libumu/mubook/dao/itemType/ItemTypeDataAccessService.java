@@ -47,4 +47,9 @@ public class ItemTypeDataAccessService implements ItemTypeDao {
         return repository.getAllItemTypeId();
     }
 
+    @Override
+    public ItemType getItemTypeByDesc(String itemTypeDesc) {
+        return repository.findByDescription(itemTypeDesc);
+    }
+
 }

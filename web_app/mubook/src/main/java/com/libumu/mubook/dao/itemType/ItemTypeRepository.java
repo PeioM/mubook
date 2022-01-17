@@ -13,4 +13,5 @@ public interface ItemTypeRepository extends JpaRepository<ItemType, Integer> {
     @Query(value = "SELECT item_type_id "+
                     "FROM item_type", nativeQuery = true)
     public List<Object[]> getAllItemTypeId();
+    ItemType findByDescription(String description);
 }

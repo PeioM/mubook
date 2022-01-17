@@ -13,5 +13,5 @@ public interface ItemTypeDao {
     public void deleteItemType(ItemType itemType);
     public void addItemType(ItemType itemType);
     public List<Object[]> getAllItemTypeId();
-
+    ItemType getItemTypeByDesc(String itemTypeDesc);
 }
