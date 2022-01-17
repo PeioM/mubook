@@ -8,11 +8,12 @@
     <header th:replace="include.html :: headercontent"></header>
     <div class="container rounded bg-white mt-3 mb-3 border center">
         <div class="row d-flex justify-content-center">
+            <form name="reservation-form" th:action="@{/reservations/add}" th:object="${reserve}" method="post">
             <h3 class="text-center m-2">Reservation Details</h3>
             <div class="col-lg-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <h5 th:text="'BOOK'+${itemModel.name}">BOOK - Title1</h5>
-                    <h6 th:text="'Your book ID: '${reserve.item_id}">Your book ID: <b>564561</b></h6>
+                    <h5 th:text="'BOOK '+${reserve.item.itemModel.name}"></h5>
+                    <input th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}"></input>
                     <div class="user-img-div">
                         <img class="mt-5 img-fluid" src="../static/images/computadora.png" alt="Item image">
                     </div>
@@ -29,7 +30,7 @@
                     <h4 class="mb-2">Item Details</h4>
                     <div class="col m-3">
                         <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Book ID: </label> <label th:text="${itemModel.item_model_id}">564561</label>
+                            <label class="text-dark">Book ID: </label> <label th:text="${reserve.item.itemModel.itemModelId}"></label>
                         </div>
                         <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
                             <label class="text-dark">Author: </label> <label>JK Rowling</label>
@@ -51,22 +52,22 @@
                     </div>
                     <div class="start-date-div">
                         <h4 class="mb-2">Start Date</h4>
-                        <label class="m-2" th:text="${reserve.init_date}">04/02/2022</label>
+                        <input class="m-2" th:field="*{initDate}" th:attr="value=${reserve.initDate}"></input>
                     </div>
                     <div class="end-date-div">
                         <h4 class="mb-2">End Date</h4>
-                        <label class="m-2" th:text="${reserve.init_date}">14/02/2022</label>
+                        <input class="m-2" th:field="*{endDate}" th:attr="value=${reserve.endDate}"></input>
+                    </div>
+                    <div class="username-div">
+                        <h4 class="mb-2">user id</h4>
+                        <input class="m-2" th:field="*{user.userId}" th:attr="value=${reserve.user.userId}"></input>
                     </div>
                 </div>
-                <div class="row m-4 descripion-div">
-                    <h6>Annotation</h6>
-                    <textarea class="form-control mt-2" id="textAreaExample" rows="3" style="min-height:100px;height:100%;width:100%;">
-                    </textarea>
-                </div>
                 <div class="d-flex justify-content-center">
-                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" href="reservation.html" role="button">BOOK NOW</a>
+                    <button type="submit" class="btn btn-primary salmon" id="create-reservation-btn">BOOK NOW</button>
                 </div>
             </div>
+        </form> 
         </div>
     </div>
     <footer th:replace="include.html :: footercontent"></footer>

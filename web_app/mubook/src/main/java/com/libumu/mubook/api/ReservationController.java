@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.WebRequest;
 
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -104,10 +105,11 @@ public class ReservationController {
 
     @GetMapping(path="/offer")
     public ModelAndView makeReservationOffer(Model model,
-                                             @ModelAttribute ItemModel itemModel){
+                                             @RequestParam("itemModelId") long itemModelId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userDao.getUserByUsername(username);
+        ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
 
         List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
         Date initDate = (Date) result.get(0)[0];
@@ -143,7 +145,10 @@ public class ReservationController {
     }
 
     @PostMapping(path="/add")
-    public String addReservation(Reservation reservation, Model model){
+    public String addReservation(Model model,
+                                    @ModelAttribute Reservation reservation){
+        reservation.setItem(itemDao.getItem(reservation.getItem().getItemId()));                                 
+        reservation.setUser(userDao.getUser(reservation.getUser().getUserId()));                             
         reservationDao.addReservation(reservation);
 
         return "redirect:/index";
