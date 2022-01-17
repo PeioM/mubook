@@ -35,29 +35,29 @@
                     <div class="user-img-div">
                         <img class="rounded mt-5 img-fluid" src="../static/images/userExample.jpg" alt="user profile image">
                     </div>
-                    <span class="font-weight-bold">UserExample</span>
-                    <span class="text-black-50">ID: <span class="user-id">00183</span> </span>
+                    <span class="font-weight-bold" >Your user</span>
+                    <span class="text-black-50">ID: <span class="user-id" th:text="${user.userid}"></span> </span>
                     <span> </span>
                 </div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
-                    <form name="user-profile-form" th:action="@{/user_profile_process}" method="post">
+                    <form name="user-profile-form" th:action="@{/user/add}" th:object="${user}" method="post">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h4 class="text-right">Profile Settings</h4>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="User" value="" disabled></div>
-                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text" class="form-control" value="" placeholder="Example1 Example2" disabled></div>
+                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" th:field="*{name}" th:attr="value=${user.name != null? user.name:''}" disabled></div>
+                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text" class="form-control" th:field="*{surname}" th:attr="value=${user.surname != null? user.surname:''}" disabled></div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-12"><label class="labels">Email</label><input type="email" class="form-control" placeholder="example@example.com" value=""></div>
-                            <div class="col-md-12"><label class="labels">Username</label><input type="text" class="form-control" placeholder="username" value=""></div>
+                            <div class="col-md-12"><label class="labels">Email</label><input type="email" class="form-control" th:field="*{email}" th:attr="value=${user.email != null? user.email:''}"></div>
+                            <div class="col-md-12"><label class="labels">Username</label><input type="text" class="form-control" th:field="*{username}" th:attr="value=${user.username != null? user.username:''}"></div>
                         </div>
                         <div class="row mt-3">
                             <h5>Change Password</h5>
-                            <div class="col-md-6"><label class="labels">Password</label><input type="password" class="form-control" placeholder="" value=""></div>
-                            <div class="col-md-6"><label class="labels">Repeat Password</label><input type="password" class="form-control" value="" placeholder=""></div>
+                            <div class="col-md-6"><label class="labels">Password</label><input type="password" class="form-control" placeholder="" value="" id="password" name="password"></div>
+                            <div class="col-md-6"><label class="labels">Repeat Password</label><input type="password" class="form-control" value="" placeholder="" id="passwordRep" name="passwordRep"></div>
                         </div>
                         <div class="mt-5 text-center">
                             <button class="btn salmon" type="submit">Save Profile</button>
