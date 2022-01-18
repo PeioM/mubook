@@ -23,7 +23,10 @@ public class HomeController implements ServletContextAware {
 
     @GetMapping(path = {"/", "/index", "/home"})
     public String home(Model model){
-        updateNews();
+        
+     //   if(isSameDay((Date) servletContext.getAttribute("lastFetchDate"), new Date())){
+            updateNews(servletContext, newsDao);
+       // }
         model.addAttribute("news", servletContext.getAttribute("news"));
         return "index";
     }
@@ -67,18 +70,9 @@ public class HomeController implements ServletContextAware {
         this.servletContext = servletContext;
     }
 
-    private void updateNews() {
-        Date lastDate = (Date) servletContext.getAttribute("lastFetchDate");
-        boolean sameDay = false;
-        if(lastDate != null){
-            sameDay = isSameDay(lastDate, new Date());
-        }
-        //if lastDate is null sameDay will stay as false
-        //so no need to check if it is null again
-        if(!sameDay) {
-            servletContext.setAttribute("lastFetchDate", new Date());
-            servletContext.setAttribute("news",  newsDao.getActiveNews());
-        }
+    public static void updateNews(ServletContext servletContext, NewsDao newsDao) {
+        servletContext.setAttribute("lastFetchDate", new Date());
+        servletContext.setAttribute("news",  newsDao.getActiveNews());
     }
 
     public static boolean isSameDay(Date date1, Date date2) {
