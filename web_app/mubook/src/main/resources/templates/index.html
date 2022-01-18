@@ -8,14 +8,17 @@
 <body class=" justify-content-center">
     <header th:replace="include.html :: headercontent"></header>
     <div id="carouselExampleCaptions" class="carousel slide container" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+        <!--<div class="carousel-indicators" >
+            <button type="button" data-bs-target="#carouselExampleCaptions" th:attrappend="data-slide-to=${iterator.index},
+            aria-label='Slide '+'${iterator.index}+1', aria-current=${iterator.first}?'true'"  th:each="actualNew, iterator: ${news}"
+            th:classappend="${iterator.first}? active"
+            ></button>
+             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
                 aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
                 aria-label="Slide 3"></button>
         </div>
+        -->
 
         <div class="carousel-inner">
             <div th:each="actualNew, iterator: ${news}" class="carousel-item" th:classappend="${iterator.first}? active">
@@ -30,18 +33,17 @@
                                 d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                         </svg></button>
                     </form>
-                    <!--<img th:src="@{${actualNew.image}}" class="d-block h-50 p-3" alt="${actualNew.title} + image">-->
                     <img th:attr="src=@{${actualNew.image}},alt=${actualNew.title}" class="d-block h-50 p-3"/>
                     <h5 th:text="${actualNew.title}"> </h5>
                     <div class="accordion" id="accordionExample">
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
+                            <h2 class="accordion-header" th:id="'heading'+${iterator.index}">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                aria-expanded="true" th:attr="aria-controls='collapse'+${iterator.index}, data-bs-target='#collapse'+${iterator.index}">
                                     more info
                                 </button>
                             </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                            <div th:id="'collapse'+${iterator.index}" class="accordion-collapse collapse " th:attr="aria-labelledby='heading'+${iterator.index}"
                                 data-bs-parent="#accordionExample">
                                 <div class="accordion-body text-dark" th:text="${actualNew.description}">
                                 </div>
