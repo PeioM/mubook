@@ -50,7 +50,7 @@ public class SearchController {
                         sl -> loadSpecifications(sl, specifications)));
 
         //Save in model
-        model.addAttribute("actualItemType", itemType.getItemTypeId());
+        model.addAttribute("actualItemType", itemType);
         model.addAttribute("itemModels", itemModels);
         model.addAttribute("specifications", specifications);
 
