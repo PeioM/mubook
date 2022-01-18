@@ -92,7 +92,7 @@
             <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
 
                 <div th:each="itemModel: ${itemModels}" class=" card col mb-4 shadow-sm p-0">
-                    <a th:href="'/itemModel/view?id='+${itemModel.itemModelId}" class="text-decoration-none text-dark">
+                    <a th:href="'/itemModel/view/'+${itemModel.itemModelId}" class="text-decoration-none text-dark">
                         <img class="card-img-top img-fluid" th:src="@{${itemModel.img}}"
                             alt="Card image cap">
                         <div class="card-body text-center">

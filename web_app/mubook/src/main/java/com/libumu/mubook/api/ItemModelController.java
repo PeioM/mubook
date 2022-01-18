@@ -24,6 +24,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping(path="/itemModel")
 public class ItemModelController {
@@ -40,9 +42,10 @@ public class ItemModelController {
     @Autowired
     SpecificationDao specificationDao;
 
-    @GetMapping(path="/view")
+    @GetMapping(path="/view/{itemModelId}")
     public ModelAndView getItemModel(Model model,
-                                     @RequestParam("id") long itemModelId){
+                                    @PathVariable("itemModelId") String itemModelStr){
+        Long itemModelId = Long.parseLong(itemModelStr);
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
 
         model.addAttribute("itemModel", itemModel);

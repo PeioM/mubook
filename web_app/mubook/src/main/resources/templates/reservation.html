@@ -32,7 +32,10 @@
                         <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
                             <label class="text-dark">Book ID: </label> <label th:text="${reserve.item.itemModel.itemModelId}"></label>
                         </div>
-                        <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
+                        <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded" th:each="specificationList: ${reserve.item.itemModel.specificationLists}">
+                            <label class="text-dark" th:text="${specificationList.specification.description}"></label> <label th:text="${specificationList.value}"></label>
+                        </div>
+                        <!--<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
                             <label class="text-dark">Author: </label> <label>JK Rowling</label>
                         </div>
 						<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
@@ -48,7 +51,7 @@
                         </div>
 						<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
                             <label class="text-dark">Book Genre: </label> <label>Science fiction</label>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="start-date-div">
                         <h4 class="mb-2">Start Date</h4>
