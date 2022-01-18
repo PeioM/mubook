@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    document.getElementById("filterButton").addEventListener("click",updateItems);
+    if($('body').is('.searchBody'))document.getElementById("filterButton").addEventListener("click",updateItems);
 });
 
 function updateItems(){
