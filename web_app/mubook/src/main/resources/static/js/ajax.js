@@ -31,8 +31,15 @@ function updateItems(){
             let allModels = document.getElementsByClassName("itemModel");
             for (let itemModel of allModels){
                 let id = itemModel.id.slice(-1);
+                if(!itemModelIds.includes(parseInt(id))){
+                    itemModel.style.display = "none";
+                }
+                else{
+                    itemModel.style.display = "initial";
+                }
                 //If includes hidden = false, else hidden = true
-                itemModel.hidden = !itemModelIds.includes(parseInt(id));
+                //itemModel.hidden = !itemModelIds.includes(parseInt(id));
+                //.style.display = "none"
             }
         }
     });

@@ -59,7 +59,12 @@ public class SearchController {
 
     private void loadSpecifications(SpecificationList sl, Map<Specification, List<String>> specifications){
         if(specifications.containsKey(sl.getSpecification())){
-            specifications.get(sl.getSpecification()).add(sl.getValue());
+            String valueToAdd = sl.getValue();
+            List<String> mapValues = specifications.get(sl.getSpecification());
+
+            if(!mapValues.contains(valueToAdd)) {
+                specifications.get(sl.getSpecification()).add(valueToAdd);
+            }
         }
         else{
             List<String> values = new ArrayList<>();
