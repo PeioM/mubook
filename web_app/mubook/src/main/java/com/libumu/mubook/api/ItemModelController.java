@@ -1,17 +1,22 @@
 package com.libumu.mubook.api;
 
+import com.libumu.mubook.dao.comment.CommentDao;
 import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.specification.SpecificationDao;
 import com.libumu.mubook.dao.status.StatusDao;
+import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.entities.*;
 import com.libumu.mubook.entities.SpecificationList.SpecificationList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,13 +45,24 @@ public class ItemModelController {
     ItemDao itemDao;
     @Autowired
     SpecificationDao specificationDao;
+    @Autowired
+    CommentDao commentDao;
+    @Autowired
+    UserDao userDao;
 
     @GetMapping(path="/view")
     public ModelAndView getItemModel(Model model,
                                      @RequestParam("id") long itemModelId){
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
+        List<Comment> comments = commentDao.getAllComentsByItemModelId(itemModelId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Comment comment = new Comment();
 
         model.addAttribute("itemModel", itemModel);
+        model.addAttribute("comments", comments);
+        model.addAttribute("commentItem", comment);
+        model.addAttribute("username", username);
 
         return new ModelAndView("item", new ModelMap(model));
     }
@@ -147,6 +164,38 @@ public class ItemModelController {
         model.addAttribute("items", itemModelDao.getAllItemModels());
 
         return "redirect:/searchItems";
+    }
+
+    @PostMapping(path="/comment")
+    public String commentItemModel(Model model,
+                                         @ModelAttribute Comment comment,
+                                         @RequestParam("id") long itemModelId){
+        String returnStr="error";
+        ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userDao.getUserByUsername(username);
+        Date date = new Date();
+
+        if(itemModel != null && user != null){
+            comment.setItemModel(itemModel);
+            comment.setUser(user);
+            comment.setDate(new java.sql.Date(date.getTime()));
+            commentDao.addComent(comment);
+            returnStr = "redirect:/itemModel/view?id="+itemModelId;
+        }
+
+        return returnStr;
+    }
+
+    @PostMapping(path="/deleteComment")
+    public String deleteComment(Model model,
+                                @RequestParam("id") long id){
+        Comment comment = commentDao.getComment(id);
+        long itemModelId = comment.getItemModel().getItemModelId();
+        commentDao.deleteComment(id);
+
+        return "redirect:/itemModel/view?id=1";
     }
 
     @PostMapping(path="/edit")
