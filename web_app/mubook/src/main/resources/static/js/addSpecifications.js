@@ -1,9 +1,3 @@
-window.onload = function () {    
-	$('input[type=button]#addButton').click(function (event) {
-        addStep();
-    });
-}
-
 let btnAdd = document.querySelector('#addButton');
 let table = document.querySelector('table');
 console.log(btnAdd);

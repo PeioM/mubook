@@ -16,18 +16,22 @@
                         <img class="mt-5 img-fluid" th:src="@{${itemModel.img}}" alt="Item image">
                     </div>
                 </div>
-                <div class="leave-comment d-flex justify-content-center" sec:authorize= "hasAnyRole('USER')">
-                    <form name="comment-form" th:action="@{'/itemModel/comment?id='+${itemModel.itemModelId}}" th:object="${commentItem}" method="post">
+                <div class="leave-comment d-flex justify-content-center" sec:authorize="hasAnyRole('USER')">
+                    <form name="comment-form" th:action="@{'/itemModel/comment?id='+${itemModel.itemModelId}}"
+                        th:object="${commentItem}" method="post">
                         <div class="card card-footer py-3 border-0" style="background-color: #f8f9fa;">
                             <div class="d-flex flex-start w-100">
                                 <img class="rounded-circle shadow-1-strong me-3"
                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar"
                                     width="40" height="40" />
                                 <div class="form-outline w-100">
-                                    <p class="text-secondary"><label class="text-primary" th:text="${#authentication.getPrincipal().getUsername()}"></label> Leave your
+                                    <p class="text-secondary"><label class="text-primary"
+                                            th:text="${#authentication.getPrincipal().getUsername()}"></label> Leave
+                                        your
                                         comment</p>
                                     <textarea class="form-control" id="textAreaComment" rows="4"
-                                        style="background: #fff;" name="textAreaComment" th:field="*{content}" th:attr="value=${commentItem.content}"></textarea>
+                                        style="background: #fff;" name="textAreaComment" th:field="*{content}"
+                                        th:attr="value=${commentItem.content}"></textarea>
                                 </div>
                             </div>
 
@@ -39,10 +43,12 @@
                 </div>
             </div>
             <div class="col-lg-8 align-items-center border-right">
-                <div sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="row m-2 d-md-flex justify-content-center admin-actions-div">
-                    <a class="col-2 btn btn-dark m-2 " href="/item/edit" role="button">Edit Item</a>
-                    <a class="col-2 btn btn-dark m-2 " href="/reservations/add" role="button">Create Reservation</a>
-                    <a class="col-2 btn btn-dark m-2 " href="'/reservations/all?itemModel=' + ${itemModel.itemModelId}" role="button">Reservation History</a>
+                <div sec:authorize="hasAnyRole('ADMIN','WORKER')"
+                    class="row m-2 d-md-flex justify-content-center admin-actions-div">
+                    <a class="col-2 btn m-2 salmon" href="/item/edit" role="button">Edit Item</a>
+                    <a class="col-2 btn m-2 salmon" href="/reservations/add" role="button">Create Reservation</a>
+                    <a class="col-2 btn m-2 salmon" href="'/reservations/all?itemModel=' + ${itemModel.itemModelId}"
+                        role="button">Reservation History</a>
                     <a href="'/item/delete" class="col-2 m-2 d-flex justify-content-center align-items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
                             class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
@@ -55,8 +61,10 @@
                 </div>
                 <div class="row m-4 specifications-div">
                     <h3 class="mb-2">Specifications</h3>
-                    <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded" th:each="specificationList: ${itemModel.specificationLists}">
-                        <label class="text-dark" th:text="${specificationList.specification.description}"></label> <label th:text="${specificationList.value}"></label>
+                    <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded"
+                        th:each="specificationList: ${itemModel.specificationLists}">
+                        <label class="text-dark" th:text="${specificationList.specification.description}"></label>
+                        <label th:text="${specificationList.value}"></label>
                     </div>
                 </div>
                 <div class="row m-4 descripion-div">
@@ -66,15 +74,15 @@
                     </textarea>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-center" sec:authorize= "isAuthenticated()">
-                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" th:href="@{'/reservations/offer/' +${itemModel.itemModelId}}"
-                        role="button">BOOK NOW</a>
+                <div class="d-flex justify-content-center" sec:authorize="isAuthenticated()">
+                    <a class="col-2 btn salmon m-2 d-flex justify-content-center"
+                        th:href="@{'/reservations/offer/' +${itemModel.itemModelId}}" role="button">BOOK NOW</a>
                 </div>
                 <div class="row m-4  accordion" id="accordionExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button text-primary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                 Comments
                             </button>
                         </h2>
@@ -82,41 +90,48 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="border rounded p-3 mt-2" th:each="comentario : ${comments}">
-                                    <form name="delete-comment-form" th:action="@{'/itemModel/deleteComment?id='+${comentario.commentId}}" method="post">
+                                    <form name="delete-comment-form"
+                                        th:action="@{'/itemModel/deleteComment?id='+${comentario.commentId}}"
+                                        method="post">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="user d-flex flex-row align-items-center"> <img
                                                     src="https://i.imgur.com/hczKIze.jpg" width="30"
                                                     class="user-img rounded-circle m-2" alt="Comments profile image">
-                                                <span><small class="font-weight-bold text-primary" th:text="${comentario.user.username}"></small>
-                                                    <small class="font-weight-bold" th:text="${comentario.content}"></small></span>
-                                            </div> <small th:text="${#dates.format(comentario.date, 'yyyy-MM-dd')}"></small>
+                                                <span><small class="font-weight-bold text-primary"
+                                                        th:text="${comentario.user.username}"></small>
+                                                    <small class="font-weight-bold"
+                                                        th:text="${comentario.content}"></small></span>
+                                            </div> <small
+                                                th:text="${#dates.format(comentario.date, 'yyyy-MM-dd')}"></small>
                                         </div>
                                         <button type="submit" th:if="${comentario.user.username eq username}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
-                                                 class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
                                                 <path
-                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                                 <path fill-rule="evenodd"
-                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                             </svg>
                                         </button>
-                                        <button type="submit" th:unless="${comentario.user.username eq username}" sec:authorize="hasAnyRole('WORKER', 'ADMIN')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
-                                                 class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
+                                        <button type="submit" th:unless="${comentario.user.username eq username}"
+                                            sec:authorize="hasAnyRole('WORKER', 'ADMIN')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
                                                 <path
-                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                                 <path fill-rule="evenodd"
-                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                             </svg>
                                         </button>
                                     </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <footer th:replace="include.html :: footercontent"></footer>
+        <footer th:replace="include.html :: footercontent"></footer>
 </body>
+
 </html>
