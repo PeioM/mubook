@@ -98,6 +98,66 @@ public class UserController {
         return new ModelAndView(returnStr, new ModelMap(model));
     }
 
+
+    // LIST USERS
+
+
+
+    // EDIT USERS
+
+    @GetMapping(path="/edit")
+    public String addNew(Model model){
+        User user = new User();
+        model.addAttribute("newEntity", user);
+
+        return "editCreateUser";
+    }
+
+    @PostMapping(path="/edit")
+    public ModelAndView editUser (Model model,
+        @ModelAttribute User user,
+        @RequestParam("dniImg") MultipartFile file,
+        WebRequest request) {
+        //Return to user form in case there is any error
+        String returnStr = "userForm";
+        String error = checkUserDuplicated(user);
+        if(error.length()==0) {
+            if (file == null || file.isEmpty() || file.getOriginalFilename()==null || file.getOriginalFilename().equals("")) {
+                error = "Please upload the DNI photo";
+            } else if (!passwordsMatch(request)) {
+                error = "Password mismatch";
+            } else {
+                // save the file on the local file system
+                String filename = file.getOriginalFilename();
+                String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
+                try {
+                    String pathStr = LOCAL_UPLOAD_DIR + user.getName() + "_" + user.getSurname() + extension;
+                    new File(pathStr);  //Create dest file to save
+                    Path path = Paths.get(pathStr);
+                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    user.setDniImgPath(path.toString());
+                    //In case there is no error redirect to home
+                    returnStr = "index";
+                } catch (IOException e) {
+                    error = "Error uploading file";
+                }
+                //Obtain encrypted password and save other parameters
+                BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
+                user.setPassword(encrypt.encode(request.getParameter("password")));
+                user.setUserType(userTypeDao.getUserType("USER"));
+                user.setUserActivity(userActivityDao.getUserActivity(3));
+
+                userDao.addUser(user);
+            }
+        }
+        //Si se añade usuario notificar informacion sobre el
+        //Sino, rellenar campos con los valores introducidos
+        model.addAttribute("user", user);
+        if(error.length()!=0)model.addAttribute("error",error);
+
+        return new ModelAndView(returnStr, new ModelMap(model));
+    }
+
     private String checkUserDuplicated(User user){
         String errorStr = "User already exists: ";
         User u = userDao.getUserByUsername(user.getUsername());
