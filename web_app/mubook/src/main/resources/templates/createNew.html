@@ -10,23 +10,30 @@
     <div class="container rounded bg-white mt-5 mb-5 center">
         <div class="row justify-content-center p-3 createNew-div">
             <div class="col-md-5 border bg-white rounded">
-			
+
                 <div class="p-3 py-5 justify-content-center">
-				<h4 class="text-right">Create New</h4>
-                    <form name="user-profile-form" th:object="${newEntity}" th:action="@{/news/add}" method="post">
+                    <h4 class="text-right">Create New</h4>
+                    <form name="user-profile-form" th:object="${newEntity}" th:action="@{/news/add}"
+                        enctype="multipart/form-data" method="post">
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Title*</label><input type="text" class="form-control" th:field="*{title}" placeholder="" value="" required></div>
+                            <div class="col-md-6"><label class="labels">Title*</label><input type="text"
+                                    class="form-control" th:field="*{title}" placeholder="" value="" required></div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-12 mb-3"><label class="labels">Description*</label><textarea class="form-control" th:field="*{desciption}" placeholder="" style="height:100%;" required></textarea></div>
+                            <div class="col-md-12 mb-3"><label class="labels">Description*</label><textarea
+                                    class="form-control" th:field="*{description}" placeholder="" style="height:100%;"
+                                    required></textarea></div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Start date*</label><input type="date" class="form-control" th:field="*{initDate}" placeholder="" value="" required></div>
+                            <div class="col-md-6"><label class="labels">Start date*</label><input type="date"
+                                    class="form-control" th:field="*{initDate}" placeholder="" value="" required></div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">End date*</label><input type="date" class="form-control" th:field="*{endDate}" placeholder="" value="" required></div>
+                            <div class="col-md-6"><label class="labels">End date*</label><input type="date"
+                                    class="form-control" th:field="*{endDate}" placeholder="" value="" required></div>
                         </div>
                         <div class="row mt-3">
+                            <!--input class="form-control" th:field="*{newImg}" placeholder="New Image"><br> -->
                             <label class="labels">New Image*</label>
                             <div class="upload-img-div d-flex justify-content-start">
                                 <input type="file" class="custom-file-input" name="newImg" id="newImg">
@@ -42,4 +49,5 @@
     </div>
     <footer th:replace="include.html :: footercontent"></footer>
 </body>
+
 </html>
