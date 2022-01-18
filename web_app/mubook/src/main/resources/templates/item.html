@@ -67,7 +67,7 @@
                 </div>
                 <hr>
                 <div class="d-flex justify-content-center" sec:authorize= "isAuthenticated()">
-                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" th:href="@{'/reservations/offer?itemModelId=' +${itemModel.itemModelId}}"
+                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" th:href="@{'/reservations/offer/' +${itemModel.itemModelId}}"
                         role="button">BOOK NOW</a>
                 </div>
                 <div class="row m-4  accordion" id="accordionExample">

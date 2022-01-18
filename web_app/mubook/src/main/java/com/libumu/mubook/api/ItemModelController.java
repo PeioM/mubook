@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping(path="/itemModel")
 public class ItemModelController {
@@ -50,9 +52,10 @@ public class ItemModelController {
     @Autowired
     UserDao userDao;
 
-    @GetMapping(path="/view")
+    @GetMapping(path="/view/{itemModelId}")
     public ModelAndView getItemModel(Model model,
-                                     @RequestParam("id") long itemModelId){
+                                    @PathVariable("itemModelId") String itemModelStr){
+        Long itemModelId = Long.parseLong(itemModelStr);
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
         List<Comment> comments = commentDao.getAllComentsByItemModelId(itemModelId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

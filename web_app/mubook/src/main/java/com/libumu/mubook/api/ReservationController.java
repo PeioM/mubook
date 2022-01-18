@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
@@ -103,9 +105,11 @@ public class ReservationController {
         return reservationDao.getReservation(reservationId);
     }
 
-    @GetMapping(path="/offer")
+    @GetMapping(path="/offer/{itemModelId}")
     public ModelAndView makeReservationOffer(Model model,
-                                             @RequestParam("itemModelId") long itemModelId){
+                                            @PathVariable("itemModelId") String itemModelStr){
+
+        Long itemModelId = Long.parseLong(itemModelStr);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userDao.getUserByUsername(username);

@@ -30,10 +30,10 @@
         });
     </script>
     <!--header.css-->
-    <link rel="stylesheet" href="css/header.css"/>
-    <link rel="stylesheet" href="css/footer.css"/>
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="icon" href="images/logo_trasp.png" />
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="icon" href="/images/logo_trasp.png" />
     <title th:replace=" :: #Ptitle"></title>
 </head>
 <body>
@@ -41,9 +41,9 @@
     <div class="d-lg-flex align-items-center container">
       <div class="d-flex align-items-center justify-content-center justify-content-lg-start col">
         <a href="" class="d-flex  justify-content-center">
-          <img src="images/logo_mubook.png" alt="Logo MUBook" class="bi me-2 w-50 d-none d-lg-flex"
+          <img src="/images/logo_mubook.png" alt="Logo MUBook" class="bi me-2 w-50 d-none d-lg-flex"
             aria-label="Bootstrap" />
-          <img src="images/logo_web.png" alt="Logo MUBook"
+          <img src="/images/logo_web.png" alt="Logo MUBook"
             class="m-2 w-50 d-lg-none d-flex justify-content-center d-block" aria-label="Bootstrap" />
         </a>
       </div>
@@ -59,7 +59,7 @@
       <div class="dropdown text-end d-none d-lg-flex justify-content-end col">
         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownProfile"
           data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          <img src="/images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile">
           <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="myReservations.html">My Reservations</a></li>
@@ -68,7 +68,11 @@
             <hr class="dropdown-divider">
           </li>
           <li sec:authorize= "isAnonymous()"><a class="dropdown-item" th:href="@{/login}">Sign in</a></li>
-          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" th:href="@{/login}">Sign out</a></li>
+          <li sec:authorize= "isAuthenticated()">
+            <form th:action="@{/logout}" method = "post">
+            <input type = "submit" value = "Sign Out" class="dropdown-item"/>
+            </form>
+          </li>
         </ul>
       </div>
     </div>
@@ -108,7 +112,11 @@
               <hr class="dropdown-divider ">
             </li>
             <li sec:authorize= "isAnonymous()"><a class="nav-link text-white d-lg-none" th:href="@{/login}">Sign in</a></li>
-            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" th:href="@{/login}">Sign out</a></li>
+            <li sec:authorize= "isAuthenticated()" class="nav-link text-white d-lg-none" >
+              <form th:action="@{/logout}" method = "post">
+              <input type = "submit" value = "Sign Out" class="nav-link text-white d-lg-none bg-transparent border-0"/>
+              </form>
+            </li>
             <hr>
           </ul>
           <ul class="navbar-nav float-right">
