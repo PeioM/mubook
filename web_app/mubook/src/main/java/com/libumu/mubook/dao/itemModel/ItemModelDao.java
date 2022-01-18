@@ -1,7 +1,6 @@
 package com.libumu.mubook.dao.itemModel;
 
 import com.libumu.mubook.entities.ItemModel;
-import com.libumu.mubook.entities.ItemType;
 
 import java.util.List;
 
@@ -15,4 +14,5 @@ public interface ItemModelDao {
     public void addItemModel(ItemModel itemModel);
     public List<Object[]> getAllItemModelId();
     int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId);
+    List<ItemModel> getItemModelsBySpecification(List<Long> ids, int specId, String specValue);
 }

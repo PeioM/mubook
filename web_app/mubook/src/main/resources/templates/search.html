@@ -6,27 +6,73 @@
 <body>
 <header th:replace="include.html :: headercontent"></header>
 
-<img src="images/Logos/logo_prueba.png" alt="logo prueba">
+<img src="/images/Logos/logo_prueba.png" alt="logo prueba">
 <div id="ItemTypesSelection">
     <div th:each="itemType : ${itemTypes}">
-        <form th:action="@{/search/} + ${itemType.description}" method="get">
-            <input type="submit" th:value="${itemType.description}" style="font-size: 15px"
-                   th:name="buttonType"></input>
-        </form>
+        <a th:href="@{/search/} + ${itemType.description}">
+            <button th:text="${itemType.description}" style="font-size: 15px"></button>
+        </a>
     </div>
 </div>
 <br><br><br>
 <div id="SpecificationSelection">
-    <div th:each="entry : ${specifications}">
-        <h4 th:text="${entry.key.description}"></h4>
-        <ul>
-            <li th:each="especValue : ${entry.value}" th:text="${especValue}"></li>
-        </ul>
-    </div>
+    <h3 th:if="${actualItemType != null}" th:text="${actualItemType.description}"></h3>
+    <!--<form th:action="@{/ajax/filter/} + ${actualItemType}" method="get">-->
+        <div th:each="entry, stat : ${specifications}">
+            <h4 th:text="${entry.key.description}"></h4>
+            <ul>
+                <li th:each="especValue : ${entry.value}">
+                    <input class="filterCheckBox" type="checkbox" th:text="${especValue}" th:value="${especValue}" th:name="${entry.key.specificationId}"></input>
+                </li>
+            </ul>
+        </div>
+    <!--</form>-->
+    <button id="filterButton" style="font-size: 15px">Filter</button>
 </div>
 <br><br><br>
-<div style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
-    <div th:each="itemModel : ${itemModels}">
+
+<!--<script th:inline="javascript">
+    $(document).ready(function(){
+        document.getElementById("filterButton").addEventListener("click",updateItems);
+    });
+
+    function updateItems(){
+        let options = document.getElementsByClassName("filterCheckBox");
+        let data = new Map();
+        for(let option of options){
+            if(option.checked){
+                let values = [];
+                if(data.has(option.name)){
+                    values = data.get(option.name);
+                }
+                values.push(option.value);
+                data.set(option.name, values);
+            }
+        }
+        let actionUrl = "/ajax/filter/" + document.getElementById("SpecificationSelection").value;
+
+        $.ajax({
+            method: 'GET',
+            url: actionUrl,
+            data: data,
+
+            success: function (result) {
+                let details = JSON.parse(result);
+                let itemModelIds = details.values();
+
+                let allModels = document.getElementsByClassName("itemModel");
+                for (let itemModel of allModels){
+                    let id = itemModel.id.slice(-1);
+                    if(!itemModelIds.includes(id)) itemModel.hidden = true;
+                }
+            }
+        });
+    }
+</script>-->
+
+
+<div id="resultBlock" th:fragment="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
+    <div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel + ${itemModel.itemModelId}" >
         <button th:text="${itemModel.name}" style="font-size: 15px"></button>
     </div>
 </div>
