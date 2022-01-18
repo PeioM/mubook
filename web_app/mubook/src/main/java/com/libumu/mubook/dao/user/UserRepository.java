@@ -11,6 +11,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String userName);
     User findByEmail(String email);
     User findByDNI(String DNI);
+    int countUserByUsername(String username);
+    int countUserByEmailAndUserIdIsNot(String email, Long userId);
+    int countUserByUsernameAndUserIdIsNot(String username, Long userId);
 
     @Query(value = "SELECT COUNT(user_id), '?1 - ?2' AS RANGO "+
                     "FROM user "+

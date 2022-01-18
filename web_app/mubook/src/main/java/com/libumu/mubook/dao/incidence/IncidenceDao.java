@@ -1,6 +1,7 @@
 package com.libumu.mubook.dao.incidence;
 
 import com.libumu.mubook.entities.Incidence;
+import com.libumu.mubook.entities.User;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface IncidenceDao {
     public void addIncidence(Incidence incidence);
     public List<Integer> getIncidenceWithSeverityId(int incidenceSeverityId);
     public List<Integer> getIncidenceWithUserId(long incidenceUserId);
+    List<Incidence> getAllByUser(User user);
 }

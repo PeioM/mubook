@@ -20,5 +20,7 @@ public interface UserDao {
     public List<Object[]> countUsersByAgeWithoutMT();
     public List<Object[]> countUsersByIncidence(int numIncidence);
     public List<Object[]> countUsersByIncidenceWithoutMT();
+    int countUserByUsernameAndUserIdIsNot(String username, Long userId);
+    int countUserByEmailAndUserIdIsNot(String email, Long userId);
 
 }
