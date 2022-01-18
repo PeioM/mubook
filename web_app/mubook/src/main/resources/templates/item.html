@@ -11,19 +11,13 @@
         <div class="row justify-content-center">
             <div class="col-lg-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <h5 th:text="${itemModel.name}" th:value="${itemModel.itemModelId}" th:name="itemModelId">BOOK - Title1</h5>
+                    <h5 th:text="${itemModel.name}" th:value="${itemModel.itemModelId}" th:name="itemModelId"></h5>
                     <div class="user-img-div">
                         <img class="mt-5 img-fluid" th:src="@{${itemModel.img}}" alt="Item image">
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="ratings"> <i class="fa fa-star rating-color"></i> <i
-                                class="fa fa-star rating-color"></i> <i class="fa fa-star rating-color"></i> <i
-                                class="fa fa-star rating-color"></i> <i class="fa fa-star"></i> </div>
-                        <h5 class="review-count">6 Reviews</h5>
-                    </div>
                 </div>
-                <div class="leave-comment d-flex justify-content-center" sec:authorize= "isAuthenticated()">
-                    <form name="comment-form" th:action="@{/itemModel/comment}" th:object="${comment}" method="post">
+                <div class="leave-comment d-flex justify-content-center" sec:authorize= "hasAnyRole('USER')">
+                    <form name="comment-form" th:action="@{'/itemModel/comment?id='+${itemModel.itemModelId}}" th:object="${commentItem}" method="post">
                         <div class="card card-footer py-3 border-0" style="background-color: #f8f9fa;">
                             <div class="d-flex flex-start w-100">
                                 <img class="rounded-circle shadow-1-strong me-3"
@@ -33,24 +27,12 @@
                                     <p class="text-secondary"><label class="text-primary" th:text="${#authentication.getPrincipal().getUsername()}"></label> Leave your
                                         comment</p>
                                     <textarea class="form-control" id="textAreaComment" rows="4"
-                                        style="background: #fff;" name="textAreaComment" th:field="*{content}" th:attr="value=${comment.content}"></textarea>
+                                        style="background: #fff;" name="textAreaComment" th:field="*{content}" th:attr="value=${commentItem.content}"></textarea>
                                 </div>
                             </div>
 
-                            <div class="text-center">
-                                <div class="rating">
-                                    <input type="radio" name="rating" value="5" id="5">
-                                    <label for="5">☆</label> <input type="radio" name="rating" value="4" id="4">
-                                    <label for="4">☆</label> <input type="radio" name="rating" value="3" id="3">
-                                    <label for="3">☆</label> <input type="radio" name="rating" value="2" id="2">
-                                    <label for="2">☆</label> <input type="radio" name="rating" value="1" id="1">
-                                    <label for="1">☆</label>
-                                </div>
-                            </div>
                             <div class="d-flex justify-content-end mt-2 pt-1">
-                                <a class="col-2 btn btn-dark m-2 " th:href="@{'/itemModel/comment?itemModelId=' +${itemModel.itemModelId}}" role="button">Post Comment</a>
-                                <!--<button type="button" class="btn btn-primary btn-sm" href="'/itemModel/comment?itemModel=' + ${itemModel.itemModelId}">Post comment</button>-->
-                                <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                                <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
                             </div>
                         </div>
                     </form>
@@ -76,34 +58,6 @@
                     <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded" th:each="specificationList: ${itemModel.specificationLists}">
                         <label class="text-dark" th:text="${specificationList.specification.description}"></label> <label th:text="${specificationList.value}"></label>
                     </div>
-                    <!--
-                    <div class="row">
-                        <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-                        <div class=" col each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-                        <div class=" col each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-                        <div class=" col each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-                    </div>
-                    -->
                 </div>
                 <div class="row m-4 descripion-div">
                     <h3>Description</h3>
@@ -127,69 +81,35 @@
                         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <div class="border rounded p-3 mt-2" th:each="comment : ${comments}">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="user d-flex flex-row align-items-center"> <img
-                                                src="https://i.imgur.com/hczKIze.jpg" width="30"
-                                                class="user-img rounded-circle m-2" alt="Comments profile image">
-                                            <span><small class="font-weight-bold text-primary" th:text="${comment.user.username}"></small>
-                                                <small class="font-weight-bold" th:text="${comment.content}"></small></span>
-                                        </div> <small th:text="${#dates.format(comment.date, 'yyyy-MM-dd')}"></small>
-                                    </div>
-                                <!--<div class="border rounded p-3 mt-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="user d-flex flex-row align-items-center"> <img
-                                                src="https://i.imgur.com/hczKIze.jpg" width="30"
-                                                class="user-img rounded-circle m-2" alt="Comments profile image">
-                                            <span><small class="font-weight-bold text-primary">james_olesenn</small>
-                                                <small class="font-weight-bold">Hmm, This poster looks
-                                                    cool</small></span>
-                                        </div> <small>2 days ago</small>
-                                    </div>
-                                </div>
-                                <div class="border rounded p-3 mt-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="user d-flex flex-row align-items-center"> <img
-                                                src="https://i.imgur.com/C4egmYM.jpg" width="30"
-                                                class="user-img rounded-circle m-2" alt="Comments profile image">
-                                            <span><small class="font-weight-bold text-primary">olan_sams</small>
-                                                <small class="font-weight-bold">Loving your work and
-                                                    profile! </small></span>
-                                        </div> <small>3 days
-                                            ago</small>
-                                    </div>
-                                </div>
-                                <div class="border rounded p-3 mt-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="user d-flex flex-row align-items-center">
-                                            <img src="https://i.imgur.com/0LKZQYM.jpg" width="30"
-                                                class="user-img rounded-circle m-2" alt="Comments profile image">
-                                            <span><small class="font-weight-bold text-primary">rashida_jones</small>
-                                                <small class="font-weight-bold">Lorem ipsum dolor sit amet consectetur
-                                                    adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi
-                                                    repudiandae consequuntur voluptatum laborum numquam blanditiis harum
-                                                    quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque
-                                                    rerum! Provident similique accusantium nemo autem. Veritatis
-                                                    obcaecati tenetur iure eius earum ut molestias architecto voluptate
-                                                    aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt
-                                                    quaerat, odit, tenetur error, harum nesciunt ipsum debitis quas
-                                                    are you using? </small></span>
-                                        </div> <small>3 days
-                                            ago</small>
-                                    </div>
-                                </div>
-                                <div class="border rounded p-3 mt-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="user d-flex flex-row align-items-center"> <img
-                                                src="https://i.imgur.com/ZSkeqnd.jpg" width="30"
-                                                class="user-img rounded-circle m-2" alt="Comments profile image">
-                                            <span><small class="font-weight-bold text-primary">simona_rnasi</small>
-                                                <small class="font-weight-bold text-primary">@macky_lones</small>
-                                                <small class="font-weight-bold text-primary">@rashida_jones</small>
-                                                <small class="font-weight-bold">Thanks </small></span>
-                                        </div> <small>3 days ago</small>
-                                    </div>
-                                </div>-->
+                                <div class="border rounded p-3 mt-2" th:each="comentario : ${comments}">
+                                    <form name="delete-comment-form" th:action="@{'/itemModel/deleteComment?id='+${comentario.commentId}}" method="post">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="user d-flex flex-row align-items-center"> <img
+                                                    src="https://i.imgur.com/hczKIze.jpg" width="30"
+                                                    class="user-img rounded-circle m-2" alt="Comments profile image">
+                                                <span><small class="font-weight-bold text-primary" th:text="${comentario.user.username}"></small>
+                                                    <small class="font-weight-bold" th:text="${comentario.content}"></small></span>
+                                            </div> <small th:text="${#dates.format(comentario.date, 'yyyy-MM-dd')}"></small>
+                                        </div>
+                                        <button type="submit" th:if="${comentario.user.username eq username}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                                                 class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
+                                                <path
+                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                <path fill-rule="evenodd"
+                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                            </svg>
+                                        </button>
+                                        <button type="submit" th:unless="${comentario.user.username eq username}" sec:authorize="hasAnyRole('WORKER', 'ADMIN')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                                                 class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
+                                                <path
+                                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                <path fill-rule="evenodd"
+                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                            </svg>
+                                        </button>
+                                    </form>
                             </div>
                         </div>
                     </div>

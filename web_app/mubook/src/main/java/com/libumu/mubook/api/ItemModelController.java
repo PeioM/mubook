@@ -55,11 +55,14 @@ public class ItemModelController {
                                      @RequestParam("id") long itemModelId){
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
         List<Comment> comments = commentDao.getAllComentsByItemModelId(itemModelId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         Comment comment = new Comment();
 
         model.addAttribute("itemModel", itemModel);
         model.addAttribute("comments", comments);
-        model.addAttribute("comment", comment);
+        model.addAttribute("commentItem", comment);
+        model.addAttribute("username", username);
 
         return new ModelAndView("item", new ModelMap(model));
     }
@@ -164,9 +167,9 @@ public class ItemModelController {
     }
 
     @PostMapping(path="/comment")
-    public ModelAndView commentItemModel(Model model,
+    public String commentItemModel(Model model,
                                          @ModelAttribute Comment comment,
-                                         @RequestParam("itemModelId") long itemModelId){
+                                         @RequestParam("id") long itemModelId){
         String returnStr="error";
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -179,11 +182,20 @@ public class ItemModelController {
             comment.setUser(user);
             comment.setDate(new java.sql.Date(date.getTime()));
             commentDao.addComent(comment);
-            returnStr = "redirect:/item";
-            model.addAttribute("itemModel", itemModel);
+            returnStr = "redirect:/itemModel/view?id="+itemModelId;
         }
 
-        return new ModelAndView(returnStr, new ModelMap(model));
+        return returnStr;
+    }
+
+    @PostMapping(path="/deleteComment")
+    public String deleteComment(Model model,
+                                @RequestParam("id") long id){
+        Comment comment = commentDao.getComment(id);
+        long itemModelId = comment.getItemModel().getItemModelId();
+        commentDao.deleteComment(id);
+
+        return "redirect:/itemModel/view?id=1";
     }
 
     @PostMapping(path="/edit")
