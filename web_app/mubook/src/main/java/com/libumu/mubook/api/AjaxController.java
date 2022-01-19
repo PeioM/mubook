@@ -5,6 +5,8 @@ import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.specification.SpecificationDao;
 import com.libumu.mubook.entities.ItemModel;
+import com.libumu.mubook.entities.ItemType;
+import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/ajax")
 public class AjaxController {
 
-    public final static int ITEMS_PER_PAGE = 12;
+    public final static int ITEMS_PER_PAGE = 2;
 
     ItemTypeDao itemTypeDao;
     ItemModelDao itemModelDao;
@@ -33,11 +35,11 @@ public class AjaxController {
         this.specificationDao = specificationDao;
     }
 
-    @GetMapping("/filter/{itemType}/{page}")
+    @GetMapping("/filterItemModels/{itemType}/{page}")
     @ResponseBody
     public String filterItemModels(@PathVariable("itemType") String itemType,
                                    @PathVariable("page") String pageStr,
-                                   WebRequest request, Model model) {
+                                   WebRequest request) {
         //Parse page
         int page = Integer.parseInt(pageStr);
         //Obtain all filters by cleaning parameters (when it is array key = ...[])
@@ -51,16 +53,24 @@ public class AjaxController {
         else{
             List<Integer> keys = parseEntireSet(parameters.keySet());
             List<String> values = getAllValues(parameters);
-            int totalItemModels = itemModelDao.getTotalItemModelFiltered(keys, getAllValues(parameters));
-            int pages = totalItemModels/ITEMS_PER_PAGE;
 
             itemModels = itemModelDao.getItemModelsBySpecificationRowsBetween(keys, values, page);
-
         }
-        List<Long> itemModelIds = obtainItemModelIds(itemModels);
+        List<ItemModelClass> itemModelsToSend = new ArrayList<>();
+        for(ItemModel im : itemModels) itemModelsToSend.add(new ItemModelClass(im));
 
         Gson gson = new Gson();
-        return gson.toJson(itemModelIds);
+        return gson.toJson(itemModelsToSend);
+    }
+
+    @GetMapping("/filterItemModelsGetPages/{itemType}")
+    @ResponseBody
+    public String updateItemModelPages(@PathVariable("itemType") String itemTypeDesc){
+        ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
+        int totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
+        double pages = (double) totalItemModels/AjaxController.ITEMS_PER_PAGE;
+
+        return String.valueOf(pages);
     }
 
     private Map<String, String[]> clearKeys(Map<String, String[]> parameters) {

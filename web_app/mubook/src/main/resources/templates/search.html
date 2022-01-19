@@ -7,6 +7,7 @@
 <header th:replace="include.html :: headercontent"></header>
 
 <img src="/images/Logos/logo_prueba.png" alt="logo prueba">
+
 <div id="ItemTypesSelection">
     <div th:each="itemType : ${itemTypes}">
         <a th:href="@{/search/} + ${itemType.description}">
@@ -14,10 +15,11 @@
         </a>
     </div>
 </div>
+
 <br><br><br>
+
 <div id="SpecificationSelection">
     <h3 th:if="${actualItemType != null}" th:text="${actualItemType.description}"></h3>
-    <!--<form th:action="@{/ajax/filter/} + ${actualItemType}" method="get">-->
         <div th:each="entry, stat : ${specifications}">
             <h4 th:text="${entry.key.description}"></h4>
             <ul>
@@ -26,21 +28,24 @@
                 </li>
             </ul>
         </div>
-    <!--</form>-->
     <button id="filterButton" style="font-size: 15px">Filter</button>
 </div>
 <br><br><br>
 
 <div id="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
-    <div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel +'-'+ ${itemModel.itemModelId}" >
+<!--    <div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel +'-'+ ${itemModel.itemModelId}" >
         <button th:text="${itemModel.name}" style="font-size: 15px"></button>
-    </div>
-
+    </div>-->
+</div>
+<div>
     <label for="selectPage">Select Page: </label>
     <select name="page" id="selectPage">
-        <option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>
+<!--        <option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
     </select>
 </div>
+
+
+
 
 <footer th:replace="include.html :: footercontent"></footer>
 </body>

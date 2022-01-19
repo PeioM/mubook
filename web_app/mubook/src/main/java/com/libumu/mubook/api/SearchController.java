@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/search")
@@ -45,27 +43,43 @@ public class SearchController {
 
         //ItemModels filtered by ItemType
         ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
-        List<ItemModel> itemModels = itemModelDao.getItemModelsByType(itemType.getItemTypeId());
+        //List<ItemModel> itemModels = itemModelDao.getItemModelsByType(itemType.getItemTypeId());
 
         //Specifications
         Map<Specification, List<String>> specifications = new TreeMap<>();
-        itemModels.forEach(
-                im -> im.getSpecificationLists().forEach(
-                        sl -> loadSpecifications(sl, specifications)));
+        List<Object[]> specificationValues = specificationDao.getAllSpecificationAndValuesByItemType(itemType.getItemTypeId());
+        specificationValues.forEach(
+                row -> saveInMap(specifications, row)
+        );
 
         //Calculate pages to visualize
-        List<Integer> keys = specificationDao.getAllSpecificationIds();
-        List<String> values = getAllSpecificationValues(specifications);
-        int totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
-        int pages = totalItemModels/AjaxController.ITEMS_PER_PAGE + 1;
+        //List<Integer> keys = specificationDao.getAllSpecificationIds();
+        //List<String> values = getAllSpecificationValues(specifications);
+        //int totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
+        //int pages = totalItemModels/AjaxController.ITEMS_PER_PAGE + 1;
 
         //Save in model
         model.addAttribute("actualItemType", itemType);
-        model.addAttribute("itemModels", itemModels);
+        //model.addAttribute("itemModels", itemModels);
         model.addAttribute("specifications", specifications);
-        model.addAttribute("pages", pages);
+        //model.addAttribute("pages", pages);
 
         return "search";
+    }
+
+    private void saveInMap(Map<Specification, List<String>> map, Object[] row) {
+        Integer keyId = (Integer) row[0];
+        Specification key = specificationDao.getSpecification(keyId);
+        String value = (String) row[1];
+
+        if(map.containsKey(key)){
+            map.get(key).add(value);
+        }
+        else{
+            List<String> values = new ArrayList<>();
+            values.add(value);
+            map.put(key, values);
+        }
     }
 
     private List<String> getAllSpecificationValues(Map<Specification, List<String>> specifications) {
@@ -74,22 +88,5 @@ public class SearchController {
             values.addAll(entry.getValue());
         }
         return values;
-    }
-
-    private void loadSpecifications(SpecificationList sl, Map<Specification, List<String>> specifications){
-        if(specifications.containsKey(sl.getSpecification())){
-            String valueToAdd = sl.getValue();
-            List<String> mapValues = specifications.get(sl.getSpecification());
-
-            if(!mapValues.contains(valueToAdd)) {
-                specifications.get(sl.getSpecification()).add(valueToAdd);
-            }
-        }
-        else{
-            List<String> values = new ArrayList<>();
-            values.add(sl.getValue());
-            specifications.put(sl.getSpecification(), values);
-        }
-
     }
 }

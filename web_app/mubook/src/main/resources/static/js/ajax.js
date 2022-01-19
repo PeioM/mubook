@@ -1,11 +1,38 @@
 $(document).ready(function(){
     if($('body').is('.searchBody')){
-        document.getElementById("filterButton").addEventListener("click",updateItems);
-        document.getElementById("selectPage").addEventListener("change", updateItems);
+        document.getElementById("filterButton").addEventListener("click", function() {
+            updateItemModelsPage();
+            updateItemModels();
+        });
+        document.getElementById("selectPage").addEventListener("change", updateItemModels);
+        updateItemModelsPage();
+        updateItemModels();
     }
 });
 
-function updateItems(){
+
+function updateItemModelsPage() {
+    let itemTypeHeader = document.getElementsByTagName("h3")[0];
+    let actionUrl = "/ajax/filterItemModelsGetPages/" + itemTypeHeader.textContent;
+
+    $.ajax({
+        method: 'GET',
+        url: actionUrl,
+
+        success: function (result) {
+            let pageOptionHTML="";
+
+            for (let i = 0; i < result; i++) {
+                let innerHTML =  '<option>'+(i+1)+'</option>';
+                pageOptionHTML += innerHTML;
+            }
+            $('#selectPage').html(pageOptionHTML);
+            $("#selectPage").val($("#selectPage option:first").val());
+        }
+    });
+}
+
+function updateItemModels(){
     let options = document.getElementsByClassName("filterCheckBox");
     let dataMap = new Map();
     for(let option of options){
@@ -19,8 +46,13 @@ function updateItems(){
         }
     }
     let itemTypeHeader = document.getElementsByTagName("h3")[0];
-    let actionUrl = "/ajax/filter/" + itemTypeHeader.textContent + "/" + $('#selectPage option:selected').val();
+    let selectedPage = $('#selectPage option:selected').val();
+    if (typeof selectedPage === 'undefined'){
+        selectedPage = 1;
+    }
+    let actionUrl = "/ajax/filterItemModels/" + itemTypeHeader.textContent + "/" + selectedPage;
     let mapAsJson = Object.fromEntries(dataMap);
+    let itemModelsHTML;
 
     $.ajax({
         method: 'GET',
@@ -28,18 +60,16 @@ function updateItems(){
         data: mapAsJson,
 
         success: function (result) {
-            let itemModelIds = JSON.parse(result);
+            let itemModels = JSON.parse(result);
+            itemModelsHTML="";
 
-            let allModels = document.getElementsByClassName("itemModel");
-            for (let itemModel of allModels){
-                let id = itemModel.id.split('-')[1];
-                if(!itemModelIds.includes(parseInt(id))){
-                    itemModel.style.display = "none";
-                }
-                else{
-                    itemModel.style.display = "initial";
-                }
+            for (let itemModel of itemModels){
+                let innerHTML = '<div class="itemModel" id="itemModel-'+itemModel.itemModelId+'">' +
+                                '<button style="font-size: 15px">'+itemModel.name+'</button>' +
+                                '</div>';
+                itemModelsHTML += innerHTML;
             }
+            $('#resultBlock').html(itemModelsHTML);
         }
     });
 }
