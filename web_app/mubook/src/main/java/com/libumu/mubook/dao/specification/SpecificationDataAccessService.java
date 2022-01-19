@@ -4,6 +4,7 @@ import com.libumu.mubook.entities.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,6 +16,16 @@ public class SpecificationDataAccessService implements SpecificationDao {
     @Override
     public List<Specification> getAllSpecifications() {
         return (List<Specification>) repository.findAll();
+    }
+
+    @Override
+    public List<Integer> getAllSpecificationIds() {
+        List<Object[]> result = repository.getAllSpecificationId();
+        List<Integer> ids = new ArrayList<>();
+        for(Object[] i : result){
+            ids.add((Integer) i[0]);
+        }
+        return ids;
     }
 
     @Override

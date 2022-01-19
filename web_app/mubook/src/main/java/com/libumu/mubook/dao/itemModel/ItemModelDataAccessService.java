@@ -1,9 +1,11 @@
 package com.libumu.mubook.dao.itemModel;
 
+import com.libumu.mubook.api.AjaxController;
 import com.libumu.mubook.entities.ItemModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -61,5 +63,30 @@ public class ItemModelDataAccessService implements ItemModelDao {
     public List<ItemModel> getItemModelsBySpecification(List<Long> ids, int specId, String specValue) {
         return repository.findAllByItemModelIdInAndSpecificationListsSpecificationSpecificationIdAndSpecificationListsValue(ids, specId, specValue);
     }
+
+    @Override
+    public List<ItemModel> getItemModelsBySpecificationRowsBetween(List<Integer> specIds, List<String> specValues, int page) {
+        return repository.getItemModelsWithFiltersBetween(specIds, specValues, (page-1)* AjaxController.ITEMS_PER_PAGE, page*AjaxController.ITEMS_PER_PAGE);
+    }
+
+    @Override
+    public int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues) {
+        List<Object[]> result = repository.getItemModelCountWithFiltersBetween(specIds, specValues);
+        BigInteger totalModels = (BigInteger) result.get(0)[0];
+        return totalModels.intValue();
+    }
+
+    @Override
+    public int getTotalItemModelByType(int itemTypeID) {
+        List<Object[]> result = repository.getItemModelCountByItemType(itemTypeID);
+        BigInteger totalModels = (BigInteger) result.get(0)[0];
+        return totalModels.intValue();
+    }
+
+    @Override
+    public List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page) {
+        return repository.getItemModelsByTypeBetween(itemTypeId, (page-1)* AjaxController.ITEMS_PER_PAGE, page*AjaxController.ITEMS_PER_PAGE);
+    }
+
 
 }

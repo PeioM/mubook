@@ -1,5 +1,8 @@
 $(document).ready(function(){
-    if($('body').is('.searchBody'))document.getElementById("filterButton").addEventListener("click",updateItems);
+    if($('body').is('.searchBody')){
+        document.getElementById("filterButton").addEventListener("click",updateItems);
+        document.getElementById("selectPage").addEventListener("change", updateItems);
+    }
 });
 
 function updateItems(){
@@ -16,7 +19,7 @@ function updateItems(){
         }
     }
     let itemTypeHeader = document.getElementsByTagName("h3")[0];
-    let actionUrl = "/ajax/filter/" + itemTypeHeader.textContent;
+    let actionUrl = "/ajax/filter/" + itemTypeHeader.textContent + "/" + $('#selectPage option:selected').val();
     let mapAsJson = Object.fromEntries(dataMap);
 
     $.ajax({
@@ -26,20 +29,16 @@ function updateItems(){
 
         success: function (result) {
             let itemModelIds = JSON.parse(result);
-            //let itemModelIds = details.values();
 
             let allModels = document.getElementsByClassName("itemModel");
             for (let itemModel of allModels){
-                let id = itemModel.id.slice(-1);
+                let id = itemModel.id.split('-')[1];
                 if(!itemModelIds.includes(parseInt(id))){
                     itemModel.style.display = "none";
                 }
                 else{
                     itemModel.style.display = "initial";
                 }
-                //If includes hidden = false, else hidden = true
-                //itemModel.hidden = !itemModelIds.includes(parseInt(id));
-                //.style.display = "none"
             }
         }
     });

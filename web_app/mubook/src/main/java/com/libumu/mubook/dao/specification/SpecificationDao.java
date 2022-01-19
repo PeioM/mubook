@@ -7,6 +7,7 @@ import java.util.List;
 public interface SpecificationDao {
 
     public List<Specification> getAllSpecifications();
+    public List<Integer> getAllSpecificationIds();
     public Specification getSpecification(long id);
     public void editSpecification(Specification specification);
     public void deleteSpecification(long id);

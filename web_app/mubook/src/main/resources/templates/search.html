@@ -31,50 +31,15 @@
 </div>
 <br><br><br>
 
-<!--<script th:inline="javascript">
-    $(document).ready(function(){
-        document.getElementById("filterButton").addEventListener("click",updateItems);
-    });
-
-    function updateItems(){
-        let options = document.getElementsByClassName("filterCheckBox");
-        let data = new Map();
-        for(let option of options){
-            if(option.checked){
-                let values = [];
-                if(data.has(option.name)){
-                    values = data.get(option.name);
-                }
-                values.push(option.value);
-                data.set(option.name, values);
-            }
-        }
-        let actionUrl = "/ajax/filter/" + document.getElementById("SpecificationSelection").value;
-
-        $.ajax({
-            method: 'GET',
-            url: actionUrl,
-            data: data,
-
-            success: function (result) {
-                let details = JSON.parse(result);
-                let itemModelIds = details.values();
-
-                let allModels = document.getElementsByClassName("itemModel");
-                for (let itemModel of allModels){
-                    let id = itemModel.id.slice(-1);
-                    if(!itemModelIds.includes(id)) itemModel.hidden = true;
-                }
-            }
-        });
-    }
-</script>-->
-
-
-<div id="resultBlock" th:fragment="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
-    <div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel + ${itemModel.itemModelId}" >
+<div id="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
+    <div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel +'-'+ ${itemModel.itemModelId}" >
         <button th:text="${itemModel.name}" style="font-size: 15px"></button>
     </div>
+
+    <label for="selectPage">Select Page: </label>
+    <select name="page" id="selectPage">
+        <option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>
+    </select>
 </div>
 
 <footer th:replace="include.html :: footercontent"></footer>
