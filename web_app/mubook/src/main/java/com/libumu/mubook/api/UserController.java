@@ -13,6 +13,8 @@ import com.libumu.mubook.mt.Buffer;
 
 import com.libumu.mubook.security.SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -198,7 +200,7 @@ public class UserController {
     public String addNewUser (Model model) {
         model.addAttribute("user", new User());
 
-        return "userForm";
+        return "register";
     }
 
     @GetMapping(path="/edit")
@@ -207,6 +209,16 @@ public class UserController {
         model.addAttribute("user", user);
 
         return "editCreateUser";
+    }
+    @GetMapping(path="/profile")
+    public String profileUser (Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userDao.getUserByUsername(username);
+        List <Incidence> incidences= incidenceDao.getAllByUser(user);
+        model.addAttribute("userEdit", user);
+        model.addAttribute("incidences", incidences);
+        return "userProfile";
     }
 
     @GetMapping(path="/all")

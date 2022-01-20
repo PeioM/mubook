@@ -13,15 +13,9 @@
             <div class="col-lg-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <h5 th:text="'BOOK '+${reserve.item.itemModel.name}"></h5>
-                    <input th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}"></input>
+                    <input th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}" readonly></input>
                     <div class="user-img-div">
-                        <img class="mt-5 img-fluid" src="../static/images/computadora.png" alt="Item image">
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="ratings"> <i class="fa fa-star rating-color"></i> <i
-                                class="fa fa-star rating-color"></i> <i class="fa fa-star rating-color"></i> <i
-                                class="fa fa-star rating-color"></i> <i class="fa fa-star"></i> </div>
-                        <h5 class="review-count">6 Reviews</h5>
+                        <img class="mt-5 img-fluid" th:src="${reserve.item.itemModel.img}" alt="Item image">
                     </div>
                 </div>
             </div>
@@ -55,15 +49,17 @@
                     </div>
                     <div class="start-date-div">
                         <h4 class="mb-2">Start Date</h4>
-                        <input class="m-2" th:field="*{initDate}" th:attr="value=${reserve.initDate}"></input>
+                        <input class="m-2" th:field="*{initDate}" th:attr="value=${reserve.initDate}" readonly></input>
                     </div>
                     <div class="end-date-div">
                         <h4 class="mb-2">End Date</h4>
-                        <input class="m-2" th:field="*{endDate}" th:attr="value=${reserve.endDate}"></input>
+                        <input class="m-2" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}" sec:authorize= "hasAnyRole('ADMIN','WORKER')"></input>
+                        <input class="m-2" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}" sec:authorize= "hasRole('USER')" readonly></input>
                     </div>
                     <div class="username-div">
-                        <h4 class="mb-2">user id</h4>
-                        <input class="m-2" th:field="*{user.userId}" th:attr="value=${reserve.user.userId}"></input>
+                        <h4 class="mb-2">User id</h4>
+                        <input class="m-2" th:field="*{user.userId}" th:attr="value=${reserve.user != null? reserve.user.userId:''}" sec:authorize= "hasAnyRole('ADMIN','WORKER')"></input>
+                        <input class="m-2" th:field="*{user.userId}" th:attr="value=${reserve.user != null? reserve.user.userId:''}" sec:authorize= "hasAnyRole('USER')" readonly></input>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">

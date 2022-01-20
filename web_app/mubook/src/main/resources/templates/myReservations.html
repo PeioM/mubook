@@ -2,16 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">My reservations</title>
+    <title id="Ptitle">Reservations</title>
 </head>
 
 <body>
     <header th:replace="include.html :: headercontent"></header>
     <div class="container rounded bg-white mt-3 mb-3 border center">
         <div class="filterMenu">
-            <div sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="createButton d-md-flex justify-content-end p-1 m-2">
-                <a href="newItem" class="btn btn-dark salmon">Create New Item</a>
-            </div>
             <div class="container filters d-md-flex justify-content-between flex-row p-2">
                 <select class="form-select m-2">
                     <option selected>Type</option>
@@ -26,13 +23,7 @@
                     <option value="2">Fix It with Food: Every Meal Easy</option>
                     <option value="3">Fear No Evil (Alex Cross, 27)</option>
                 </select>
-
-                <select class="form-select  m-2">
-                    <option selected>Item</option>
-                    <option value="1">#23125</option>
-                    <option value="2">#98453</option>
-                    <option value="3">#38468</option>
-                </select>
+                <input type="checkbox" name="active" checked ><label for="active">Active</label>
             </div>
         </div>
 
@@ -40,6 +31,32 @@
         <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
             <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-3">
 
+                <div class="col" th:each="reservation : ${reserves}">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <a th:href="" class="text-decoration-none text-dark">
+                            <div class="row no-gutters m-2">
+                                <div class="col-md-4 ">
+                                    <h5 class="card-title mb-2" th:text="'ID '+${resevation.reservationId}">Card title</h5>
+                                    <img th:src="${reservation.item.itemModel.img}" class="card-img" alt="reservation image">
+                                </div>
+                                <div class="col-md-8 ">
+                                    <div class="card-body">
+                                        <p class="card-text" th:text="${resevation.item.itemModel}"></p>
+                                        <p class="card-text" th:text="${resevation.initDate}"></p>
+                                        <p class="card-text" th:text="${resevation.endDate}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card-bottom d-flex justify-content-center m-2" th:if="${resevation.initDate.after(today)}">
+                            <form th:action="'/reservations/'+${reservation.reservationId}+'/delete" method="post">
+                                <button type="submit">Cancel Reservation</button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                </div>
+<!--
                 <div class="col">
                     <div class="card mb-3" style="max-width: 540px;">
                         <a href="" class="text-decoration-none text-dark">
@@ -59,7 +76,30 @@
                             </div>
                         </a>
                         <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
+                            <a class="btn btn-warning">Cancel Reservation</a> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <a href="" class="text-decoration-none text-dark">
+                            <div class="row no-gutters m-2">
+                                <div class="col-md-4 ">
+                                    <h5 class="card-title mb-2">Card title</h5>
+                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
+                                </div>
+                                <div class="col-md-8 ">
+                                    <div class="card-body">
+                                        <p class="card-text">This is a wider card with supporting text below as a
+                                            natural
+                                            lead-in to
+                                            additional content. This content is a little bit longer.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card-bottom d-flex justify-content-center m-2">
+                            <a class="btn btn-warning">Cancel Reservation</a> 
                         </div>
                     </div>
                 </div>
@@ -83,30 +123,7 @@
                             </div>
                         </a>
                         <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
+                            <a class="btn btn-warning">Cancel Reservation</a> 
                         </div>
                     </div>
                 </div>
@@ -130,7 +147,7 @@
                             </div>
                         </a>
                         <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
+                            <a class="btn btn-warning">Cancel Reservation</a> 
                         </div>
                     </div>
                 </div>
@@ -154,7 +171,7 @@
                             </div>
                         </a>
                         <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
+                            <a class="btn btn-warning">Cancel Reservation</a> 
                         </div>
                     </div>
                 </div>
@@ -178,34 +195,11 @@
                             </div>
                         </a>
                         <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
+                            <a class="btn btn-warning">Cancel Reservation</a>
                         </div>
                     </div>
                 </div>
-
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> <!-- Si no está active ocultar esto-->
-                        </div>
-                    </div>
-                </div>
+            -->
             </div>
         </div>
     </div>
