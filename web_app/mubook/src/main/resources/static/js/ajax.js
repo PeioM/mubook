@@ -1,32 +1,23 @@
 $(document).ready(function(){
     if($('body').is('.searchBody')){
-        document.getElementById("filterButton").addEventListener("click", function() {
-            updateItemModelsPage();
-            updateItemModels(false);
-        });
-        document.getElementById("resetButton").addEventListener("click", function() {
-            resetFilters();
-            updateItemModelsPage();
-            updateItemModels(false);
-        });
-        document.getElementById("selectPage").addEventListener("change", function() {
-            updateItemModels(true);
-        });
+        let title = document.getElementById("defaultSearchTitle");
+        if(title == null){
+            document.getElementById("filterButton").addEventListener("click", function() {
+                updateItemModelsPage();
+                updateItemModels(false);
+            });
+            document.getElementById("selectPage").addEventListener("change", function() {
+                updateItemModels(true);
+            });
+        }
         updateItemModelsPage();
         updateItemModels(false);
     }
 });
-
-function resetFilters() {
-    let options = document.getElementsByClassName("filterCheckBox");
-    for(let option of options){
-        option.checked = false;
-    }
-}
-
 function updateItemModelsPage() {
-    let itemTypeHeader = document.getElementsByTagName("h3")[0];
-    let actionUrl = "/ajax/filterItemModelsGetPages/" + itemTypeHeader.textContent;
+    let itemTypeHeader = document.getElementsByTagName("h4")[0].textContent;
+    let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
+    let actionUrl = "/ajax/filterItemModelsGetPages/" + itemType;
 
     $.ajax({
         method: 'GET',
@@ -48,18 +39,23 @@ function updateItemModelsPage() {
 function updateItemModels(checkSelectedPage){
     let options = document.getElementsByClassName("filterCheckBox");
     let dataMap = new Map();
+
     //Get filters map
     for(let option of options){
-        if(option.checked){
+        if(option.className.includes("selected")){
             let values = [];
-            if(dataMap.has(option.name)){
-                values = dataMap.get(option.name);
+            let div = option.closest("div.dropdown-menu");
+            let select = $(div).siblings("select");
+            let key = $(select).attr("specid");
+            if(dataMap.has(key)){
+                values = dataMap.get(key);
             }
-            values.push(option.value);
-            dataMap.set(option.name, values);
+            values.push(option.textContent);
+            dataMap.set(key, values);
         }
     }
-    let itemTypeHeader = document.getElementsByTagName("h3")[0];
+    let itemTypeHeader = document.getElementsByTagName("h4")[0].textContent;
+    let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
     let selectedPage;
     if(checkSelectedPage){
         selectedPage = $('#selectPage option:selected').val();
@@ -67,7 +63,7 @@ function updateItemModels(checkSelectedPage){
     else{
         selectedPage = 1;
     }
-    let actionUrl = "/ajax/filterItemModels/" + itemTypeHeader.textContent + "/" + selectedPage;
+    let actionUrl = "/ajax/filterItemModels/" + itemType + "/" + selectedPage;
     let mapAsJson = Object.fromEntries(dataMap);
     let itemModelsHTML;
 
