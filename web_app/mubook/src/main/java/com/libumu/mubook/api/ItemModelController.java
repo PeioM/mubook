@@ -185,7 +185,7 @@ public class ItemModelController {
             comment.setUser(user);
             comment.setDate(new java.sql.Date(date.getTime()));
             commentDao.addComent(comment);
-            returnStr = "redirect:/itemModel/view?id="+itemModelId;
+            returnStr = "redirect:/itemModel/"+itemModelId+"/view";
         }
 
         return returnStr;
@@ -198,7 +198,7 @@ public class ItemModelController {
         long itemModelId = comment.getItemModel().getItemModelId();
         commentDao.deleteComment(id);
 
-        return "redirect:/itemModel/view?id=1";
+        return "redirect:/itemModel/"+itemModelId+"/view";
     }
 
     @PostMapping(path="/edit")

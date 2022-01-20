@@ -61,8 +61,8 @@
           <img src="/images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile">
-          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/list?type=&active=true">My Reservations</a></li>
-          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservation/all?type=&active=true&username=">Reservations</a></li>
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/list?itemModelName=&active=true">My Reservations</a></li>
+          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservations/all?itemModelName=&active=true&username=">Reservations</a></li>
           <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" href="/user/profile">My Profile</a></li>
           <li sec:authorize= "isAuthenticated()">
             <hr class="dropdown-divider">
@@ -106,8 +106,9 @@
               <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}">Users</a>
             </li>
             <hr>
-            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="myReservations.html">My Reservations</a></li>
-            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
+            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/list?itemModelName=&active=true">My Reservations</a></li>
+            <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all?itemModelName=&active=true&username=">Reservations</a></li>
+            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
             <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
             </li>
