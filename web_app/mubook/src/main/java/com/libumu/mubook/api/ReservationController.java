@@ -74,7 +74,7 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(path="/reserves")
+    @GetMapping(path="/list")
     public ModelAndView getUserReservations(@RequestParam("type") String type,
                                                                     @RequestParam("active") Boolean active, Model model){
         List<Reservation> reservations;
@@ -105,7 +105,7 @@ public class ReservationController {
         return reservationDao.getReservation(reservationId);
     }
 
-    @GetMapping(path="/offer/{itemModelId}")
+    @GetMapping(path="/{itemModelId}/offer")
     public ModelAndView makeReservationOffer(Model model,
                                             @PathVariable("itemModelId") String itemModelStr){
 
@@ -142,10 +142,45 @@ public class ReservationController {
         return new ModelAndView("reservation", new ModelMap(model));
     }
 
-    @GetMapping(path="/reservation")
-    public @ResponseBody Reservation getActiveReservations(@RequestParam("reservationId") long reservationId,
+    @GetMapping(path="/{itemModelId}/create")
+    public ModelAndView makeReservationWorker(Model model,
+                                            @PathVariable("itemModelId") String itemModelStr){
+
+        Long itemModelId = Long.parseLong(itemModelStr);
+        
+        ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
+
+        List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
+        Date initDate = (Date) result.get(0)[0];
+        BigInteger itemId = (BigInteger) result.get(0)[1];
+        Item item = itemDao.getItem(itemId.longValue());
+
+        Date actualDate = new Date();
+        if(initDate.compareTo(actualDate) < 0){
+            initDate = actualDate;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(initDate);
+
+        Reservation reservation = new Reservation();
+
+        reservation.setItem(item);
+        reservation.setInitDate(new java.sql.Date(initDate.getTime()));
+
+        model.addAttribute("reserve", reservation);
+
+        return new ModelAndView("reservation", new ModelMap(model));
+    }
+
+    @GetMapping(path="/{reserveIdStr}/view")
+    public ModelAndView getActiveReservations(@PathVariable("reserveIdStr") String reserveIdStr,
                                                                      Model model){
-        return reservationDao.getReservation(reservationId);
+        Long reserveId=Long.parseLong(reserveIdStr);
+        Reservation reservation=reservationDao.getReservation(reserveId);
+        model.addAttribute("reserve", reservation);
+
+        return new ModelAndView("reservation", new ModelMap(model));
     }
 
     @PostMapping(path="/add")

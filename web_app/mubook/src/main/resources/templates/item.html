@@ -43,13 +43,11 @@
                 </div>
             </div>
             <div class="col-lg-8 align-items-center border-right">
-                <div sec:authorize="hasAnyRole('ADMIN','WORKER')"
-                    class="row m-2 d-md-flex justify-content-center admin-actions-div">
-                    <a class="col-2 btn m-2 salmon" href="/item/edit" role="button">Edit Item</a>
-                    <a class="col-2 btn m-2 salmon" href="/reservations/add" role="button">Create Reservation</a>
-                    <a class="col-2 btn m-2 salmon" href="'/reservations/all?itemModel=' + ${itemModel.itemModelId}"
-                        role="button">Reservation History</a>
-                    <a href="'/item/delete" class="col-2 m-2 d-flex justify-content-center align-items-center">
+                <div sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="row m-2 d-md-flex justify-content-center admin-actions-div">
+                    <a class="col-2 btn btn-dark m-2 " th:href="@{'/item/'+${itemModel.itemModelId}+'/edit'}" role="button">Edit Item</a>
+                    <a class="col-2 btn btn-dark m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}" role="button">Create Reservation</a>
+                    <a class="col-2 btn btn-dark m-2 " th:href="@{'/reservations/all?itemModel=' + ${itemModel.itemModelId}}" role="button">Reservation History</a>
+                    <a th:href="@{'/item/'+${itemModel.itemModelId}+'/delete'}" class="col-2 m-2 d-flex justify-content-center align-items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
                             class="bi bi-trash rounded p-1" viewBox="0 0 16 16">
                             <path
@@ -74,9 +72,9 @@
                     </textarea>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-center" sec:authorize="isAuthenticated()">
-                    <a class="col-2 btn salmon m-2 d-flex justify-content-center"
-                        th:href="@{'/reservations/offer/' +${itemModel.itemModelId}}" role="button">BOOK NOW</a>
+                <div class="d-flex justify-content-center" sec:authorize= "isAuthenticated()">
+                    <a class="col-2 btn btn-dark m-2 d-flex justify-content-center" th:href="@{'/reservations/'+${itemModel.itemModelId}+'/offer' }"
+                        role="button">BOOK NOW</a>
                 </div>
                 <div class="row m-4 accordion" id="accordionExample">
                     <div class="accordion-item p-0">

@@ -52,7 +52,7 @@ public class ItemModelController {
     @Autowired
     UserDao userDao;
 
-    @GetMapping(path="/view/{itemModelId}")
+    @GetMapping(path="/{itemModelId}/view")
     public ModelAndView getItemModel(Model model,
                                     @PathVariable("itemModelId") String itemModelStr){
         Long itemModelId = Long.parseLong(itemModelStr);

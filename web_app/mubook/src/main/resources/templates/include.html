@@ -39,7 +39,7 @@
   <header class="mb-3 border-bottom" th:fragment="headercontent">
     <div class="d-lg-flex align-items-center container">
       <div class="d-flex align-items-center justify-content-center justify-content-lg-start col">
-        <a href="" class="d-flex  justify-content-center">
+        <a href="/index" class="d-flex  justify-content-center">
           <img src="/images/logo_mubook.png" alt="Logo MUBook" class="bi me-2 w-50 d-none d-lg-flex"
             aria-label="Bootstrap" />
           <img src="/images/logo_web.png" alt="Logo MUBook"
@@ -61,8 +61,9 @@
           <img src="/images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile">
-          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="myReservations.html">My Reservations</a></li>
-          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="myProfile.html">My Profile</a></li>
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/list?type=&active=true">My Reservations</a></li>
+          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservation/all?type=&active=true&username=">Reservations</a></li>
+          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" href="/user/profile">My Profile</a></li>
           <li sec:authorize= "isAuthenticated()">
             <hr class="dropdown-divider">
           </li>
@@ -106,7 +107,7 @@
             </li>
             <hr>
             <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="myReservations.html">My Reservations</a></li>
-            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="myProfile.html">My Profile</a></li>
+            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
             <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
             </li>
