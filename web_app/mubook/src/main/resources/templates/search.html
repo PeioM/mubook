@@ -20,20 +20,20 @@
 
 <div id="SpecificationSelection">
     <h3 th:if="${actualItemType != null}" th:text="${actualItemType.description}"></h3>
-        <div th:each="entry, stat : ${specifications}">
-            <h4 th:text="${entry.key.description}"></h4>
-            <ul>
-                <li th:each="especValue : ${entry.value}">
-                    <input class="filterCheckBox" type="checkbox" th:text="${especValue}" th:value="${especValue}" th:name="${entry.key.specificationId}"></input>
-                </li>
-            </ul>
-        </div>
+    <div th:each="entry, stat : ${specifications}">
+        <h4 th:text="${entry.key.description}"></h4>
+        <ul>
+            <li th:each="especValue : ${entry.value}">
+                <input class="filterCheckBox" type="checkbox" th:text="${especValue}" th:value="${especValue}" th:name="${entry.key.specificationId}"></input>
+            </li>
+        </ul>
+    </div>
     <button id="filterButton" style="font-size: 15px">Filter</button>
 </div>
 <br><br><br>
 
 <div id="resultBlock" style="display: grid; width: calc(100% - 4rem); margin: 0 2rem; grid-template-columns: 1fr 1fr 1fr">
-<!--    <div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel +'-'+ ${itemModel.itemModelId}" >
+<!--<div class="itemModel" th:each="itemModel : ${itemModels}" th:id="itemModel +'-'+ ${itemModel.itemModelId}" >
         <button th:text="${itemModel.name}" style="font-size: 15px"></button>
     </div>-->
 </div>

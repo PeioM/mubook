@@ -41,9 +41,7 @@ public class SearchController {
     public String searchPage(@PathVariable("itemType") String itemTypeDesc,
                              Model model){
 
-        //ItemModels filtered by ItemType
         ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
-        //List<ItemModel> itemModels = itemModelDao.getItemModelsByType(itemType.getItemTypeId());
 
         //Specifications
         Map<Specification, List<String>> specifications = new TreeMap<>();
@@ -52,19 +50,11 @@ public class SearchController {
                 row -> saveInMap(specifications, row)
         );
 
-        //Calculate pages to visualize
-        //List<Integer> keys = specificationDao.getAllSpecificationIds();
-        //List<String> values = getAllSpecificationValues(specifications);
-        //int totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
-        //int pages = totalItemModels/AjaxController.ITEMS_PER_PAGE + 1;
-
         //Save in model
         model.addAttribute("actualItemType", itemType);
-        //model.addAttribute("itemModels", itemModels);
         model.addAttribute("specifications", specifications);
-        //model.addAttribute("pages", pages);
 
-        return "search";
+        return "searchItems";
     }
 
     private void saveInMap(Map<Specification, List<String>> map, Object[] row) {
@@ -80,13 +70,5 @@ public class SearchController {
             values.add(value);
             map.put(key, values);
         }
-    }
-
-    private List<String> getAllSpecificationValues(Map<Specification, List<String>> specifications) {
-        List<String> values = new ArrayList<>();
-        for (Map.Entry<Specification, List<String>> entry : specifications.entrySet()){
-            values.addAll(entry.getValue());
-        }
-        return values;
     }
 }

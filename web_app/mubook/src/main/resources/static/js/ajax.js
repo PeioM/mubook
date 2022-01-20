@@ -4,6 +4,11 @@ $(document).ready(function(){
             updateItemModelsPage();
             updateItemModels(false);
         });
+        document.getElementById("resetButton").addEventListener("click", function() {
+            resetFilters();
+            updateItemModelsPage();
+            updateItemModels(false);
+        });
         document.getElementById("selectPage").addEventListener("change", function() {
             updateItemModels(true);
         });
@@ -12,6 +17,12 @@ $(document).ready(function(){
     }
 });
 
+function resetFilters() {
+    let options = document.getElementsByClassName("filterCheckBox");
+    for(let option of options){
+        option.checked = false;
+    }
+}
 
 function updateItemModelsPage() {
     let itemTypeHeader = document.getElementsByTagName("h3")[0];
@@ -70,9 +81,25 @@ function updateItemModels(checkSelectedPage){
             itemModelsHTML="";
 
             for (let itemModel of itemModels){
-                let innerHTML = '<div class="itemModel" id="itemModel-'+itemModel.itemModelId+'">' +
-                                '<button style="font-size: 15px">'+itemModel.name+'</button>' +
-                                '</div>';
+                let itemSpecificationsHTML="";
+
+                for(let spec of itemModel.specificationLists){
+                    itemSpecificationsHTML +=
+                        '<div class="p-1">' +
+                        '    <p class="m-0">'+spec.specification.description+':'+spec.value+'</p>' +
+                        '</div>';
+                }
+
+                let innerHTML =
+                    '<div class="itemModel card col mb-4 shadow-sm p-0" id="itemModel-'+itemModel.itemModelId+'">' +
+                    '<a href="/itemModel/view/'+itemModel.itemModelId+'" class="text-decoration-none text-dark">' +
+                    '   <img class="card-img-top img-fluid" src="'+itemModel.img+'" alt="Card image cap">' +
+                    '   <div class="card-body text-center">' +
+                    '       <h5 class="card-title">'+itemModel.name+'</h5>' +
+                        itemSpecificationsHTML +
+                    '   </div>' +
+                    '</a>' +
+                    '</div>';
                 itemModelsHTML += innerHTML;
             }
             $('#resultBlock').html(itemModelsHTML);
