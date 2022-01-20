@@ -31,8 +31,8 @@ public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
     @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) "+
                     "FROM item_model i" +
                     "    JOIN specification_list sl on i.item_model_id = sl.item_model_id AND sl.specification_id IN ?1 " +
-                    "WHERE sl.value IN ?2 " , nativeQuery = true)
-    List<Object[]> getItemModelCountWithFiltersBetween(List<Integer> specIds, List<String> specValues);
+                    "WHERE i.item_type_id = ?2 AND sl.value IN ?3 " , nativeQuery = true)
+    List<Object[]> getItemModelCountWithFilters(List<Integer> specIds, int itemTypeId ,List<String> specValues);
 
     @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) " +
                     "FROM item_model i " +

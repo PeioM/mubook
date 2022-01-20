@@ -2,11 +2,13 @@ $(document).ready(function(){
     if($('body').is('.searchBody')){
         document.getElementById("filterButton").addEventListener("click", function() {
             updateItemModelsPage();
-            updateItemModels();
+            updateItemModels(false);
         });
-        document.getElementById("selectPage").addEventListener("change", updateItemModels);
+        document.getElementById("selectPage").addEventListener("change", function() {
+            updateItemModels(true);
+        });
         updateItemModelsPage();
-        updateItemModels();
+        updateItemModels(false);
     }
 });
 
@@ -32,9 +34,10 @@ function updateItemModelsPage() {
     });
 }
 
-function updateItemModels(){
+function updateItemModels(checkSelectedPage){
     let options = document.getElementsByClassName("filterCheckBox");
     let dataMap = new Map();
+    //Get filters map
     for(let option of options){
         if(option.checked){
             let values = [];
@@ -46,8 +49,11 @@ function updateItemModels(){
         }
     }
     let itemTypeHeader = document.getElementsByTagName("h3")[0];
-    let selectedPage = $('#selectPage option:selected').val();
-    if (typeof selectedPage === 'undefined'){
+    let selectedPage;
+    if(checkSelectedPage){
+        selectedPage = $('#selectPage option:selected').val();
+    }
+    else{
         selectedPage = 1;
     }
     let actionUrl = "/ajax/filterItemModels/" + itemTypeHeader.textContent + "/" + selectedPage;

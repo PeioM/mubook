@@ -16,7 +16,8 @@ public interface ItemModelDao {
     int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId);
     List<ItemModel> getItemModelsBySpecification(List<Long> ids, int specId, String specValue);
     List<ItemModel> getItemModelsBySpecificationRowsBetween(List<Integer> specIds, List<String> specValues, int page);
-    int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues);
+    int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues, int itemTypeId);
+
     int getTotalItemModelByType(int itemTypeID);
     List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page);
 }

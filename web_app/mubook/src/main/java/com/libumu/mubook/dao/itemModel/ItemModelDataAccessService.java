@@ -70,8 +70,8 @@ public class ItemModelDataAccessService implements ItemModelDao {
     }
 
     @Override
-    public int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues) {
-        List<Object[]> result = repository.getItemModelCountWithFiltersBetween(specIds, specValues);
+    public int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues, int itemTypeId) {
+        List<Object[]> result = repository.getItemModelCountWithFilters(specIds, itemTypeId, specValues);
         BigInteger totalModels = (BigInteger) result.get(0)[0];
         return totalModels.intValue();
     }

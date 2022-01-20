@@ -9,7 +9,6 @@ import com.libumu.mubook.entities.ItemType;
 import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +24,8 @@ public class AjaxController {
 
     public final static int ITEMS_PER_PAGE = 2;
 
+    private Map<String, String[]> itemModelFilters;
+
     ItemTypeDao itemTypeDao;
     ItemModelDao itemModelDao;
     SpecificationDao specificationDao;
@@ -33,6 +34,7 @@ public class AjaxController {
         this.itemTypeDao = itemTypeDao;
         this.itemModelDao = itemModelDao;
         this.specificationDao = specificationDao;
+        this.itemModelFilters = new TreeMap<>();
     }
 
     @GetMapping("/filterItemModels/{itemType}/{page}")
@@ -43,16 +45,16 @@ public class AjaxController {
         //Parse page
         int page = Integer.parseInt(pageStr);
         //Obtain all filters by cleaning parameters (when it is array key = ...[])
-        Map<String, String[]> parameters = clearKeys(request.getParameterMap());
+        itemModelFilters = clearKeys(request.getParameterMap());
         //Obtain all Item Models filtered by ItemType
         List<ItemModel> itemModels;
-        if(parameters.isEmpty()) {
+        if(itemModelFilters.isEmpty()) {
             itemModels = itemModelDao.getAllItemModelsByTypeAndBetween(
                     itemTypeDao.getItemTypeByDesc(itemType).getItemTypeId(), page);
         }
         else{
-            List<Integer> keys = parseEntireSet(parameters.keySet());
-            List<String> values = getAllValues(parameters);
+            List<Integer> keys = parseEntireSet(itemModelFilters.keySet());
+            List<String> values = getAllValues(itemModelFilters);
 
             itemModels = itemModelDao.getItemModelsBySpecificationRowsBetween(keys, values, page);
         }
@@ -67,7 +69,20 @@ public class AjaxController {
     @ResponseBody
     public String updateItemModelPages(@PathVariable("itemType") String itemTypeDesc){
         ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
-        int totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
+        List<Integer> keys;
+        List<String> values;
+        int totalItemModels;
+        //If no filter get all ItemModels count by type
+        if(itemModelFilters.isEmpty()) {
+            totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
+        }
+        //Else, get count of item model by type and filter
+        else {
+            keys = parseEntireSet(itemModelFilters.keySet());
+            values = getAllValues(itemModelFilters);
+            totalItemModels = itemModelDao.getTotalItemModelFiltered(keys, values,itemType.getItemTypeId());
+        }
+
         double pages = (double) totalItemModels/AjaxController.ITEMS_PER_PAGE;
 
         return String.valueOf(pages);
