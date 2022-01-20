@@ -21,13 +21,18 @@
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
-                    <form name="user-profile-form" th:action="@{'/user/edit}" th:object="${userEdit}" method="post">
+                    <form name="user-profile-form" th:action="@{'/user/edit'}" th:object="${userEdit}" method="post">
+
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h4 class="text-right">Profile Settings</h4>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" th:field="*{name}" th:attr="value=${userEdit.name != null? userEdit.name:''}" disabled></div>
-                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text" class="form-control" th:field="*{surname}" th:attr="value=${userEdit.surname != null? userEdit.surname:''}" disabled></div>
+                            <div class="col-md-6"><label class="labels">Id</label><input type="text" class="form-control" th:field="*{userId}" th:attr="value=${userEdit.userId != null? userEdit.userId:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels">User type</label><input type="text" name="flexRadioDefault" class="form-control" th:attr="value=${userEdit.userType.userTypeId != null? userEdit.userType.userTypeId:''}" readonly></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" th:field="*{name}" th:attr="value=${userEdit.name != null? userEdit.name:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text" class="form-control" th:field="*{surname}" th:attr="value=${userEdit.surname != null? userEdit.surname:''}" readonly></div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12"><label class="labels">Email</label><input type="email" class="form-control" th:field="*{email}" th:attr="value=${userEdit.email != null? userEdit.email:''}"></div>

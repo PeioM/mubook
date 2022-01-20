@@ -167,7 +167,7 @@ public class UserController {
         if(!passwordsMatch(request)){
             error = error + "Password mismatch";
         }else if(request.getParameter("password").equals("") && request.getParameter("passwordRep").equals("")){
-            bdUser = userDao.getUser(user.getUserId());
+            bdUser = userDao.findUserByUserId(user.getUserId());
             user.setPassword(bdUser.getPassword());
         }else{
             BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
@@ -187,6 +187,9 @@ public class UserController {
         }else{
             bdUser = userDao.getUser(user.getUserId());
             user.setUserActivity(bdUser.getUserActivity());
+            user.setDniImgPath(bdUser.getDniImgPath());
+            user.setDNI(bdUser.getDNI());
+            user.setBornDate(bdUser.getBornDate());
             String type = request.getParameter("flexRadioDefault");
             user.setUserType(userTypeDao.getUserType(type));
             user.setValidated(true);
@@ -222,6 +225,13 @@ public class UserController {
             match = false;
         }
         return match;
+    }
+
+    @GetMapping(path="/add")
+    public String registerUser (Model model) {
+        model.addAttribute("user", new User());
+
+        return "register";
     }
 
     @GetMapping(path="/create")

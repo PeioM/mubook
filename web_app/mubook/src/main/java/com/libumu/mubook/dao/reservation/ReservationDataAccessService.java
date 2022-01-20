@@ -106,13 +106,18 @@ public class ReservationDataAccessService implements ReservationDao {
     }
 
     @Override
-    public List<Reservation> findAllByItemItemModelItemTypeDescriptionAndUserUsername(String itemType_description, String user_username) {
-        return repository.findAllByItemItemModelItemTypeDescriptionAndUserUsername(itemType_description, user_username);
+    public List<Reservation> findAllByItemItemModelNameAndUserUsername(String item_itemModel_name, String user_username) {
+        return repository.findAllByItemItemModelNameAndUserUsername(item_itemModel_name, user_username);
     }
 
     @Override
-    public List<Reservation> findAllByItemItemModelItemTypeDescriptionAndEndDateIsAfterAndUserUsername(String itemType_description, Date endDate, String user_username) {
-        return repository.findAllByItemItemModelItemTypeDescriptionAndEndDateIsAfterAndUserUsername(itemType_description, endDate, user_username);
+    public List<Reservation> findAllByItemItemModelNameAndEndDateIsAfterAndUserUsername(String item_itemModel_name, Date endDate, String user_username) {
+        return repository.findAllByItemItemModelNameAndEndDateIsAfterAndUserUsername(item_itemModel_name, endDate, user_username);
+    }
+
+    @Override
+    public List<Long> getItemsWithoutReservation(long itemModelId) {
+        return repository.getItemsWithoutReservation(itemModelId);
     }
 
 }

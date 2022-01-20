@@ -18,8 +18,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByItemItemModelName(String item_itemModel_name);
     List<Reservation> findAllByUserUsernameAndEndDateIsAfter(String user_username, Date date);
     List<Reservation> findAllByItemItemModelNameAndEndDateIsAfter(String item_itemModel_name, Date date);
-    List<Reservation> findAllByItemItemModelItemTypeDescriptionAndUserUsername(String itemType_description, String user_username);
-    List<Reservation> findAllByItemItemModelItemTypeDescriptionAndEndDateIsAfterAndUserUsername(String itemType_description, Date endDate, String user_username);
+    List<Reservation> findAllByItemItemModelNameAndUserUsername(String item_itemModel_name, String user_username);
+    List<Reservation> findAllByItemItemModelNameAndEndDateIsAfterAndUserUsername(String item_itemModel_name, Date endDate, String user_username);
 
     @Query(value = "SELECT MAX(r2.end_date) fecha, i2.item_id " +
             "    FROM reservation r2 "+
@@ -30,6 +30,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "ORDER BY fecha ASC " +
             "LIMIT 1", nativeQuery = true)
     List<Object[]> getFirstReservationDate(long item_model_id);
+
+    @Query(value = "SELECT item_id "+
+            "FROM item "+
+            "JOIN item_model m on m.item_model_id = item.item_model_id "+
+            "WHERE item_id NOT IN(select DISTINCT (i.item_id) "+
+            "from reservation "+
+            "join item i on i.item_id = reservation.item_id "+
+            "join item_model im on im.item_model_id = i.item_model_id "+
+            "where im.item_model_id = ?1) "+
+            "AND m.item_model_id = ?1", nativeQuery = true)
+    List<Long> getItemsWithoutReservation(long itemModelId);
 
     @Query(value = "SELECT it.description, COUNT(r.reservation_id) "+
             "FROM item_type it "+
