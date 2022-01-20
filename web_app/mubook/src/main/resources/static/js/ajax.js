@@ -3,40 +3,27 @@ $(document).ready(function(){
         let title = document.getElementById("defaultSearchTitle");
         if(title == null){
             document.getElementById("filterButton").addEventListener("click", function() {
-                updateItemModelsPage();
-                updateItemModels(false);
+                updateItemModelPageWithFilters();
+                updateItemModelsWithFilters(false);
             });
             document.getElementById("selectPage").addEventListener("change", function() {
-                updateItemModels(true);
+                updateItemModelsWithFilters(true);
             });
+            updateItemModelPageWithFilters();
+            updateItemModelsWithFilters(false);
         }
-        updateItemModelsPage();
-        updateItemModels(false);
+        else{
+            document.getElementById("selectPage").addEventListener("change", function() {
+                updateItemModelsWithoutFilters(true);
+            });
+            updateItemModelPageWithoutFilters();
+            updateItemModelsWithoutFilters(false);
+        }
+
     }
 });
-function updateItemModelsPage() {
-    let itemTypeHeader = document.getElementsByTagName("h4")[0].textContent;
-    let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
-    let actionUrl = "/ajax/filterItemModelsGetPages/" + itemType;
 
-    $.ajax({
-        method: 'GET',
-        url: actionUrl,
-
-        success: function (result) {
-            let pageOptionHTML="";
-
-            for (let i = 0; i < result; i++) {
-                let innerHTML =  '<option>'+(i+1)+'</option>';
-                pageOptionHTML += innerHTML;
-            }
-            $('#selectPage').html(pageOptionHTML);
-            $("#selectPage").val($("#selectPage option:first").val());
-        }
-    });
-}
-
-function updateItemModels(checkSelectedPage){
+function updateItemModelsWithFilters(checkSelectedPage){
     let options = document.getElementsByClassName("filterCheckBox");
     let dataMap = new Map();
 
@@ -54,8 +41,22 @@ function updateItemModels(checkSelectedPage){
             dataMap.set(key, values);
         }
     }
+
     let itemTypeHeader = document.getElementsByTagName("h4")[0].textContent;
     let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
+
+    let actionUrl = "/ajax/filterItemModels/" + itemType + "/" + getSelectedPage(checkSelectedPage);
+    let mapAsJson = Object.fromEntries(dataMap);
+
+    ajaxCallGetItemModels(actionUrl, mapAsJson);
+}
+function updateItemModelsWithoutFilters(checkSelectedPage) {
+
+    let actionUrl = "/ajax/filterItemModels/all/" + getSelectedPage(checkSelectedPage);
+
+    ajaxCallGetItemModels(actionUrl, null);
+}
+function getSelectedPage(checkSelectedPage){
     let selectedPage;
     if(checkSelectedPage){
         selectedPage = $('#selectPage option:selected').val();
@@ -63,16 +64,16 @@ function updateItemModels(checkSelectedPage){
     else{
         selectedPage = 1;
     }
-    let actionUrl = "/ajax/filterItemModels/" + itemType + "/" + selectedPage;
-    let mapAsJson = Object.fromEntries(dataMap);
-    let itemModelsHTML;
-
+    return selectedPage;
+}
+function ajaxCallGetItemModels(actionUrl,mapAsJson){
     $.ajax({
         method: 'GET',
         url: actionUrl,
         data: mapAsJson,
 
         success: function (result) {
+            let itemModelsHTML;
             let itemModels = JSON.parse(result);
             itemModelsHTML="";
 
@@ -92,7 +93,7 @@ function updateItemModels(checkSelectedPage){
                     '   <img class="card-img-top img-fluid" src="'+itemModel.img+'" alt="Card image cap">' +
                     '   <div class="card-body text-center">' +
                     '       <h5 class="card-title">'+itemModel.name+'</h5>' +
-                        itemSpecificationsHTML +
+                    itemSpecificationsHTML +
                     '   </div>' +
                     '</a>' +
                     '</div>';
@@ -102,3 +103,34 @@ function updateItemModels(checkSelectedPage){
         }
     });
 }
+
+function updateItemModelPageWithFilters() {
+    let itemTypeHeader = document.getElementsByTagName("h4")[0].textContent;
+    let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
+    let actionUrl = "/ajax/filterItemModelsGetPages/" + itemType;
+
+    ajaxCallGetPages(actionUrl)
+}
+function updateItemModelPageWithoutFilters() {
+    let actionUrl = "/ajax/filterItemModelsGetPages/all";
+
+    ajaxCallGetPages(actionUrl)
+}
+function ajaxCallGetPages(actionUrl) {
+    $.ajax({
+        method: 'GET',
+        url: actionUrl,
+
+        success: function (result) {
+            let pageOptionHTML="";
+
+            for (let i = 0; i < result; i++) {
+                let innerHTML =  '<option>'+(i+1)+'</option>';
+                pageOptionHTML += innerHTML;
+            }
+            $('#selectPage').html(pageOptionHTML);
+            $("#selectPage").val($("#selectPage option:first").val());
+        }
+    });
+}
+

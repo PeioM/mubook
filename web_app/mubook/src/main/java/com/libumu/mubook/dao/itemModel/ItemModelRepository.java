@@ -19,14 +19,19 @@ public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
                     "FROM item_model i " +
                     "WHERE i.item_type_id = ?1 " +
                     "LIMIT ?2,?3" , nativeQuery = true)
-    List<ItemModel> getItemModelsByTypeBetween(int itemTypeId, int startRow, int endRow);
+    List<ItemModel> getItemModelsByTypeAndBetween(int itemTypeId, int startRow, int quantity);
+
+    @Query(value =  "SELECT DISTINCT i.* " +
+                    "FROM item_model i " +
+                    "LIMIT ?1,?2" , nativeQuery = true)
+    List<ItemModel> getItemModelsBetween(int startRow, int quantity);
 
     @Query(value =  "SELECT DISTINCT i.*" +
                     "FROM item_model i" +
                     "    JOIN specification_list sl on i.item_model_id = sl.item_model_id AND sl.specification_id IN ?1 " +
                     "WHERE sl.value IN ?2 " +
                     "LIMIT ?3,?4" , nativeQuery = true)
-    List<ItemModel> getItemModelsWithFiltersBetween(List<Integer> specIds, List<String> specValues, int startRow, int endRow);
+    List<ItemModel> getItemModelsWithFiltersBetween(List<Integer> specIds, List<String> specValues, int startRow, int quantity);
 
     @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) "+
                     "FROM item_model i" +
@@ -38,4 +43,8 @@ public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
                     "FROM item_model i " +
                     "WHERE item_type_id = ?1" , nativeQuery = true)
     List<Object[]> getItemModelCountByItemType(int itemTypeId);
+
+    @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) " +
+            "FROM item_model i ", nativeQuery = true)
+    List<Object[]> getTotalItemModelCount();
 }

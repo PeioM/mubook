@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/ajax")
 public class AjaxController {
 
-    public final static int ITEMS_PER_PAGE = 2;
+    public final static int ITEMS_PER_PAGE = 4;
 
     private Map<String, String[]> itemModelFilters;
 
@@ -44,20 +44,28 @@ public class AjaxController {
                                    WebRequest request) {
         //Parse page
         int page = Integer.parseInt(pageStr);
-        //Obtain all filters by cleaning parameters (when it is array key = ...[])
-        itemModelFilters = clearKeys(request.getParameterMap());
-        //Obtain all Item Models filtered by ItemType
         List<ItemModel> itemModels;
-        if(itemModelFilters.isEmpty()) {
-            itemModels = itemModelDao.getAllItemModelsByTypeAndBetween(
-                    itemTypeDao.getItemTypeByDesc(itemType).getItemTypeId(), page);
+
+        if(itemType.equals("all")){
+            itemModels = itemModelDao.getAllItemModelsBetween(page);
         }
         else{
-            List<Integer> keys = parseEntireSet(itemModelFilters.keySet());
-            List<String> values = getAllValues(itemModelFilters);
+            //Obtain all filters by cleaning parameters (when it is array key = ...[])
+            itemModelFilters = clearKeys(request.getParameterMap());
+            //Obtain all Item Models filtered by ItemType
 
-            itemModels = itemModelDao.getItemModelsBySpecificationRowsBetween(keys, values, page);
+            if(itemModelFilters.isEmpty()) {
+                itemModels = itemModelDao.getAllItemModelsByTypeAndBetween(
+                        itemTypeDao.getItemTypeByDesc(itemType).getItemTypeId(), page);
+            }
+            else{
+                List<Integer> keys = parseEntireSet(itemModelFilters.keySet());
+                List<String> values = getAllValues(itemModelFilters);
+
+                itemModels = itemModelDao.getItemModelsBySpecificationRowsBetween(keys, values, page);
+            }
         }
+        //Convert from entity to class to be able to access from thymeleaf
         List<ItemModelClass> itemModelsToSend = new ArrayList<>();
         for(ItemModel im : itemModels) itemModelsToSend.add(new ItemModelClass(im));
 
@@ -68,21 +76,27 @@ public class AjaxController {
     @GetMapping("/filterItemModelsGetPages/{itemType}")
     @ResponseBody
     public String updateItemModelPages(@PathVariable("itemType") String itemTypeDesc){
-        ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
-        List<Integer> keys;
-        List<String> values;
         int totalItemModels;
-        //If no filter get all ItemModels count by type
-        if(itemModelFilters.isEmpty()) {
-            totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
-        }
-        //Else, get count of item model by type and filter
-        else {
-            keys = parseEntireSet(itemModelFilters.keySet());
-            values = getAllValues(itemModelFilters);
-            totalItemModels = itemModelDao.getTotalItemModelFiltered(keys, values,itemType.getItemTypeId());
-        }
 
+        if(itemTypeDesc.equals("all")){
+            totalItemModels = itemModelDao.getTotalItemModels();
+        }
+        else{
+            ItemType itemType = itemTypeDao.getItemTypeByDesc(itemTypeDesc);
+            List<Integer> keys;
+            List<String> values;
+
+            //If no filter get all ItemModels count by type
+            if(itemModelFilters.isEmpty()) {
+                totalItemModels = itemModelDao.getTotalItemModelByType(itemType.getItemTypeId());
+            }
+            //Else, get count of item model by type and filter
+            else {
+                keys = parseEntireSet(itemModelFilters.keySet());
+                values = getAllValues(itemModelFilters);
+                totalItemModels = itemModelDao.getTotalItemModelFiltered(keys, values,itemType.getItemTypeId());
+            }
+        }
         double pages = (double) totalItemModels/AjaxController.ITEMS_PER_PAGE;
 
         return String.valueOf(pages);

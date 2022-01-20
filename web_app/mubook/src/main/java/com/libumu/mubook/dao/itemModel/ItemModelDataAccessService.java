@@ -66,7 +66,9 @@ public class ItemModelDataAccessService implements ItemModelDao {
 
     @Override
     public List<ItemModel> getItemModelsBySpecificationRowsBetween(List<Integer> specIds, List<String> specValues, int page) {
-        return repository.getItemModelsWithFiltersBetween(specIds, specValues, (page-1)* AjaxController.ITEMS_PER_PAGE, page*AjaxController.ITEMS_PER_PAGE);
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getItemModelsWithFiltersBetween(specIds, specValues, start, quantity);
     }
 
     @Override
@@ -84,9 +86,23 @@ public class ItemModelDataAccessService implements ItemModelDao {
     }
 
     @Override
-    public List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page) {
-        return repository.getItemModelsByTypeBetween(itemTypeId, (page-1)* AjaxController.ITEMS_PER_PAGE, page*AjaxController.ITEMS_PER_PAGE);
+    public int getTotalItemModels() {
+        List<Object[]> result = repository.getTotalItemModelCount();
+        BigInteger totalModels = (BigInteger) result.get(0)[0];
+        return totalModels.intValue();
     }
 
+    @Override
+    public List<ItemModel> getAllItemModelsBetween(int page) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getItemModelsBetween(start, quantity);
+    }
 
+    @Override
+    public List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getItemModelsByTypeAndBetween(itemTypeId, start, quantity);
+    }
 }

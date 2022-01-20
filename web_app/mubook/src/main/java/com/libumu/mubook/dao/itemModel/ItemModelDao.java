@@ -19,5 +19,7 @@ public interface ItemModelDao {
     int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues, int itemTypeId);
 
     int getTotalItemModelByType(int itemTypeID);
+    int getTotalItemModels();
+    List<ItemModel> getAllItemModelsBetween( int page);
     List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page);
 }
