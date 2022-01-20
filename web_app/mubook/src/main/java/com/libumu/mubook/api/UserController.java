@@ -2,13 +2,10 @@ package com.libumu.mubook.api;
 
 import com.libumu.mubook.dao.incidence.IncidenceDao;
 import com.libumu.mubook.dao.incidenceSeverity.IncidenceSeverityDao;
-import com.libumu.mubook.dao.incidenceSeverity.IncidenceSeverityDataAccessService;
 import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.dao.userActivity.UserActivityDao;
 import com.libumu.mubook.dao.userType.UserTypeDao;
-import com.libumu.mubook.entities.Incidence;
-import com.libumu.mubook.entities.IncidenceSeverity;
-import com.libumu.mubook.entities.User;
+import com.libumu.mubook.entities.*;
 import com.libumu.mubook.mt.Buffer;
 
 import com.libumu.mubook.security.SecurityConfiguration;
@@ -61,6 +58,14 @@ public class UserController {
 
     int [] ageList = new int []{0, 12, 13, 18, 19, 30, 31, 50, 51, 1000};
 
+    @GetMapping(path="")
+    public String searchUser(Model model){
+        model.addAttribute("users", userDao.getAllUsers());
+        model.addAttribute("userTypes", userTypeDao.getAllUserTypes());
+
+        return "searchUser";
+    }
+
     @PostMapping(path="/add")
     public ModelAndView createNewUser (Model model,
         @ModelAttribute User user,
@@ -106,64 +111,87 @@ public class UserController {
         return new ModelAndView(returnStr, new ModelMap(model));
     }
 
+    @PostMapping(path="/create")
+    public String createUser(Model model,
+                             @ModelAttribute User user,
+                             WebRequest request){
+
+        String error="";
+        if(!passwordsMatch(request) || request.getParameter("password").equals("")){
+            error = error + "Wrong password";
+        }
+
+        if(userDao.countUsersByUsername(user.getUsername()) > 0 || user.getUsername().equals("")){
+            error = error + " Wrong username";
+        }
+
+        if(userDao.countUsersByEmail(user.getEmail()) > 0 || user.getEmail().equals("")){
+            error = error + " Wrong email";
+        }
+
+        if(user.getDNI().equals("") || user.getDNI().length() < 9){
+            error = error + " The DNI is not correct";
+        }
+
+        if(user.getBornDate() == null){
+            error = error + " The born date is null";
+        }
+        String type = request.getParameter("flexRadioDefault");
+        if(type == null){
+            error = error + " Select a user type";
+        }
+
+        if(error.length() == 0){
+            BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
+            user.setPassword(encrypt.encode(request.getParameter("password")));
+            user.setUserType(userTypeDao.getUserType(request.getParameter("flexRadioDefault")));
+            user.setValidated(true);
+            UserActivity ua = userActivityDao.getUserActivity(1);
+            user.setUserActivity(ua);
+            userDao.addUser(user);
+        }
+
+        return "redirect:/user";
+    }
+
     @PostMapping(path = "/edit")
     public String editUser(Model model,
-                                @ModelAttribute User editedUser,
-                                 @ModelAttribute List<Incidence> incidences,
+                                @ModelAttribute User user,
                                  WebRequest request) {
 
         String error = "";
+        User bdUser;
+
         if(!passwordsMatch(request)){
             error = error + "Password mismatch";
+        }else if(request.getParameter("password").equals("") && request.getParameter("passwordRep").equals("")){
+            bdUser = userDao.getUser(user.getUserId());
+            user.setPassword(bdUser.getPassword());
+        }else{
+            BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
+            user.setPassword(encrypt.encode(request.getParameter("password")));
         }
 
-        if(userDao.countUserByUsernameAndUserIdIsNot(editedUser.getUsername(), editedUser.getUserId()) > 0){
+        if(userDao.countUserByUsernameAndUserIdIsNot(user.getUsername(), user.getUserId()) > 0){
             error = error + " Username already in use";
         }
 
-        if(userDao.countUserByEmailAndUserIdIsNot(editedUser.getEmail(), editedUser.getUserId()) > 0){
+        if(userDao.countUserByEmailAndUserIdIsNot(user.getEmail(), user.getUserId()) > 0){
             error = error + " Email already in use";
-        }
-
-        editedUser.setValidated(Boolean.valueOf(request.getParameter("validated")));
-
-        if(incidences.size() > 0 && error.length() == 0){
-            String incidenceError = "";
-            List<Incidence> previousIncidences = incidenceDao.getAllByUser(editedUser);
-            for(Incidence incidence : incidences.toArray(new Incidence[0])){
-                if(!previousIncidences.contains(incidence)){
-                    if(incidence.getIncidenceSeverity() == null){
-                        incidenceError = incidenceError + " Incidence severity is empty";
-                    }
-                    if(incidence.getDescription().equals("")){
-                        incidenceError = incidenceError + " Incidence description is empty";
-                    }
-
-                    if(incidenceError.length() == 0){
-                        Date initDate = new Date();
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(initDate);
-                        c.add(Calendar.MONTH, incidence.getIncidenceSeverity().getDuration());
-                        Date endDate = c.getTime();
-                        incidence.setInitDate(new java.sql.Date(initDate.getTime()));
-                        incidence.setEndDate(new java.sql.Date(endDate.getTime()));
-                        incidence.setUser(editedUser);
-                        incidenceDao.addIncidence(incidence);
-                    }
-                }
-            }
-            incidenceError = "";
         }
 
         if(error.length() > 0){
             model.addAttribute("error", error);
         }else{
-            userDao.editUser(editedUser);
+            bdUser = userDao.getUser(user.getUserId());
+            user.setUserActivity(bdUser.getUserActivity());
+            String type = request.getParameter("flexRadioDefault");
+            user.setUserType(userTypeDao.getUserType(type));
+            user.setValidated(true);
+            userDao.editUser(user);
         }
 
-        model.addAttribute("users", userDao.getAllUsers());
-
-        return "redirect:/searchUser";
+        return "redirect:/index";
     }
 
     private String checkUserDuplicated(User user){
@@ -194,25 +222,71 @@ public class UserController {
         return match;
     }
 
-    @GetMapping(path="/add")
+    @GetMapping(path="/create")
     public String addNewUser (Model model) {
-        model.addAttribute("user", new User());
-
-        return "userForm";
-    }
-
-    @GetMapping(path="/edit")
-    public String editUser (Model model, @RequestParam("userId") long userId) {
-        User user = userDao.getUser(userId);
-        model.addAttribute("user", user);
+        model.addAttribute("userEdit", new User());
+        model.addAttribute("action", "create");
 
         return "editCreateUser";
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers(Model model) {
-        // This returns a JSON or XML with the users
-        return userDao.getAllUsers();
+    @GetMapping(path="/{userId}/edit")
+    public String editUser (Model model, @PathVariable("userId") String userIdStr) {
+        User user = userDao.findUserByUserId(Long.parseLong(userIdStr));
+        List<Incidence> incidences = incidenceDao.getAllByUser(user);
+        List<IncidenceSeverity> incidenceSeverities = incidenceSeverityDao.getAllIncidenceSeverities();
+        Incidence incidence = new Incidence();
+        model.addAttribute("userEdit", user);
+        model.addAttribute("incidences", incidences);
+        model.addAttribute("incidenceSeverities", incidenceSeverities);
+        model.addAttribute("incidence", incidence);
+        model.addAttribute("action", "edit");
+
+        return "editCreateUser";
+    }
+
+    @PostMapping(path="/incidenceAdd")
+    public String addIncidence(Model model,
+                                     @ModelAttribute Incidence incidence,
+                                     WebRequest request){
+        IncidenceSeverity incidenceSeverity = incidenceSeverityDao.getIncidenceSeverityByDescription(request.getParameter("severity"));
+        String userId = request.getParameter("user");
+        User user = userDao.findUserByUserId(Long.parseLong(userId));
+
+        if(user != null && incidenceSeverity != null && incidence.getInitDate() != null){
+            incidence.setUser(user);
+            incidence.setIncidenceSeverity(incidenceSeverity);
+            Calendar c = Calendar.getInstance();
+            c.setTime(incidence.getInitDate());
+            c.add(Calendar.MONTH, incidenceSeverity.getDuration());
+            Date endDate = c.getTime();
+            incidence.setEndDate(new java.sql.Date(endDate.getTime()));
+            Date date = new Date();
+            List<Incidence> activeIncidences = incidenceDao.getIncidencesByEndDateIsAfterAndUser_UserId(new java.sql.Date(date.getTime()), user.getUserId());
+            updateIncidenceDates(activeIncidences, incidence);
+            incidenceDao.addIncidence(incidence);
+        }
+
+        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit";
+    }
+
+    @PostMapping(path="/incidenceDelete")
+    public String deleteIncidence(@RequestParam("id") long incidenceId){
+        Incidence incidence = incidenceDao.getIncidence(incidenceId);
+        if(incidence != null){
+            incidenceDao.deleteIncidence(incidence);
+        }
+
+        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit";
+    }
+
+    public void updateIncidenceDates(List<Incidence> activeIncidences, Incidence lastIncidence){
+        for(Incidence incidence : activeIncidences.toArray(new Incidence[0])){
+            if(incidence.getEndDate().compareTo(lastIncidence.getEndDate()) < 0){
+                incidence.setEndDate(lastIncidence.getEndDate());
+                incidenceDao.editIncidence(incidence);
+            }
+        }
     }
 
     @GetMapping(path="/age")

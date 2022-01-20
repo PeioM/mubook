@@ -3,6 +3,7 @@ package com.libumu.mubook.dao.incidence;
 import com.libumu.mubook.entities.Incidence;
 import com.libumu.mubook.entities.User;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface IncidenceDao {
@@ -15,4 +16,5 @@ public interface IncidenceDao {
     public List<Integer> getIncidenceWithSeverityId(int incidenceSeverityId);
     public List<Integer> getIncidenceWithUserId(long incidenceUserId);
     List<Incidence> getAllByUser(User user);
+    List<Incidence> getIncidencesByEndDateIsAfterAndUser_UserId(Date endDate, Long user_userId);
 }
