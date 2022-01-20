@@ -102,7 +102,7 @@
               <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/aboutUs}">About Us</a>
             </li>
             <li class="nav-item"><!--actualPage==User Search  th:classappend="${0}? active"-->
-              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/userSearch}">Users</a>
+              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}">Users</a>
             </li>
             <hr>
             <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="myReservations.html">My Reservations</a></li>

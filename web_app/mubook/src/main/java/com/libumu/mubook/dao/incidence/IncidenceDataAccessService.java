@@ -5,6 +5,7 @@ import com.libumu.mubook.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -56,4 +57,10 @@ public class IncidenceDataAccessService implements IncidenceDao {
     public List<Incidence> getAllByUser(User user) {
         return repository.getAllByUser(user);
     }
+
+    @Override
+    public List<Incidence> getIncidencesByEndDateIsAfterAndUser_UserId(Date endDate, Long user_userId) {
+        return repository.getIncidencesByEndDateIsAfterAndUser_UserId(endDate, user_userId);
+    }
+
 }

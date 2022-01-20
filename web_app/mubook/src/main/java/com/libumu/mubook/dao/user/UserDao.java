@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserDao {
 
     public List<User> getAllUsers();
-    public User getUser(long id);
+    User getUser(long id);
     public void editUser(User user);
     public void deleteUser(long id);
     public void deleteUser(User user);
@@ -15,6 +15,7 @@ public interface UserDao {
     public User getUserByUsername(String username);
     public User getUserByDNI(String username);
     public User getUserByEmail(String username);
+    User findUserByUserId(Long userId);
     
     public int countUsersByAge(int low, int high);
     public List<Object[]> countUsersByAgeWithoutMT();
@@ -22,5 +23,7 @@ public interface UserDao {
     public List<Object[]> countUsersByIncidenceWithoutMT();
     int countUserByUsernameAndUserIdIsNot(String username, Long userId);
     int countUserByEmailAndUserIdIsNot(String email, Long userId);
+    int countUsersByUsername(String username);
+    int countUsersByEmail(String email);
 
 }

@@ -57,6 +57,11 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
+    public User findUserByUserId(Long userId) {
+        return repository.findUserByUserId(userId);
+    }
+
+    @Override
     public int countUsersByAge(int low, int high) {
         return repository.countUsersByAge(low, high);
     }
@@ -84,6 +89,16 @@ public class UserDataAccessService implements UserDao {
     @Override
     public int countUserByEmailAndUserIdIsNot(String email, Long userId) {
         return repository.countUserByEmailAndUserIdIsNot(email, userId);
+    }
+
+    @Override
+    public int countUsersByUsername(String username) {
+        return repository.countUserByUsername(username);
+    }
+
+    @Override
+    public int countUsersByEmail(String email) {
+        return repository.countUserByEmail(email);
     }
 
 }
