@@ -1,8 +1,6 @@
 package com.libumu.mubook.entities;
 
 
-import com.libumu.mubook.entities.SpecificationList.SpecificationList;
-
 import javax.persistence.*;
 import java.util.List;
 

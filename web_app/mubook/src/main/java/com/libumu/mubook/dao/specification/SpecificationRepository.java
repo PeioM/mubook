@@ -4,4 +4,5 @@ import com.libumu.mubook.entities.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpecificationRepository extends JpaRepository<Specification, Long> {
+    Specification findSpecificationBySpecificationIdIs(Integer specificationId);
 }

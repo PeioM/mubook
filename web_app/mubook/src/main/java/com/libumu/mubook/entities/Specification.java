@@ -1,7 +1,7 @@
 package com.libumu.mubook.entities;
 
 
-import com.libumu.mubook.entities.SpecificationList.SpecificationList;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,6 +18,7 @@ public class Specification implements Comparable<Specification>{
     @Column(name = "desccription")
     private String description;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "specification")
     private List<SpecificationList> specificationLists;
 

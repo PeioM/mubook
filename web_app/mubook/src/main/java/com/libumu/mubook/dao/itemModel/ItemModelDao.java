@@ -15,4 +15,5 @@ public interface ItemModelDao {
     public List<Object[]> getAllItemModelId();
     int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId);
     List<ItemModel> getItemModelsBySpecification(List<Long> ids, int specId, String specValue);
+    int countItemModelByIdentifier(String identifier);
 }

@@ -46,4 +46,9 @@ public class StatusDataAccessService implements StatusDao {
     public List<Integer> getStatusWithItemId(long itemId) {
         return null;
     }
+
+    @Override
+    public Status getStatusByDescription(String description) {
+        return repository.getStatusByDescription(description);
+    }
 }

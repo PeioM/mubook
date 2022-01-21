@@ -18,11 +18,6 @@ public class SpecificationDataAccessService implements SpecificationDao {
     }
 
     @Override
-    public Specification getSpecification(long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
     public void editSpecification(Specification specification) {
         repository.save(specification);
     }
@@ -45,5 +40,10 @@ public class SpecificationDataAccessService implements SpecificationDao {
     @Override
     public List<Integer> getSpecificationWithModelId(long itemModelId) {
         return null;
+    }
+
+    @Override
+    public Specification findSpecificationBySpecificationIdIs(Integer specificationId) {
+        return repository.findSpecificationBySpecificationIdIs(specificationId);
     }
 }

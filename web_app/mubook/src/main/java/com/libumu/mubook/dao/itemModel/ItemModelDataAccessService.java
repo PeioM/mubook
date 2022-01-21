@@ -62,4 +62,8 @@ public class ItemModelDataAccessService implements ItemModelDao {
         return repository.findAllByItemModelIdInAndSpecificationListsSpecificationSpecificationIdAndSpecificationListsValue(ids, specId, specValue);
     }
 
+    @Override
+    public int countItemModelByIdentifier(String identifier) {
+        return repository.countItemModelByIdentifier(identifier);
+    }
 }
