@@ -2,6 +2,7 @@ package com.libumu.mubook.entities;
 
 
 import com.libumu.mubook.entities.SpecificationList.SpecificationList;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.List;
 public class Specification implements Comparable<Specification>{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="specification" , strategy="increment")
+    @GeneratedValue(generator="specification")
     @Column(name = "specification_id")
     private Integer specificationId;
 

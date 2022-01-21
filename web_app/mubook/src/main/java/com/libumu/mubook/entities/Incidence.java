@@ -1,6 +1,8 @@
 package com.libumu.mubook.entities;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -9,7 +11,8 @@ import java.sql.Date;
 public class Incidence {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="incidence" , strategy="increment")
+    @GeneratedValue(generator="incidence")
     @Column(name = "incidence_id")
     private Long incidenceId;
 

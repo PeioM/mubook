@@ -2,6 +2,7 @@ package com.libumu.mubook.entities;
 
 
 import com.libumu.mubook.entities.SpecificationList.SpecificationList;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.List;
 public class ItemModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="itemModel" , strategy="increment")
+    @GeneratedValue(generator="itemModel")
     @Column(name = "item_model_id")
     private Long itemModelId;
 

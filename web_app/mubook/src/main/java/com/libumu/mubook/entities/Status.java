@@ -1,6 +1,8 @@
 package com.libumu.mubook.entities;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,7 +10,8 @@ import javax.persistence.*;
 public class Status {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="status" , strategy="increment")
+    @GeneratedValue(generator="status")
     @Column(name = "status_id")
     private Integer statusId;
 

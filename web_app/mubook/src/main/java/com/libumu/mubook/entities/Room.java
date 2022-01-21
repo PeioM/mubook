@@ -1,6 +1,8 @@
 package com.libumu.mubook.entities;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,7 +10,8 @@ import javax.persistence.*;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="room" , strategy="increment")
+    @GeneratedValue(generator="room")
     @Column(name = "room_id")
     private Integer roomId;
 

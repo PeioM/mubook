@@ -1,12 +1,15 @@
 package com.libumu.mubook.entities;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name= "user_activity")
 public class UserActivity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GenericGenerator(name="userActivity" , strategy="increment")
+    @GeneratedValue(generator="userActivity")
     @Column(name = "user_activity_id")
     private Integer userActivityId;
 

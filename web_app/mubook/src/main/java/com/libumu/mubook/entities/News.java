@@ -1,6 +1,8 @@
 package com.libumu.mubook.entities;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -9,7 +11,8 @@ import java.sql.Date;
 public class News {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="news" , strategy="increment")
+    @GeneratedValue(generator="news")
     @Column(name = "news_id")
     private Long newsid;
 

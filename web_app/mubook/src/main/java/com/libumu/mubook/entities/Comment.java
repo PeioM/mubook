@@ -1,5 +1,7 @@
 package com.libumu.mubook.entities;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -7,7 +9,8 @@ import java.sql.Date;
 @Table(name = "comment")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="comment" , strategy="increment")
+    @GeneratedValue(generator="comment")
     @Column(name = "comment_id")
     private Long commentId;
 
