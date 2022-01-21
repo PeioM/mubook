@@ -58,6 +58,11 @@ public class SpecificationDataAccessService implements SpecificationDao {
     }
 
     @Override
+    public Specification findSpecificationBySpecificationIdIs(Integer specificationId) {
+        return repository.findSpecificationBySpecificationIdIs(specificationId);
+    }
+
+    @Override
     public List<Object[]> getAllSpecificationAndValuesByItemType(int itemTypeId) {
         return repository.getAllSpecificationAndValuesByItemType(itemTypeId);
     }

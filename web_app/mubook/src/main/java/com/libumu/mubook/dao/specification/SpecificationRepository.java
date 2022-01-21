@@ -16,4 +16,5 @@ public interface SpecificationRepository extends JpaRepository<Specification, In
                     "    JOIN specification s on sl.specification_id = s.specification_id " +
                     "WHERE im.item_type_id = ?1", nativeQuery = true)
     List<Object[]> getAllSpecificationAndValuesByItemType(int itemTypeId);
+    Specification findSpecificationBySpecificationIdIs(Integer specificationId);
 }

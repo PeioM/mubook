@@ -14,6 +14,7 @@ public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
     List<Object[]> getAllItemModelId();
     List<ItemModel> findAllByItemTypeItemTypeId(Integer itemType_itemTypeId);
     List<ItemModel> findAllByItemModelIdInAndSpecificationListsSpecificationSpecificationIdAndSpecificationListsValue(Collection<Long> itemModelId, Integer specificationLists_specification_specificationId, String specificationLists_value);
+    int countItemModelByIdentifier(String identifier);
 
     @Query(value =  "SELECT DISTINCT i.* " +
                     "FROM item_model i " +

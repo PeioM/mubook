@@ -1,6 +1,7 @@
 package com.libumu.mubook.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.libumu.mubook.entities.SpecificationList.SpecificationList;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,6 +21,7 @@ public class Specification implements Comparable<Specification>{
     @Column(name = "desccription")
     private String description;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "specification")
     private List<SpecificationList> specificationLists;
 

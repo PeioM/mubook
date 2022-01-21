@@ -5,10 +5,11 @@ import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.specification.SpecificationDao;
+import com.libumu.mubook.dao.specificationList.SpecificationListDao;
 import com.libumu.mubook.dao.status.StatusDao;
 import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.entities.*;
-import com.libumu.mubook.entities.SpecificationList.SpecificationList;
+import com.libumu.mubook.entities.SpecificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,8 +31,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Controller
 @RequestMapping(path="/itemModel")
 public class ItemModelController {
@@ -47,6 +46,8 @@ public class ItemModelController {
     ItemDao itemDao;
     @Autowired
     SpecificationDao specificationDao;
+    @Autowired
+    SpecificationListDao specificationListDao;
     @Autowired
     CommentDao commentDao;
     @Autowired
@@ -75,47 +76,61 @@ public class ItemModelController {
         ItemModel itemModel = new ItemModel();
         List<ItemType> itemTypeList = itemTypeDao.getAllItemTypes();
         List<Status> statusList = statusDao.getAllStatus();
-        List<Specification> specificationList = specificationDao.getAllSpecifications();
-        List<Item> itemList = itemDao.getItemByItemModelItemModelId(itemModel.getItemModelId());
 
         model.addAttribute("itemModel", itemModel);
         model.addAttribute("itemTypes", itemTypeList);
         model.addAttribute("status", statusList);
-        model.addAttribute("items", itemList);
+        model.addAttribute("action", "create");
 
         return "editCreateItem";
     }
 
-    @GetMapping(path="/edit")
+    @GetMapping(path="{id}/edit")
     public String editItemModel(Model model,
-                                @ModelAttribute ItemModel itemModel){
+                                @PathVariable("id") String idStr){
+        Long itemModelId = Long.parseLong(idStr);
+        ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
         List<ItemType> itemTypeList = itemTypeDao.getAllItemTypes();
         List<Status> statusList = statusDao.getAllStatus();
         List<Specification> specifications = specificationDao.getAllSpecifications();
+        List<SpecificationList> specList = specificationListDao.getSpecificationListsByItemModel_ItemModelId(itemModel.getItemModelId());
         List<Item> itemList = itemDao.getItemByItemModelItemModelId(itemModel.getItemModelId());
+        Item item = new Item();
 
+        model.addAttribute("itemModel", itemModel);
+        model.addAttribute("itemTypes", itemTypeList);
+        model.addAttribute("statusList", statusList);
+        model.addAttribute("specifications", specifications);
+        model.addAttribute("items", itemList);
+        model.addAttribute("item", item);
+        model.addAttribute("specificationList", new SpecificationList());
+        model.addAttribute("specList", specList);
+        model.addAttribute("action", "edit");
 
         return "editCreateItem";
     }
 
-    @PostMapping(path="/add")
+    @PostMapping(path="/create")
     public String createItemModel(Model model,
                                   @ModelAttribute ItemModel itemModel,
-                                  @ModelAttribute Item items[],
-                                  @ModelAttribute SpecificationList specifications[],
-                                  @RequestParam("itemModelImg") MultipartFile file){
+                                  @RequestParam("itemImg") MultipartFile file,
+                                  WebRequest request){
         String error = "";
-        if(itemModel.getItemType() == null){
-            error = "Item type is left";
+        String type = request.getParameter("type");
+        ItemType itemType = itemTypeDao.getItemTypeByDesc(type);
+
+        if(itemType == null){
+            error = error + " Item type is empty";
         }
+
         if(itemModel.getName().equals("")){
             error = error + " Item model name is empty";
         }
         if(itemModel.getDescription().equals("")){
             error = error + " Item model description is empty";
         }
-        if(itemModel.getIdentifier().equals("")){
-            error = error + " Item model identifier is empty";
+        if(itemModel.getIdentifier().equals("") || itemModelDao.countItemModelByIdentifier(itemModel.getIdentifier()) > 0){
+            error = error + " Wrong item model identifier";
         }
         if (file == null || file.isEmpty() || file.getOriginalFilename()==null || file.getOriginalFilename().equals("")) {
             error = error + " Please upload the item model image";
@@ -136,37 +151,77 @@ public class ItemModelController {
         }
 
         if(error.length() == 0){
-            String itemError = "";
+            itemModel.setItemType(itemType);
             itemModelDao.addItemModel(itemModel);
-            for(Item item : items){
-                if(item.getSerialNum().equals("")){
-                    itemError = itemError + " Item serial number is empty";
-                }
-                if(item.getStatus() == null){
-                    itemError = itemError + " Item status is empty";
-                }
-                if(itemError.length() == 0){
-                    item.setItemModel(itemModel);
-                    itemDao.addItem(item);
-                }
-                itemError = "";
-            }
-            String specError = "";
-            /*for(SpecificationList specification : specifications){
-                if(specification.getValue().equals("")){
-                    specError = specError + " Specification value is empty";
-                }
-
-                if(specError.length() == 0){
-                    specification.setItemModel(itemModel);
-
-                }
-            }*/
         }
 
-        model.addAttribute("items", itemModelDao.getAllItemModels());
+        return "redirect:/index";
+    }
 
-        return "redirect:/searchItems";
+    @PostMapping(path="/addSpecification")
+    public String addSpecification(Model model,
+                                   @ModelAttribute SpecificationList specificationList,
+                                   WebRequest request){
+
+        ItemModel itemModel = itemModelDao.getItemModel(Long.parseLong(request.getParameter("itemModelId")));
+        int id = Integer.parseInt(request.getParameter("sp"));
+        Specification specification = specificationDao.findSpecificationBySpecificationIdIs(id);
+        if(itemModel != null && specification != null){
+            specificationList.setItemModel(itemModel);
+            specificationList.setSpecification(specification);
+            specificationListDao.addSpecificationList(specificationList);
+            List<SpecificationList> specList = itemModel.getSpecificationLists();
+            specList.add(specificationList);
+            itemModel.setSpecificationLists(specList);
+            itemModelDao.editItemModel(itemModel);
+        }
+
+        return "redirect:/index";
+    }
+
+    @PostMapping(path="/addItem")
+    public String addItem(Model model,
+                          @ModelAttribute Item item,
+                          WebRequest request){
+
+        ItemModel itemModel = itemModelDao.getItemModel(Long.parseLong(request.getParameter("itemModelId")));
+        String st = request.getParameter("st");
+        Status status = statusDao.getStatusByDescription(st);
+        if(itemModel != null && status != null){
+            item.setItemModel(itemModel);
+            item.setStatus(status);
+            itemDao.addItem(item);
+        }
+
+        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit";
+    }
+
+    @PostMapping(path="/deleteSpec")
+    public String deleteSpec(@RequestParam("id") long specId){
+        SpecificationList specificationList = specificationListDao.findSpecificationListBySpecificationListId(specId);
+
+        if(specificationList != null){
+            specificationListDao.deleteSpecificationList(specificationList);
+        }
+
+        return "redirect:/itemModel/"+specificationList.getItemModel().getItemModelId()+"/edit";
+    }
+
+    @PostMapping(path="/disableItem")
+    public String disableItem(@RequestParam("id") long itemId){
+        Item item = itemDao.getItem(itemId);
+        Status available = statusDao.getStatusByDescription("Available");
+        Status disable = statusDao.getStatusByDescription("Disable");
+        if(item != null){
+            if(item.getStatus().getDescription().equals(available.getDescription())){
+                item.setStatus(disable);
+            }else{
+                item.setStatus(available);
+            }
+            itemDao.editItem(item);
+        }
+
+        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit";
     }
 
     @PostMapping(path="/comment")
@@ -204,9 +259,10 @@ public class ItemModelController {
     @PostMapping(path="/edit")
     public String editItemModel(Model model,
                                 @ModelAttribute ItemModel itemModelEdited,
-                                @ModelAttribute List<Item> items,
-                                @ModelAttribute List<Specification> specifications){
+                                @RequestParam("itemImg") MultipartFile file,
+                                WebRequest request){
         String error = "";
+        ItemType it = itemTypeDao.getItemTypeByDesc(request.getParameter("type"));
         if(!itemModelEdited.getIdentifier().equals("")){
             if(itemModelDao.countItemModelByIdentifierAndItemModelIdNotLike(itemModelEdited.getIdentifier(), itemModelEdited.getItemModelId()) > 0){
                 error = error + " Item model identifier already exists";
@@ -214,8 +270,10 @@ public class ItemModelController {
         }else{
             error = error + " Item model identifier is empty";
         }
-        if(itemModelEdited.getItemType() == null){
+        if(it == null){
             error = error + " Item model type is empty";
+        }else{
+            itemModelEdited.setItemType(it);
         }
         if(itemModelEdited.getName().equals("")){
             error = error + " Item model name is empty";
@@ -224,38 +282,27 @@ public class ItemModelController {
             error = error + " Item model description is empty";
         }
 
-        if(error.length() == 0){
-            String itemError = "";
-            List<Item> previousItems = itemDao.getItemByItemModelItemModelId(itemModelEdited.getItemModelId());
-            for(Item item : items.toArray(new Item[0])){
-                if(!previousItems.contains(item)){
-                    if(item.getSerialNum().equals("")){
-                        itemError = itemError + " Item serial number is empty";
-                    }
-                    if(item.getStatus() == null){
-                        itemError = itemError + " Item status is empty";
-                    }
-                    if(itemError.length() == 0){
-                        item.setItemModel(itemModelEdited);
-                        itemDao.addItem(item);
-                    }
-                }
-                itemError = "";
+        if(file.getOriginalFilename().equals("")){
+            itemModelEdited.setImg((itemModelDao.getItemModel(itemModelEdited.getItemModelId())).getImg());
+        }else{
+            String filename = file.getOriginalFilename();
+            String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
+            try {
+                String pathStr = LOCAL_UPLOAD_DIR + itemModelEdited.getName() + extension;
+                new File(pathStr);  //Create dest file to save
+                Path path = Paths.get(pathStr);
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                itemModelEdited.setImg(path.toString());
+                //In case there is no error redirect to home
+            } catch (IOException e) {
+                error = error + " Error uploading file";
             }
         }
 
-
-        model.addAttribute("items", itemModelDao.getAllItemModels());
-
-        return "redirect:/searchItems";
-    }
-
-    /*@PostMapping(path="/delete")
-    public String deleteItemModel(Model model,
-                                  @ModelAttribute ItemModel itemModel){
-        List<Item> items = itemDao.getItemByItemModelItemModelId(itemModel.getItemModelId());
-
+        if(error.length() == 0){
+            itemModelDao.editItemModel(itemModelEdited);
+        }
 
         return "redirect:/index";
-    }*/
+    }
 }

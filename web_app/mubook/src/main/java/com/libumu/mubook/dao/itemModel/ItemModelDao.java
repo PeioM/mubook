@@ -22,4 +22,5 @@ public interface ItemModelDao {
     int getTotalItemModels();
     List<ItemModel> getAllItemModelsBetween( int page);
     List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page);
+    int countItemModelByIdentifier(String identifier);
 }

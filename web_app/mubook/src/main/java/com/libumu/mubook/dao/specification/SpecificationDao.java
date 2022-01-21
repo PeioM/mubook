@@ -15,4 +15,5 @@ public interface SpecificationDao {
      void addSpecification(Specification specification);
      List<Integer> getSpecificationWithModelId(long itemModelId);
      List<Object[]> getAllSpecificationAndValuesByItemType(int itemTypeId);
+    Specification findSpecificationBySpecificationIdIs(Integer specificationId);
 }

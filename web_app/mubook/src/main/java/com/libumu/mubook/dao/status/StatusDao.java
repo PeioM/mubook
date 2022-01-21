@@ -13,5 +13,6 @@ public interface StatusDao {
     public void deleteStatus(Status specification);
     public void addStatus(Status specification);
     public List<Integer> getStatusWithItemId(long itemId);
+    Status getStatusByDescription(String description);
 
 }

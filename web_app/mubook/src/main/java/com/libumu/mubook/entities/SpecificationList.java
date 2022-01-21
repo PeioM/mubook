@@ -1,6 +1,5 @@
-package com.libumu.mubook.entities.SpecificationList;
+package com.libumu.mubook.entities;
 
-import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.entities.ItemModel;
 import com.libumu.mubook.entities.Specification;
 
@@ -11,16 +10,16 @@ import java.io.Serializable;
 @Table(name = "specification_list")
 public class SpecificationList  implements Serializable {
 
-    @EmbeddedId
-    private SpecificationListId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "specification_list_id")
+    private Long specificationListId;
 
     @ManyToOne
-    @MapsId("itemModel")
     @JoinColumn(name = "item_model_id")
     private ItemModel itemModel;
 
     @ManyToOne
-    @MapsId("specification")
     @JoinColumn(name = "specification_id")
     private Specification specification;
 
@@ -29,6 +28,10 @@ public class SpecificationList  implements Serializable {
 
     public Specification getSpecification(){
         return this.specification;
+    }
+
+    public void setSpecification(Specification specification){
+        this.specification = specification;
     }
 
     public String getValue(){
@@ -45,5 +48,13 @@ public class SpecificationList  implements Serializable {
 
     public ItemModel getItemModel(){
         return this.itemModel;
+    }
+
+    public void setSpecificationListId(Long specificationListId){
+        this.specificationListId = specificationListId;
+    }
+
+    public Long getSpecificationListId() {
+        return this.specificationListId;
     }
 }
