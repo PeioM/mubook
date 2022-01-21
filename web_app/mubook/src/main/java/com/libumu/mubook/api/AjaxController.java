@@ -1,20 +1,22 @@
 package com.libumu.mubook.api;
 
 import com.google.gson.Gson;
+import com.libumu.mubook.dao.button.ButtonDao;
+import com.libumu.mubook.dao.buttonClick.ButtonClickDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.specification.SpecificationDao;
-import com.libumu.mubook.entities.ItemModel;
-import com.libumu.mubook.entities.ItemType;
+import com.libumu.mubook.dao.user.UserDao;
+import com.libumu.mubook.entities.*;
 import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,12 +31,20 @@ public class AjaxController {
     ItemTypeDao itemTypeDao;
     ItemModelDao itemModelDao;
     SpecificationDao specificationDao;
+    UserDao userDao;
+    ButtonClickDao buttonClickDao;
+    ButtonDao buttonDao;
     @Autowired
-    public AjaxController(ItemTypeDao itemTypeDao, ItemModelDao itemModelDao, SpecificationDao specificationDao) {
+    public AjaxController(ItemTypeDao itemTypeDao, ItemModelDao itemModelDao,
+                          SpecificationDao specificationDao, UserDao userDao,
+                          ButtonClickDao buttonClickDao, ButtonDao buttonDao) {
         this.itemTypeDao = itemTypeDao;
         this.itemModelDao = itemModelDao;
         this.specificationDao = specificationDao;
         this.itemModelFilters = new TreeMap<>();
+        this.userDao = userDao;
+        this.buttonClickDao = buttonClickDao;
+        this.buttonDao = buttonDao;
     }
 
     @GetMapping("/filterItemModels/{itemType}/{page}")
@@ -133,5 +143,24 @@ public class AjaxController {
 
     public static List<Long> obtainItemModelIds(List<ItemModel> list){
         return list.stream().map(ItemModel::getItemModelId).collect(Collectors.toList());
+    }
+
+
+    @GetMapping("/registerGrafana/{buttonId}")
+    @ResponseBody
+    public String registryButtonClickGrafana(@PathVariable("buttonId") String buttonId,
+                                             Principal principal){
+        String result = "";
+        String username;
+        if(principal != null) username = principal.getName();
+        else username = "anonymousUser";
+
+        User user = userDao.getUserByUsername(username);
+        Button button = buttonDao.getButton(Integer.parseInt(buttonId));
+        ButtonClick buttonClick = new ButtonClick(button, user);
+        buttonClickDao.addButtonClick(buttonClick);
+        result = "success";
+
+        return result;
     }
 }
