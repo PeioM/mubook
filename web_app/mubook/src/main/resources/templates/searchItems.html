@@ -40,7 +40,10 @@
 <!----------------------->
 <!-----CREATE BUTTON----->
             <div class="createButton d-flex justify-content-center p-3">
-                <button sec:authorize="hasAnyRole('ADMIN','WORKER')" type="button" class="btn btn-lg btn-block salmon" href="/item/add" th:text="#{searchItems.createItem}"></button>
+                <a th:href="@{/itemModel/add}">
+                    <button sec:authorize="hasAnyRole('ADMIN','WORKER')" type="button"
+                            class="btn btn-lg btn-block salmon" th:text="#{searchItems.createItem}"></button>
+                </a>
             </div>
         </div>
 <!----------------------->
