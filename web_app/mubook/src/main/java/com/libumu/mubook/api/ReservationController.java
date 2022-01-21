@@ -52,30 +52,40 @@ public class ReservationController {
     private Buffer buffer = new Buffer(MAXBUFFER);
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Reservation> getActiveReservations(@RequestParam("username") String username,
+    public ModelAndView getActiveReservations(@RequestParam("username") String username,
                                                                      @RequestParam("itemModelName") String itemModelName,
                                                                      @RequestParam("active") Boolean active,
                                                                      Model model){
         Date now = new Date();
         java.sql.Date date = new java.sql.Date(now.getTime());
+        List<Reservation> reservations;
 
         if(itemModelName.equals("") && !username.equals("") && !active){
-            return reservationDao.findAllByUserUsername(username);
+            reservations = reservationDao.findAllByUserUsername(username);
         }else if(username.equals("") && !itemModelName.equals("") && !active){
-            return reservationDao.findAllByItemItemModelName(itemModelName);
+            reservations = reservationDao.findAllByItemItemModelName(itemModelName);
         }else if(username.equals("") && itemModelName.equals("") && !active){
-            return reservationDao.getAllReservations();
+            reservations = reservationDao.getAllReservations();
         }else if(itemModelName.equals("") && !username.equals("") && active){
-            return reservationDao.findAllByUserUsernameAndEndDateIsAfter(username, date);
+            reservations = reservationDao.findAllByUserUsernameAndEndDateIsAfter(username, date);
         }else if(username.equals("") && !itemModelName.equals("") && active){
-            return reservationDao.findAllByItemItemModelNameAndEndDateIsAfter(itemModelName, date);
+            reservations = reservationDao.findAllByItemItemModelNameAndEndDateIsAfter(itemModelName, date);
         }else{
-            return reservationDao.findAllByEndDateIsAfter(date);
+            reservations = reservationDao.findAllByEndDateIsAfter(date);
         }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(now);
+        c.add(Calendar.DATE, -1);
+
+        model.addAttribute("reserves", reservations);
+        model.addAttribute("today", c.getTime());
+
+        return new ModelAndView("myReservations", new ModelMap(model));
     }
 
     @GetMapping(path="/list")
-    public ModelAndView getUserReservations(@RequestParam("type") String type,
+    public ModelAndView getUserReservations(@RequestParam("itemModelName") String itemModelName,
                                                                     @RequestParam("active") Boolean active, Model model){
         List<Reservation> reservations;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,24 +95,33 @@ public class ReservationController {
         Date now = new Date();
         java.sql.Date date = new java.sql.Date(now.getTime());
 
-        if(type.equals("") && !active){
+        if(itemModelName.equals("") && !active){
             reservations = reservationDao.findAllByUserUsername(user.getUsername());
-        }else if(!type.equals("") && !active){
-            reservations = reservationDao.findAllByItemItemModelItemTypeDescriptionAndUserUsername(type, user.getUsername());
-        }else if(!type.equals("") && active){
-            reservations = reservationDao.findAllByItemItemModelItemTypeDescriptionAndEndDateIsAfterAndUserUsername(type, date, user.getUsername());
+        }else if(!itemModelName.equals("") && !active){
+            reservations = reservationDao.findAllByItemItemModelNameAndUserUsername(itemModelName, user.getUsername());
+        }else if(!itemModelName.equals("") && active){
+            reservations = reservationDao.findAllByItemItemModelNameAndEndDateIsAfterAndUserUsername(itemModelName, date, user.getUsername());
         }else{
             reservations = reservationDao.findAllByUserUsernameAndEndDateIsAfter(user.getUsername(), date);
         }
+        Calendar c = Calendar.getInstance();
+        Date today = new Date();
+        c.setTime(today);
+        c.add(Calendar.DATE, -1);
 
         model.addAttribute("reserves", reservations);
+        model.addAttribute("today", c.getTime());
 
         return new ModelAndView("myReservations", new ModelMap(model));
     }
 
-    @GetMapping(path="/reserve")
-    public Reservation getReservation(@RequestParam("reservationId") long reservationId){
-        return reservationDao.getReservation(reservationId);
+    @GetMapping(path="/{id}/view")
+    public ModelAndView getReservation(@PathVariable("id") String reservationId, Model model){
+        Reservation reservation = reservationDao.getReservation(Long.parseLong(reservationId));
+
+        model.addAttribute("reserve", reservation);
+
+        return new ModelAndView("reservation", new ModelMap(model));
     }
 
     @GetMapping(path="/{itemModelId}/offer")
@@ -114,11 +133,22 @@ public class ReservationController {
         String username = authentication.getName();
         User user = userDao.getUserByUsername(username);
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
+        Item item = null;
+        Date initDate = null;
+        String error = "";
 
+        List<Long> itemsWithoutR = reservationDao.getItemsWithoutReservation(itemModel.getItemModelId());
         List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
-        Date initDate = (Date) result.get(0)[0];
-        BigInteger itemId = (BigInteger) result.get(0)[1];
-        Item item = itemDao.getItem(itemId.longValue());
+        if(itemsWithoutR.size() != 0){
+            item = itemDao.getItem(itemsWithoutR.get(0));
+            initDate = new Date();
+        }else if(result.size() != 0) {
+            initDate = (Date) result.get(0)[0];
+            BigInteger itemId = (BigInteger) result.get(0)[1];
+            item = itemDao.getItem(itemId.longValue());
+        }else{
+            error = "No está disponible";
+        }
 
         Date actualDate = new Date();
         if(initDate.compareTo(actualDate) < 0){
@@ -138,6 +168,7 @@ public class ReservationController {
         reservation.setUser(user);
 
         model.addAttribute("reserve", reservation);
+        model.addAttribute("offer", "offer");
 
         return new ModelAndView("reservation", new ModelMap(model));
     }
@@ -173,16 +204,6 @@ public class ReservationController {
         return new ModelAndView("reservation", new ModelMap(model));
     }
 
-    @GetMapping(path="/{reserveIdStr}/view")
-    public ModelAndView getActiveReservations(@PathVariable("reserveIdStr") String reserveIdStr,
-                                                                     Model model){
-        Long reserveId=Long.parseLong(reserveIdStr);
-        Reservation reservation=reservationDao.getReservation(reserveId);
-        model.addAttribute("reserve", reservation);
-
-        return new ModelAndView("reservation", new ModelMap(model));
-    }
-
     @PostMapping(path="/add")
     public String addReservation(Model model,
                                     @ModelAttribute Reservation reservation){
@@ -201,11 +222,10 @@ public class ReservationController {
     }
 
     @PostMapping(path="/delete")
-    public String deleteReservation(@RequestParam("reservationId") long reservationId,
-                                                           Model model){
+    public String deleteReservation(@RequestParam("id") long reservationId){
         reservationDao.deleteReservation(reservationId);
 
-        return "redirect:/index";
+        return "redirect:/reservations/list?itemModelName=&active=true";
     }
 
     @GetMapping(path="/itemType")

@@ -2,364 +2,79 @@
 <html lang="en">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">Search</title>
+    <title id="Ptitle" th:text="#{searchItems.htmlTitle}"></title>
 </head>
 
 <body class="searchBody">
-    <header th:replace="include.html :: headercontent"></header>
-    <div class="container border bg-white rounded">
-        <div class="filterMenu">
+<header th:replace="include.html :: headercontent"></header>
+<div class="container border bg-white rounded">
+    <div class="filterMenu">
+        <div class="filters container">
+<!--ITEM TYPE SELECTION-->
+            <div>
+                <br>
+                <h4 id="defaultSearchTitle" th:if="${itemTypes != null}">Filter by Item Type</h4>
+                <h4 id="itemTypeSearch" th:if="${actualItemType != null}" th:text="'Item Type: ' + ${actualItemType.description}"></h4>
+                <hr>
+            </div>
 
-            <div class="filters container">
-
-                <!--<form form th:action="@{/search/} + ${itemType.description}" method="get">
-                    <div class="d-flex flex-row justify-content-center align-items-baseline">
-                        <p>Type:</p>
-                        <select class="form-select w-25 m-3">
-                            <optgroup label="Select item type">
-                                <option selected> - </option>
-                                <option th:each="itemType : ${itemTypes}"></option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </form>-->
-                <div th:each="itemType : ${itemTypes}">
-                    <form th:action="@{/search/} + ${itemType.description}" method="get">
-                        <input type="submit" th:value="${itemType.description}" style="font-size: 15px"
-                               th:name="buttonType"></input>
-                    </form>
+            <div class="mt-2 col-md-12" th:each="itemType : ${itemTypes}">
+                <a th:href="@{/search/} + ${itemType.description}">
+                    <button class="btn btn-secondary" th:text="${itemType.description}" style="font-size: 15px"></button>
+                </a>
+            </div>
+<!----------------------->
+<!---FILTERS SELECTION--->
+            <div class="especification-filters d-md-flex justify-content-center row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-2">
+                <!--FOR EACH-->
+                <div class="d-flex flex-row justify-content-center align-items-baseline" th:each="entry : ${specifications}">
+                    <select class="m-3 selectpicker border border-secondary rounded" multiple
+                            th:attr="title=${entry.key.description}, data-actions-box=true, specid=${entry.key.specificationId}">
+                        <option class="filterCheckBox" th:each="especValue : ${entry.value}" th:text="${especValue}"></option>
+                    </select>
                 </div>
-                <div class="especification-filters d-md-flex justify-content-center row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-2">
-
-                    <!--FOR EACH-->
-                    <div class="d-flex flex-row justify-content-center align-items-baseline" th:each="entry : ${specifications}">
-                        <select class="form-select m-3">
-                            <option selected disabled th:text="${entry.key.description}"></option>
-                            <option th:each="especValue : ${entry.value}" th:text="${especValue}"></option>
-                        </select>
-                    </div>
-
-                   <!--<div class="d-flex flex-row justify-content-center align-items-baseline">
-                        <select class="form-select m-3">
-                            <option selected disabled>Tipo</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                        </select>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-center align-items-baseline">
-                        <select class="form-select m-3">
-                            <option selected disabled>Noseque</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                        </select>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-center align-items-baseline">
-                        <select class="form-select m-3">
-                            <option selected disabled>Editorial</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                        </select>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-center align-items-baseline">
-                        <select class="form-select m-3">
-                            <option selected disabled>Editorial</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                        </select>
-                    </div>-->
-
-        </div>
-
-        <div class="createButton d-flex justify-content-center p-3">
-            <button type="button" class="btn btn-lg btn-block salmon" href="/item/add">Create Item</button>
-        </div>
-    </div>
-
-
-    <div class="py-5">
-        <div class="container">
-            <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
-
-                <div th:each="itemModel: ${itemModels}" class=" card col mb-4 shadow-sm p-0">
-                    <a th:href="'/itemModel/'+${itemModel.itemModelId}+'/view'" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" th:src="@{${itemModel.img}}"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title" th:text="${itemModel.name}">This is the book Title</h5>
-                            <div class="p-1" th:each="specificationList: ${itemModel.specificationLists}">
-                                <p class="m-0" th:text="${specificationList.specification.description}+' : ' +${specificationList.value}"></p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!--
-                <div class=" card col mb-4 shadow-sm p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" card col mb-4 shadow-sm m-0 p-0">
-                    <a href="https://example.com" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" src="../static//images/ItemImages/insta1.png"
-                            alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">This is the book Title</h5>
-                            <div class="p-1">
-                                <p class="m-0">First</p>
-                                <p class="m-0">Second</p>
-                                <p class="m-0">Third</p>
-                                <p class="m-0">Fourth</p>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <div class="btn-group">
-                                    <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                    -->
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary" th:if="${specifications!=null}" id="filterButton" style="font-size: 15px">Filter</button>
+            </div>
+<!----------------------->
+<!-----CREATE BUTTON----->
+            <div class="createButton d-flex justify-content-center p-3">
+                <button sec:authorize="hasAnyRole('ADMIN','WORKER')" type="button" class="btn btn-lg btn-block salmon" href="/item/add" th:text="#{searchItems.createItem}"></button>
             </div>
         </div>
+<!----------------------->
+<!----ITEM MODEL SHOW---->
+        <div class="py-5">
+            <div class="container">
+                <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
+                    <!--<div th:each="itemModel: ${itemModels}" class=" card col mb-4 shadow-sm p-0">
+                        <a th:href="'/itemModel/view/'+${itemModel.itemModelId}" class="text-decoration-none text-dark">
+                            <img class="card-img-top img-fluid" th:src="@{${itemModel.img}}"
+                                 alt="Card image cap">
+                            <div class="card-body text-center">
+                                <h5 class="card-title" th:text="${itemModel.name}">This is the book Title</h5>
+                                <div class="p-1" th:each="specificationList: ${itemModel.specificationLists}">
+                                    <p class="m-0" th:text="${specificationList.specification.description}+' : ' +${specificationList.value}"></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+<!----------------------->
+<!-----PAGE SELECTION---->
+        <div class="form-group w-25 p-3" id="pageSelector">
+            <label for="selectPage">Select Page: </label>
+            <select class="form-control" name="page" id="selectPage">
+                <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
+            </select>
+        </div>
+<!----------------------->
     </div>
-    </div>
-    <footer th:replace="include.html :: footercontent"></footer>
+</div>
+
+<footer th:replace="include.html :: footercontent"></footer>
 
 </body>

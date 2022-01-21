@@ -6,12 +6,13 @@ import java.util.List;
 
 public interface SpecificationDao {
 
-    public List<Specification> getAllSpecifications();
-    public Specification getSpecification(long id);
-    public void editSpecification(Specification specification);
-    public void deleteSpecification(long id);
-    public void deleteSpecification(Specification specification);
-    public void addSpecification(Specification specification);
-    public List<Integer> getSpecificationWithModelId(long itemModelId);
-
+     List<Specification> getAllSpecifications();
+     List<Integer> getAllSpecificationIds();
+     Specification getSpecification(int id);
+     void editSpecification(Specification specification);
+     void deleteSpecification(int id);
+     void deleteSpecification(Specification specification);
+     void addSpecification(Specification specification);
+     List<Integer> getSpecificationWithModelId(long itemModelId);
+     List<Object[]> getAllSpecificationAndValuesByItemType(int itemTypeId);
 }

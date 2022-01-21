@@ -5,14 +5,21 @@ import com.libumu.mubook.entities.ItemModel;
 import java.util.List;
 
 public interface ItemModelDao {
-    public List<ItemModel> getAllItemModels();
-    public List<ItemModel> getItemModelsByType(int itemTypeId);
-    public ItemModel getItemModel(long id);
-    public void editItemModel(ItemModel itemModel);
-    public void deleteItemModel(long id);
-    public void deleteItemModel(ItemModel itemModel);
-    public void addItemModel(ItemModel itemModel);
-    public List<Object[]> getAllItemModelId();
+    List<ItemModel> getAllItemModels();
+    List<ItemModel> getItemModelsByType(int itemTypeId);
+    ItemModel getItemModel(long id);
+    void editItemModel(ItemModel itemModel);
+    void deleteItemModel(long id);
+    void deleteItemModel(ItemModel itemModel);
+    void addItemModel(ItemModel itemModel);
+    List<Object[]> getAllItemModelId();
     int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId);
     List<ItemModel> getItemModelsBySpecification(List<Long> ids, int specId, String specValue);
+    List<ItemModel> getItemModelsBySpecificationRowsBetween(List<Integer> specIds, List<String> specValues, int page);
+    int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues, int itemTypeId);
+
+    int getTotalItemModelByType(int itemTypeID);
+    int getTotalItemModels();
+    List<ItemModel> getAllItemModelsBetween( int page);
+    List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page);
 }

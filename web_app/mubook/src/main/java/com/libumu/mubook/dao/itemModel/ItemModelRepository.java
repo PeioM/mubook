@@ -7,14 +7,44 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Collection;
 import java.util.List;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called itemRepository
-// CRUD refers Create, Read, Update, Delete
-
 public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
     int countItemModelByIdentifierAndItemModelIdNotLike(String identifier, Long itemModelId);
 
     @Query(value = "SELECT item_model_id FROM item_model", nativeQuery = true)
-    public List<Object[]> getAllItemModelId();
+    List<Object[]> getAllItemModelId();
     List<ItemModel> findAllByItemTypeItemTypeId(Integer itemType_itemTypeId);
     List<ItemModel> findAllByItemModelIdInAndSpecificationListsSpecificationSpecificationIdAndSpecificationListsValue(Collection<Long> itemModelId, Integer specificationLists_specification_specificationId, String specificationLists_value);
+
+    @Query(value =  "SELECT DISTINCT i.* " +
+                    "FROM item_model i " +
+                    "WHERE i.item_type_id = ?1 " +
+                    "LIMIT ?2,?3" , nativeQuery = true)
+    List<ItemModel> getItemModelsByTypeAndBetween(int itemTypeId, int startRow, int quantity);
+
+    @Query(value =  "SELECT DISTINCT i.* " +
+                    "FROM item_model i " +
+                    "LIMIT ?1,?2" , nativeQuery = true)
+    List<ItemModel> getItemModelsBetween(int startRow, int quantity);
+
+    @Query(value =  "SELECT DISTINCT i.*" +
+                    "FROM item_model i" +
+                    "    JOIN specification_list sl on i.item_model_id = sl.item_model_id AND sl.specification_id IN ?1 " +
+                    "WHERE sl.value IN ?2 " +
+                    "LIMIT ?3,?4" , nativeQuery = true)
+    List<ItemModel> getItemModelsWithFiltersBetween(List<Integer> specIds, List<String> specValues, int startRow, int quantity);
+
+    @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) "+
+                    "FROM item_model i" +
+                    "    JOIN specification_list sl on i.item_model_id = sl.item_model_id AND sl.specification_id IN ?1 " +
+                    "WHERE i.item_type_id = ?2 AND sl.value IN ?3 " , nativeQuery = true)
+    List<Object[]> getItemModelCountWithFilters(List<Integer> specIds, int itemTypeId ,List<String> specValues);
+
+    @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) " +
+                    "FROM item_model i " +
+                    "WHERE item_type_id = ?1" , nativeQuery = true)
+    List<Object[]> getItemModelCountByItemType(int itemTypeId);
+
+    @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) " +
+            "FROM item_model i ", nativeQuery = true)
+    List<Object[]> getTotalItemModelCount();
 }

@@ -54,7 +54,7 @@ public class NewsController implements ServletContextAware {
         }
 
         //Return to user form in case there is any error
-        String returnStr = "userForm";
+        String returnStr = "";
         if(error.length()==0) {
             if (file == null || file.isEmpty() || file.getOriginalFilename()==null || file.getOriginalFilename().equals("")) {
                 error = "Please upload the new image";
