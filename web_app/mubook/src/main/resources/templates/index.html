@@ -47,7 +47,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form name="new-delete" th:action="@{'/news/delete?id=' + ${actualNew.newsid}}"  method="post">
+                                <form sec:authorize= "hasAnyRole('ADMIN','WORKER')" name="new-delete" th:action="@{'/news/delete?id=' + ${actualNew.newsid}}"  method="post">
                                     <button type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                                         class="bi bi-trash fluid" viewBox="0 0 16 16">
