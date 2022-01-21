@@ -1,9 +1,11 @@
 package com.libumu.mubook.dao.itemModel;
 
+import com.libumu.mubook.api.AjaxController;
 import com.libumu.mubook.entities.ItemModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -62,4 +64,45 @@ public class ItemModelDataAccessService implements ItemModelDao {
         return repository.findAllByItemModelIdInAndSpecificationListsSpecificationSpecificationIdAndSpecificationListsValue(ids, specId, specValue);
     }
 
+    @Override
+    public List<ItemModel> getItemModelsBySpecificationRowsBetween(List<Integer> specIds, List<String> specValues, int page) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getItemModelsWithFiltersBetween(specIds, specValues, start, quantity);
+    }
+
+    @Override
+    public int getTotalItemModelFiltered(List<Integer> specIds, List<String> specValues, int itemTypeId) {
+        List<Object[]> result = repository.getItemModelCountWithFilters(specIds, itemTypeId, specValues);
+        BigInteger totalModels = (BigInteger) result.get(0)[0];
+        return totalModels.intValue();
+    }
+
+    @Override
+    public int getTotalItemModelByType(int itemTypeID) {
+        List<Object[]> result = repository.getItemModelCountByItemType(itemTypeID);
+        BigInteger totalModels = (BigInteger) result.get(0)[0];
+        return totalModels.intValue();
+    }
+
+    @Override
+    public int getTotalItemModels() {
+        List<Object[]> result = repository.getTotalItemModelCount();
+        BigInteger totalModels = (BigInteger) result.get(0)[0];
+        return totalModels.intValue();
+    }
+
+    @Override
+    public List<ItemModel> getAllItemModelsBetween(int page) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getItemModelsBetween(start, quantity);
+    }
+
+    @Override
+    public List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getItemModelsByTypeAndBetween(itemTypeId, start, quantity);
+    }
 }
