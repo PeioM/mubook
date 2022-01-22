@@ -1,5 +1,6 @@
 package com.libumu.mubook.api;
 
+import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.news.NewsDao;
 import com.libumu.mubook.security.MyUserDetails;
 
@@ -20,6 +21,8 @@ public class HomeController implements ServletContextAware {
     private ServletContext servletContext;
     @Autowired
     NewsDao newsDao;
+    @Autowired
+    ItemModelDao itemModelDao;
 
     @GetMapping(path = {"/", "/index", "/home"})
     public String home(Model model){
@@ -36,6 +39,12 @@ public class HomeController implements ServletContextAware {
 
     @GetMapping("/aboutUs")
     public String aboutUs(){ return "aboutUs"; }
+
+    @GetMapping("/data")
+    public String dataChart(Model model){ 
+        model.addAttribute("itemModels", itemModelDao.getAllItemModels());
+        return "selectChart"; 
+    }
 
     @GetMapping("/normalUser")
     @ResponseBody

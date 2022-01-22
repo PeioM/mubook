@@ -25,6 +25,7 @@ import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.reservation.ReservationDao;
 import com.libumu.mubook.entities.Reservation;
 import com.libumu.mubook.mt.Buffer;
+import com.libumu.mubook.mt.ResultMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,7 +228,7 @@ public class ReservationController {
 
         return "redirect:/reservations/list?itemModelName=&active=true";
     }
-
+/*
     @GetMapping(path="/itemType")
     public String countReservationByType(Model model){
         long start = System.currentTimeMillis();
@@ -280,6 +281,50 @@ public class ReservationController {
         System.out.println(end - start + "ms");
 
         return "chart";
+    }*/
+
+    @GetMapping(path="/itemType")
+    public String countReservationByType(Model model){
+        long start = System.currentTimeMillis();
+        List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
+        ResultMap results= new ResultMap();
+        ReservationByType[] rbt = new ReservationByType[MAXNUMTHREADS];
+        Buffer buffer = new Buffer(itemTypeId.size());
+
+        for(int i = 0; i < itemTypeId.size(); i++){
+            try {
+                buffer.put((int) itemTypeId.get(i)[0]);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        int numThreads;
+        for(numThreads=0; numThreads < itemTypeId.size() && numThreads < MAXNUMTHREADS; numThreads++){
+            rbt[numThreads] = new ReservationByType(numThreads,results,buffer);
+            
+        }
+        for (int i = 0; i<numThreads; i++) {
+			rbt[i].start();
+		}
+        for (int i = 0; i<numThreads; i++) {
+            try {
+                rbt[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        model.addAttribute("key", results.getKeys().toArray(new String[0]));
+        model.addAttribute("value", results.getValues().toArray(new Long[0]));
+        model.addAttribute("name", "Reservations of item model each type");
+        model.addAttribute("type", "bar");
+        
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
+        return "chart";
     }
 
     @GetMapping(path="/itemTypeWithoutMT")
@@ -312,32 +357,85 @@ public class ReservationController {
     }
 
     class ReservationByType extends Thread{
-        int id;
         int threadId;
-        List<Object[]> result;
+        ResultMap results;
+        Buffer buffer;
 
-        public ReservationByType(int threadId){
+        public ReservationByType(int threadId, ResultMap results, Buffer buffer){
             this.threadId = threadId;
+            this.results = results;
+            this.buffer = buffer;
         }
 
         @Override
         public void run() {
-            result = reservationDao.countReservationsByItemType(id);
-        }
-
-        public String getKey(){
-            return (String) result.get(0)[0];
-        }
-
-        public Long getValue(){
-            BigInteger num = (BigInteger) result.get(0)[1];
-            return num.longValue();
-        }
-
-        public void setId(int id) {
-            this.id = id;
+            while(!buffer.empty()){
+                try {
+                    List<Object[]>result = reservationDao.countReservationsByItemType(buffer.get());
+                    System.out.println((String)result.get(0)[0] +(BigInteger)result.get(0)[1] );
+                    results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
+/*
+    @GetMapping(path="/itemModel")
+    public String countReservationByModel(Model model){
+        long start = System.currentTimeMillis();
+        List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
+        List<String> key = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
+        ReservationByModel rbm[] = new ReservationByModel[MAXNUMTHREADS];
+        Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
+
+        for(int i = 0; i < itemModelId.size(); i++){
+            BigInteger num = (BigInteger) itemModelId.get(i)[0];
+            try {
+                buffer.put(num.intValue());
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        for(int i = 0; i < itemModelId.size() && i < MAXNUMTHREADS; i++){
+            rbm[i] = new ReservationByModel(i);
+            try {
+                threadsBuffer.put(i);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        while(buffer.getBuffer().size() > 0){
+            int threadId;
+            try {
+                threadId = threadsBuffer.get();
+                rbm[threadId].setId(buffer.get());
+                rbm[threadId].run();
+                key.add(rbm[threadId].getKey());
+                value.add(rbm[threadId].getValue());
+                threadsBuffer.put(threadId);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "bar");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
+        return "chart";
+    }*/
 
     @GetMapping(path="/itemModel")
     public String countReservationByModel(Model model){

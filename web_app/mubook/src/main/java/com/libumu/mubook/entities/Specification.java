@@ -2,7 +2,6 @@ package com.libumu.mubook.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.libumu.mubook.entities.SpecificationList.SpecificationList;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
