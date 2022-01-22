@@ -17,6 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int countUserByUsernameAndUserIdIsNot(String username, Long userId);
     int countUserByEmail(String email);
 
+    @Query(value =  "SELECT DISTINCT u.* " +
+                    "FROM user u " +
+                    "LIMIT ?1,?2" , nativeQuery = true)
+    List<User> getUsersBetween(int startRow, int quantity);
+
     @Query(value = "SELECT COUNT(user_id), '?1 - ?2' AS RANGO "+
                     "FROM user "+
                     "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN ?1 AND ?2", nativeQuery = true)
@@ -61,4 +66,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
                             "GROUP BY u.user_id) AS a "+
                     "GROUP BY a.peso;", nativeQuery = true)
     public List<Object[]> countUsersByIncidenceWithoutMT();
+
+    @Query(value = "SELECT DISTINCT u.* " +
+                    "FROM user u " +
+                    "WHERE user_type_id like ?1 " +
+                    "AND name like '%'+?4+'%'  OR surname like '%'+?4+'%' OR email like '%'+?4+'%' OR username like '%'+?4+'%'" +
+                    "LIMIT ?2,?3" , nativeQuery = true)
+    List<User> getUsersByTypeAndBetweenAndContaining(String userType, int start, int quantity, String containingStr);
+
+
+    List<Object[]> getUserCountContaining(String containStr);
+    
+    List<Object[]> getUserCountByTypeAndContaining(String userType, String containStr);
 }

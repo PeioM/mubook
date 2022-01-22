@@ -1,9 +1,11 @@
 package com.libumu.mubook.dao.user;
 
+import com.libumu.mubook.api.AjaxController;
 import com.libumu.mubook.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -15,6 +17,20 @@ public class UserDataAccessService implements UserDao {
     @Override
     public List<User> getAllUsers() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<User> getUsersBetween(int page) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getUsersBetween(start, quantity);
+    }
+
+    @Override
+    public List<User> getUsersByTypeAndBetweenAndContainig(String userType, int page, String containingStr) {
+        int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
+        int quantity = AjaxController.ITEMS_PER_PAGE;
+        return repository.getUsersByTypeAndBetweenAndContaining(userType, start, quantity, containingStr);
     }
 
     @Override
@@ -99,6 +115,20 @@ public class UserDataAccessService implements UserDao {
     @Override
     public int countUsersByEmail(String email) {
         return repository.countUserByEmail(email);
+    }
+
+    @Override
+    public int getuserCountContaining(String containStr) {
+        List<Object[]> result = repository.getUserCountContaining(containStr);
+        BigInteger totalUsers = (BigInteger) result.get(0)[0];
+        return totalUsers.intValue();
+    }
+
+    @Override
+    public int getuserCountByTypeAndContaining(String userType, String containStr) {
+        List<Object[]> result = repository.getUserCountByTypeAndContaining(userType, containStr);
+        BigInteger totalUsers = (BigInteger) result.get(0)[0];
+        return totalUsers.intValue();
     }
 
 }

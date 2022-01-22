@@ -256,6 +256,7 @@ public class UserController {
 
         return "editCreateUser";
     }
+
     @GetMapping(path="/profile")
     public String profileUser (Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

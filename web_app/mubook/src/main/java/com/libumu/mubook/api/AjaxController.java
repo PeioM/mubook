@@ -145,6 +145,43 @@ public class AjaxController {
         return list.stream().map(ItemModel::getItemModelId).collect(Collectors.toList());
     }
 
+    @GetMapping("/filterUsers/{userType}/{page}")
+    @ResponseBody
+    public String filterUsers(@PathVariable("userType") String userType,
+                              @PathVariable("page") String pageStr,
+                              WebRequest request){
+        int page = Integer.parseInt(pageStr);
+        List<User> users;
+        String containStr = request.getParameter("containStr");
+        if(userType.equals(" - ")){
+            users = userDao.getUsersBetween(page);
+        }
+        else{
+            users = userDao.getUsersByTypeAndBetweenAndContainig(userType, page, containStr);
+        }
+
+        Gson gson = new Gson();
+        return gson.toJson(users);
+    }
+
+
+    @GetMapping("/filterUsersGetPages/{userType}")
+    @ResponseBody
+    public String filterUsersGetPage(@PathVariable("userType") String userType,
+                              WebRequest request){
+        int totalUsers;
+        String containStr = request.getParameter("containStr");
+        if(userType.equals(" - ")){
+            totalUsers = userDao.getuserCountContaining(containStr);
+        }
+        else{
+            totalUsers = userDao.getuserCountByTypeAndContaining(userType, containStr);
+        }
+        double pages = (double) totalUsers/AjaxController.ITEMS_PER_PAGE;
+
+        Gson gson = new Gson();
+        return String.valueOf(pages);
+    }
 
     @GetMapping("/registerGrafana/{buttonId}")
     @ResponseBody
