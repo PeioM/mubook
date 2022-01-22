@@ -63,4 +63,9 @@ public class IncidenceDataAccessService implements IncidenceDao {
         return repository.getIncidencesByEndDateIsAfterAndUser_UserId(endDate, user_userId);
     }
 
+    @Override
+    public int countSumIncidenceByUserId(long userId) {
+        return repository.countSumIncidenceByUserId(userId);
+    }
+
 }

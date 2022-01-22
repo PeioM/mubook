@@ -7,14 +7,15 @@ import java.sql.Date;
 import java.util.List;
 
 public interface IncidenceDao {
-    public List<Incidence> getAllIncidences();
-    public Incidence getIncidence(long id);
-    public void editIncidence(Incidence incidence);
-    public void deleteIncidence(long id);
-    public void deleteIncidence(Incidence incidence);
-    public void addIncidence(Incidence incidence);
-    public List<Integer> getIncidenceWithSeverityId(int incidenceSeverityId);
-    public List<Integer> getIncidenceWithUserId(long incidenceUserId);
+    List<Incidence> getAllIncidences();
+    Incidence getIncidence(long id);
+    void editIncidence(Incidence incidence);
+    void deleteIncidence(long id);
+    void deleteIncidence(Incidence incidence);
+    void addIncidence(Incidence incidence);
+    List<Integer> getIncidenceWithSeverityId(int incidenceSeverityId);
+    List<Integer> getIncidenceWithUserId(long incidenceUserId);
     List<Incidence> getAllByUser(User user);
     List<Incidence> getIncidencesByEndDateIsAfterAndUser_UserId(Date endDate, Long user_userId);
+    int countSumIncidenceByUserId(long userId);
 }

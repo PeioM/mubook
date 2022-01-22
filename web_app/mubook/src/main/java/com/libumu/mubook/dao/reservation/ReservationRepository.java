@@ -25,21 +25,25 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "    FROM reservation r2 "+
             "        JOIN item i2 on i2.item_id = r2.item_id " +
             "        JOIN item_model m on m.item_model_id = i2.item_model_id " +
-            "    WHERE m.item_model_id = ?1 " +
+            "        JOIN status s on s.status_id = i2.status_id " +
+            "    WHERE m.item_model_id = ?1" +
+            "    AND s.description = 'Available' " +
             "GROUP BY i2.item_id " +
             "ORDER BY fecha ASC " +
             "LIMIT 1", nativeQuery = true)
     List<Object[]> getFirstReservationDate(long item_model_id);
 
     @Query(value = "SELECT item_id "+
-            "FROM item "+
-            "JOIN item_model m on m.item_model_id = item.item_model_id "+
-            "WHERE item_id NOT IN(select DISTINCT (i.item_id) "+
-            "from reservation "+
-            "join item i on i.item_id = reservation.item_id "+
-            "join item_model im on im.item_model_id = i.item_model_id "+
-            "where im.item_model_id = ?1) "+
-            "AND m.item_model_id = ?1", nativeQuery = true)
+                        "FROM item "+
+                            "JOIN item_model m on m.item_model_id = item.item_model_id "+
+                            "JOIN status s on s.status_id = item.status_id "+
+                        "WHERE item_id NOT IN(select DISTINCT (i.item_id) " +
+                                            "from reservation "+
+                                                "join item i on i.item_id = reservation.item_id "+
+                                                "join item_model im on im.item_model_id = i.item_model_id "+
+                                            "where im.item_model_id = ?1) "+
+                        "AND m.item_model_id = ?1 " +
+                        "AND s.description = 'Available' ", nativeQuery = true)
     List<Long> getItemsWithoutReservation(long itemModelId);
 
     @Query(value = "SELECT it.description, COUNT(r.reservation_id) "+
