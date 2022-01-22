@@ -1,7 +1,5 @@
 package com.libumu.mubook.entities;
 
-
-import com.libumu.mubook.entities.SpecificationList.SpecificationList;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

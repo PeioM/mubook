@@ -15,10 +15,6 @@ public class Reservation {
     private Long reservationId;
 
     @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
-
-    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -32,15 +28,6 @@ public class Reservation {
     private Date endDate;
     @Column(name = "return_date")
     private Date returnDate;
-
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
 
     public Long getReservationId() {
         return reservationId;
