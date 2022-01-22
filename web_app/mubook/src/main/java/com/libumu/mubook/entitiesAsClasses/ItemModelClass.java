@@ -4,7 +4,7 @@ package com.libumu.mubook.entitiesAsClasses;
 import com.libumu.mubook.entities.ItemModel;
 import com.libumu.mubook.entities.ItemType;
 import com.libumu.mubook.entities.Specification;
-import com.libumu.mubook.entities.SpecificationList.SpecificationList;
+import com.libumu.mubook.entities.SpecificationList;
 
 import javax.persistence.*;
 import java.util.ArrayList;

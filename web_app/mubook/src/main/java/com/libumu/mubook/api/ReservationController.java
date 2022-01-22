@@ -1,5 +1,6 @@
 package com.libumu.mubook.api;
 
+import com.libumu.mubook.dao.incidence.IncidenceDao;
 import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.entities.Item;
 import com.libumu.mubook.entities.ItemModel;
@@ -49,6 +50,8 @@ public class ReservationController {
     private ItemDao itemDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private IncidenceDao incidenceDao;
     private Buffer buffer = new Buffer(MAXBUFFER);
 
     @GetMapping(path="/all")
@@ -136,6 +139,7 @@ public class ReservationController {
         Item item = null;
         Date initDate = null;
         String error = "";
+        String returnStr = "";
 
         List<Long> itemsWithoutR = reservationDao.getItemsWithoutReservation(itemModel.getItemModelId());
         List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
@@ -147,30 +151,42 @@ public class ReservationController {
             BigInteger itemId = (BigInteger) result.get(0)[1];
             item = itemDao.getItem(itemId.longValue());
         }else{
-            error = "No está disponible";
+            error = "No está disponible este modelo";
         }
 
-        Date actualDate = new Date();
-        if(initDate.compareTo(actualDate) < 0){
-            initDate = actualDate;
+        if(error.length() == 0){
+            int numIncidence = incidenceDao.countSumIncidenceByUserId(user.getUserId());;
+            if(numIncidence >= 3){
+                error = "Tienes mas de 3 incidencias acumuladas actualmente";
+            }
         }
 
-        Calendar c = Calendar.getInstance();
-        c.setTime(initDate);
-        c.add(Calendar.DATE, 10);
-        Date endDate = c.getTime();
+        if(error.length() == 0){
+            Date actualDate = new Date();
+            if(initDate.compareTo(actualDate) < 0){
+                initDate = actualDate;
+            }
 
-        Reservation reservation = new Reservation();
+            Calendar c = Calendar.getInstance();
+            c.setTime(initDate);
+            c.add(Calendar.DATE, 10);
+            Date endDate = c.getTime();
 
-        reservation.setItem(item);
-        reservation.setInitDate(new java.sql.Date(initDate.getTime()));
-        reservation.setEndDate(new java.sql.Date(endDate.getTime()));
-        reservation.setUser(user);
+            Reservation reservation = new Reservation();
 
-        model.addAttribute("reserve", reservation);
-        model.addAttribute("offer", "offer");
+            reservation.setItem(item);
+            reservation.setInitDate(new java.sql.Date(initDate.getTime()));
+            reservation.setEndDate(new java.sql.Date(endDate.getTime()));
+            reservation.setUser(user);
 
-        return new ModelAndView("reservation", new ModelMap(model));
+            model.addAttribute("reserve", reservation);
+            model.addAttribute("offer", "offer");
+            returnStr = "reservation";
+        }else{
+            returnStr = "index";
+        }
+
+        return new ModelAndView(returnStr, new ModelMap(model));
     }
 
     @GetMapping(path="/{itemModelId}/create")
