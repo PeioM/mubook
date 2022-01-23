@@ -40,7 +40,7 @@
 <!----------------------->
 <!-----CREATE BUTTON----->
             <div class="createButton d-flex justify-content-center p-3">
-                <a th:href="@{/itemModel/add?error=}">
+                <a th:href="@{/itemModel/add}">
                     <button sec:authorize="hasAnyRole('ADMIN','WORKER')" type="button"
                             class="btn btn-lg btn-block salmon" th:text="#{searchItems.createItem}"></button>
                 </a>

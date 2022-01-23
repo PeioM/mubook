@@ -73,7 +73,7 @@ public class ItemModelController {
 
     @GetMapping(path="/add")
     public String addItemModel(Model model,
-                               @RequestParam("error") String error){
+                               @RequestParam(value = "error", required = false) String error){
         ItemModel itemModel = new ItemModel();
         List<ItemType> itemTypeList = itemTypeDao.getAllItemTypes();
         List<Status> statusList = statusDao.getAllStatus();
@@ -90,7 +90,7 @@ public class ItemModelController {
     @GetMapping(path="{id}/edit")
     public String editItemModel(Model model,
                                 @PathVariable("id") String idStr,
-                                @RequestParam("error") String error){
+                                @RequestParam(value = "error", required = false) String error){
         Long itemModelId = Long.parseLong(idStr);
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
         List<ItemType> itemTypeList = itemTypeDao.getAllItemTypes();
@@ -183,7 +183,7 @@ public class ItemModelController {
             specList.add(specificationList);
             itemModel.setSpecificationLists(specList);
             itemModelDao.editItemModel(itemModel);
-            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error=";
+            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit";
         }else{
             error = "Incorrect specification values";
             returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error="+error;
@@ -207,7 +207,7 @@ public class ItemModelController {
             item.setItemModel(itemModel);
             item.setStatus(status);
             itemDao.addItem(item);
-            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error=";
+            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit";
         }else{
             error = "Incorrect item values";
             returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error="+error;
@@ -224,7 +224,7 @@ public class ItemModelController {
             specificationListDao.deleteSpecificationList(specificationList);
         }
 
-        return "redirect:/itemModel/"+specificationList.getItemModel().getItemModelId()+"/edit?error=";
+        return "redirect:/itemModel/"+specificationList.getItemModel().getItemModelId()+"/edit";
     }
 
     @PostMapping(path="/disableItem")
@@ -241,7 +241,7 @@ public class ItemModelController {
             itemDao.editItem(item);
         }
 
-        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit?error=";
+        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit";
     }
 
     @PostMapping(path="/comment")
