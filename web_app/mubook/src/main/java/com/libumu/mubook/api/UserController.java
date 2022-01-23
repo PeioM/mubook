@@ -257,7 +257,7 @@ public class UserController {
 
     @GetMapping(path="/create")
     public String addNewUser (Model model,
-                              @RequestParam("error") String error) {
+                              @RequestParam(value = "error", required = false) String error) {
         model.addAttribute("userEdit", new User());
         model.addAttribute("action", "create");
         model.addAttribute("error", error);
@@ -267,7 +267,7 @@ public class UserController {
 
     @GetMapping(path="/{userId}/edit")
     public String editUser (Model model, @PathVariable("userId") String userIdStr,
-                            @RequestParam("error") String error) {
+                            @RequestParam(value = "error", required = false) String error) {
         User user = userDao.findUserByUserId(Long.parseLong(userIdStr));
         List<Incidence> incidences = incidenceDao.getAllByUser(user);
         List<IncidenceSeverity> incidenceSeverities = incidenceSeverityDao.getAllIncidenceSeverities();
@@ -284,7 +284,7 @@ public class UserController {
 
     @GetMapping(path="/profile")
     public String profileUser (Model model,
-                               @RequestParam("error") String error) {
+                               @RequestParam(value = "error", required = false) String error) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userDao.getUserByUsername(username);
@@ -317,7 +317,7 @@ public class UserController {
             List<Incidence> activeIncidences = incidenceDao.getIncidencesByEndDateIsAfterAndUser_UserId(new java.sql.Date(date.getTime()), user.getUserId());
             updateIncidenceDates(activeIncidences, incidence);
             incidenceDao.addIncidence(incidence);
-            returnStr = "redirect:/user/"+user.getUserId()+"/edit?error=";
+            returnStr = "redirect:/user/"+user.getUserId()+"/edit";
         }else{
             error = "Wrong values for incidence";
             returnStr = "redirect:/user/"+user.getUserId()+"/edit?error="+error;
@@ -333,7 +333,7 @@ public class UserController {
             incidenceDao.deleteIncidence(incidence);
         }
 
-        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit?error=";
+        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit";
     }
 
     public void updateIncidenceDates(List<Incidence> activeIncidences, Incidence lastIncidence){
