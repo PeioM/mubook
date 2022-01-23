@@ -25,5 +25,7 @@ public interface UserDao {
     int countUserByEmailAndUserIdIsNot(String email, Long userId);
     int countUsersByUsername(String username);
     int countUsersByEmail(String email);
+    int countUserByDNIAndUserIdIsNot(String DNI, Long userId);
+    int countUserByDNI(String DNI);
 
 }

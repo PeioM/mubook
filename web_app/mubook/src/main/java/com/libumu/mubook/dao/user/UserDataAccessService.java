@@ -101,4 +101,14 @@ public class UserDataAccessService implements UserDao {
         return repository.countUserByEmail(email);
     }
 
+    @Override
+    public int countUserByDNIAndUserIdIsNot(String DNI, Long userId) {
+        return repository.countUserByDNIAndUserIdIsNot(DNI, userId);
+    }
+
+    @Override
+    public int countUserByDNI(String DNI) {
+        return repository.countUserByDNI(DNI);
+    }
+
 }

@@ -72,7 +72,8 @@ public class ItemModelController {
     }
 
     @GetMapping(path="/add")
-    public String addItemModel(Model model){
+    public String addItemModel(Model model,
+                               @RequestParam("error") String error){
         ItemModel itemModel = new ItemModel();
         List<ItemType> itemTypeList = itemTypeDao.getAllItemTypes();
         List<Status> statusList = statusDao.getAllStatus();
@@ -81,13 +82,15 @@ public class ItemModelController {
         model.addAttribute("itemTypes", itemTypeList);
         model.addAttribute("status", statusList);
         model.addAttribute("action", "create");
+        model.addAttribute("error", error);
 
         return "editCreateItem";
     }
 
     @GetMapping(path="{id}/edit")
     public String editItemModel(Model model,
-                                @PathVariable("id") String idStr){
+                                @PathVariable("id") String idStr,
+                                @RequestParam("error") String error){
         Long itemModelId = Long.parseLong(idStr);
         ItemModel itemModel = itemModelDao.getItemModel(itemModelId);
         List<ItemType> itemTypeList = itemTypeDao.getAllItemTypes();
@@ -106,6 +109,7 @@ public class ItemModelController {
         model.addAttribute("specificationList", new SpecificationList());
         model.addAttribute("specList", specList);
         model.addAttribute("action", "edit");
+        model.addAttribute("error", error);
 
         return "editCreateItem";
     }
@@ -118,6 +122,7 @@ public class ItemModelController {
         String error = "";
         String type = request.getParameter("type");
         ItemType itemType = itemTypeDao.getItemTypeByDesc(type);
+        String returnStr = "redirect:/index";
 
         if(itemType == null){
             error = error + " Item type is empty";
@@ -153,20 +158,24 @@ public class ItemModelController {
         if(error.length() == 0){
             itemModel.setItemType(itemType);
             itemModelDao.addItemModel(itemModel);
+        }else{
+            returnStr = "redirect:/itemModel/add?error="+error;
         }
 
-        return "redirect:/index";
+        return returnStr;
     }
 
     @PostMapping(path="/addSpecification")
     public String addSpecification(Model model,
                                    @ModelAttribute SpecificationList specificationList,
                                    WebRequest request){
+        String error="";
+        String returnStr="";
 
         ItemModel itemModel = itemModelDao.getItemModel(Long.parseLong(request.getParameter("itemModelId")));
         int id = Integer.parseInt(request.getParameter("sp"));
         Specification specification = specificationDao.findSpecificationBySpecificationIdIs(id);
-        if(itemModel != null && specification != null){
+        if(itemModel != null && specification != null && !specificationList.getValue().equals("")){
             specificationList.setItemModel(itemModel);
             specificationList.setSpecification(specification);
             specificationListDao.addSpecificationList(specificationList);
@@ -174,9 +183,13 @@ public class ItemModelController {
             specList.add(specificationList);
             itemModel.setSpecificationLists(specList);
             itemModelDao.editItemModel(itemModel);
+            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error=";
+        }else{
+            error = "Incorrect specification values";
+            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error="+error;
         }
 
-        return "redirect:/index";
+        return returnStr;
     }
 
     @PostMapping(path="/addItem")
@@ -184,16 +197,23 @@ public class ItemModelController {
                           @ModelAttribute Item item,
                           WebRequest request){
 
+        String error="";
+        String returnStr="";
+
         ItemModel itemModel = itemModelDao.getItemModel(Long.parseLong(request.getParameter("itemModelId")));
         String st = request.getParameter("st");
         Status status = statusDao.getStatusByDescription(st);
-        if(itemModel != null && status != null){
+        if(itemModel != null && status != null && !item.getSerialNum().equals("")){
             item.setItemModel(itemModel);
             item.setStatus(status);
             itemDao.addItem(item);
+            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error=";
+        }else{
+            error = "Incorrect item values";
+            returnStr = "redirect:/itemModel/"+itemModel.getItemModelId()+"/edit?error="+error;
         }
 
-        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit";
+        return returnStr;
     }
 
     @PostMapping(path="/deleteSpec")
@@ -204,7 +224,7 @@ public class ItemModelController {
             specificationListDao.deleteSpecificationList(specificationList);
         }
 
-        return "redirect:/itemModel/"+specificationList.getItemModel().getItemModelId()+"/edit";
+        return "redirect:/itemModel/"+specificationList.getItemModel().getItemModelId()+"/edit?error=";
     }
 
     @PostMapping(path="/disableItem")
@@ -221,7 +241,7 @@ public class ItemModelController {
             itemDao.editItem(item);
         }
 
-        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit";
+        return "redirect:/itemModel/"+item.getItemModel().getItemModelId()+"/edit?error=";
     }
 
     @PostMapping(path="/comment")
@@ -262,6 +282,7 @@ public class ItemModelController {
                                 @RequestParam("itemImg") MultipartFile file,
                                 WebRequest request){
         String error = "";
+        String returnStr ="";
         ItemType it = itemTypeDao.getItemTypeByDesc(request.getParameter("type"));
         if(!itemModelEdited.getIdentifier().equals("")){
             if(itemModelDao.countItemModelByIdentifierAndItemModelIdNotLike(itemModelEdited.getIdentifier(), itemModelEdited.getItemModelId()) > 0){
@@ -301,8 +322,11 @@ public class ItemModelController {
 
         if(error.length() == 0){
             itemModelDao.editItemModel(itemModelEdited);
+            returnStr = "redirect:/index";
+        }else{
+            returnStr = "redirect:/itemModel/" + itemModelEdited.getItemModelId() + "/edit?error=" + error;
         }
 
-        return "redirect:/index";
+        return returnStr;
     }
 }
