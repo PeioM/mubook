@@ -2,7 +2,9 @@ window.onload = function loadChart(){
     var labels = /*[[${key}]]*/ [];
     var data = /*[[${value}]]*/ [];
     var name = '[[${name}]]';
+    name = name.replace(/["']/g, "");
     var chartType = '[[${type}]]';
+    chartType = chartType.replace(/["']/g, "");
     
         var data = {
             labels: labels,
@@ -18,8 +20,13 @@ window.onload = function loadChart(){
         type: chartType,
         data: data,
         options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: true
         }
         };
     

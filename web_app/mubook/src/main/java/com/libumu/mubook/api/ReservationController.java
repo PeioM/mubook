@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +27,7 @@ import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.reservation.ReservationDao;
 import com.libumu.mubook.entities.Reservation;
 import com.libumu.mubook.mt.Buffer;
+import com.libumu.mubook.mt.DateResultMap;
 import com.libumu.mubook.mt.ResultMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -346,7 +349,7 @@ public class ReservationController {
 
         model.addAttribute("key", key.toArray(new String[0]));
         model.addAttribute("value", value.toArray(new Long[0]));
-        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("name", "Reservations of item model each type");
         model.addAttribute("type", "bar");
 
         long end = System.currentTimeMillis();
@@ -372,7 +375,6 @@ public class ReservationController {
             while(!buffer.empty()){
                 try {
                     List<Object[]>result = reservationDao.countReservationsByItemType(buffer.get());
-                    System.out.println((String)result.get(0)[0] +(BigInteger)result.get(0)[1] );
                     results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -441,50 +443,54 @@ public class ReservationController {
     public String countReservationByModel(Model model){
         long start = System.currentTimeMillis();
         List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
-        List<String> key = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
-        ReservationByModel rbm[] = new ReservationByModel[MAXNUMTHREADS];
-        Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
+        ResultMap results= new ResultMap();
+        Map<String, Long> tmpResult = new HashMap<String, Long>();
+        Map<String, Long> sortedResult = new LinkedHashMap<String, Long>();
+        ReservationByModel[] rbm = new ReservationByModel[MAXNUMTHREADS];
+        Buffer buffer = new Buffer(itemModelId.size());
 
         for(int i = 0; i < itemModelId.size(); i++){
-            BigInteger num = (BigInteger) itemModelId.get(i)[0];
             try {
-                buffer.put(num.intValue());
+                buffer.put(((BigInteger) itemModelId.get(i)[0]).intValue());
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-
-        for(int i = 0; i < itemModelId.size() && i < MAXNUMTHREADS; i++){
-            rbm[i] = new ReservationByModel(i);
+        int numThreads;
+        for(numThreads=0; numThreads < itemModelId.size() && numThreads < MAXNUMTHREADS; numThreads++){
+            rbm[numThreads] = new ReservationByModel(numThreads,results,buffer);
+            
+        }
+        for (int i = 0; i<numThreads; i++) {
+			rbm[i].start();
+		}
+        for (int i = 0; i<numThreads; i++) {
             try {
-                threadsBuffer.put(i);
+                rbm[i].join();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
+        tmpResult.putAll(results.getMap());
+        sortedResult.putAll(sortByValue(tmpResult)); 
+        List<String> key = new ArrayList<String>(sortedResult.keySet());
+        List<String> firstNElementsKey = key.stream().limit(5).collect(Collectors.toList());
+        List<String> lastNElementsKey = key.subList(Math.max(key.size() - 5, 0), key.size());
+        List<String> keyList = new ArrayList<String>();
+        keyList.addAll(firstNElementsKey);
+        keyList.addAll(lastNElementsKey);
+        List<Long> value = new ArrayList<Long>(sortedResult.values());
+        List<Long> firstNElementsValue = value.stream().limit(5).collect(Collectors.toList());
+        List<Long> lastNElementsValue = value.subList(Math.max(value.size() - 5, 0), value.size());
+        List<Long> valueList = new ArrayList<Long>();
+        valueList.addAll(firstNElementsValue);
+        valueList.addAll(lastNElementsValue);
 
-        while(buffer.getBuffer().size() > 0){
-            int threadId;
-            try {
-                threadId = threadsBuffer.get();
-                rbm[threadId].setId(buffer.get());
-                rbm[threadId].run();
-                key.add(rbm[threadId].getKey());
-                value.add(rbm[threadId].getValue());
-                threadsBuffer.put(threadId);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
-        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("key", keyList.toArray(new String[0]));
+        model.addAttribute("value", valueList.toArray(new Long[0]));
+        model.addAttribute("name", "Reservations of item model each model");
         model.addAttribute("type", "bar");
+        
 
         long end = System.currentTimeMillis();
 
@@ -492,7 +498,15 @@ public class ReservationController {
 
         return "chart";
     }
-
+    public static Map<String, Long>  sortByValue(Map<String, Long> map){
+        List<Entry<String, Long>> list = new ArrayList(map.entrySet());
+        list.sort(Entry.comparingByValue());
+        map = new LinkedHashMap<String, Long>();
+        for(Entry<String, Long> each : list) {
+        map.put(each.getKey(), each.getValue());
+        }
+        return map;
+        }
     @GetMapping(path="/itemModelWithoutMT")
     public String countReservationByModelWithoutMT(Model model){
         long start = System.currentTimeMillis();
@@ -523,33 +537,29 @@ public class ReservationController {
     }
 
     class ReservationByModel extends Thread{
-        int id;
         int threadId;
-        List<Object[]> result;
+        ResultMap results;
+        Buffer buffer;
 
-        public ReservationByModel(int threadId){
+        public ReservationByModel(int threadId, ResultMap results, Buffer buffer){
             this.threadId = threadId;
+            this.results = results;
+            this.buffer = buffer;
         }
 
         @Override
         public void run() {
-            result = reservationDao.countReservationsByItemModel((long) id);
-        }
-
-        public String getKey(){
-            return (String) result.get(0)[0];
-        }
-
-        public int getValue(){
-            BigInteger num = (BigInteger) result.get(0)[1];
-            return num.intValue();
-        }
-
-        public void setId(int id) {
-            this.id = id;
+            while(!buffer.empty()){
+                try {
+                    List<Object[]>result = reservationDao.countReservationsByItemModel((long)buffer.get());
+                    results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
-
+/*
     @GetMapping(path="/itemMonth")
     public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model){
         long start = System.currentTimeMillis();
@@ -617,6 +627,57 @@ public class ReservationController {
         System.out.println(end - start + "ms");
 
         return "chart";
+    }*/
+    @GetMapping(path="/itemMonth")
+    public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model){
+        long start = System.currentTimeMillis();
+        List<Object[]> itemId = itemDao.getItemWithModelId(itemModelId);
+        DateResultMap results = new DateResultMap();
+        Map<String, Long> sortedResult = new TreeMap<String, Long>();
+        ReservationsByItem rbi[] = new ReservationsByItem[MAXNUMTHREADS];
+        Buffer buffer = new Buffer(itemId.size());
+
+        for(int i = 0; i < itemId.size(); i++){
+            try {
+                buffer.put(((BigInteger) itemId.get(i)[0]).intValue());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        int numThreads;
+        for(numThreads=0; numThreads < itemId.size() && numThreads < MAXNUMTHREADS; numThreads++){
+            rbi[numThreads] = new ReservationsByItem(numThreads,results,buffer);
+            
+        }
+        for (int i = 0; i<numThreads; i++) {
+			rbi[i].start();
+		}
+        for (int i = 0; i<numThreads; i++) {
+            try {
+                rbi[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        
+
+        
+
+        sortedResult.putAll(results.getMap());
+        List<String> key = new ArrayList<String>(sortedResult.keySet());
+        List<Long> value = new ArrayList<Long>(sortedResult.values());
+
+        model.addAttribute("key", key.toArray(new String[0]));
+        model.addAttribute("value", value.toArray(new Long[0]));
+        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("type", "line");
+
+        long end = System.currentTimeMillis();
+
+        System.out.println(end - start + "ms");
+
+        return "chart";
     }
 
     @GetMapping(path="/itemMonthWithoutMT")
@@ -649,50 +710,49 @@ public class ReservationController {
     }
 
     class ReservationsByItem extends Thread{
-        int id;
         int threadId;
-        List<Object[]> result;
+        DateResultMap results;
+        Buffer buffer;
 
-        public ReservationsByItem(int threadId){
+        public ReservationsByItem(int threadId, DateResultMap results, Buffer buffer){
             this.threadId = threadId;
+            this.results = results;
+            this.buffer = buffer;
         }
 
         @Override
         public void run() {
-            result = reservationDao.countReservationsOfItemEachMonth((long)id);
+                while(!buffer.empty()){
+                    try {
+                        List<Object[]>result = reservationDao.countReservationsOfItemEachMonth((long)buffer.get());
+                        for(int i = 0; i < MAXMONTHS && i < result.size(); i++){
+                            String keyStr = getDate(String.valueOf(result.get(i)[2]),String.valueOf(result.get(i)[1]));
+                            Long valueLong =((BigInteger)result.get(i)[0]).longValue();
+                            results.put(keyStr, valueLong);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
         }
 
-        public String getKey(int month){
-            String year =  String.valueOf(result.get(month)[1]);
-            String mon = String.valueOf(result.get(month)[2]);
+        public String getDate(String month,String year){
             String dateStr=year + "-";
             SimpleDateFormat format = new SimpleDateFormat("MM");
             try {
-                Date date = format.parse(mon);
+                Date date = format.parse(month);
                 if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue() < 10){
-                    String newMonth = "0" + mon.substring(0);
+                    String newMonth = "0" + month.substring(0);
                     dateStr = dateStr + newMonth;
                 }else{
-                    dateStr = dateStr + mon;
+                    dateStr = dateStr + month;
                 }
             } catch (ParseException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            
             return dateStr;
-        }
-
-        public int getValue(int month){
-            BigInteger num = (BigInteger) result.get(month)[0];
-            return (int) num.intValue();
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public List<Object[]> getResult(){
-            return this.result;
         }
     }
 }

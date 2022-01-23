@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">FAQ</title>
+    <title id="Ptitle">Select chart</title>
 </head>
 
 <body>
@@ -10,7 +10,7 @@
     <div class="container">
         <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center">Charts</h4><br>
         <div>
-            <form action="/reservations/itemTypeWithoutMT" method="get">
+            <form action="/reservations/itemType" method="get">
                  <button type="submit" class=" mt-1">Reservations by item type</button>
             </form>
         </div>
@@ -20,11 +20,11 @@
             </form>
         </div>
         <div>
-            <form taction="/reservations/itemMonth" method="get">
-                <select class="col form-control" name="">
+            <form action="/reservations/itemMonth" method="get">
+                <select class="col form-control" name="itemModelId">
                     <optgroup label="Select Incidence severity">
                         <option selected> - </option>
-                        <option  th:value="${model.itemModelId}" th:text="${model.itemModelId}" th:each="model:${itemModels}"></option>
+                        <option  th:value="${model.itemModelId}" th:text="${model.name}" th:each="model:${itemModels}"></option>
                     </optgroup>
                 </select>
                 <button type="submit" class=" mt-1">Item reservation flow</button>

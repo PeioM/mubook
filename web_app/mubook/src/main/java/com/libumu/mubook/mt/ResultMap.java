@@ -2,34 +2,37 @@ package com.libumu.mubook.mt;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ResultMap {
-
-    List<String> keys;
-    List<Long> values;
+    Map<String, Long> results = new HashMap<String, Long>();
     Lock mutex;
 
     public ResultMap () {
-        keys = new ArrayList<>();
-        values = new ArrayList<>();
         mutex = new ReentrantLock();
+        results = new HashMap<String, Long>();
     }
     public void put(String key,Long value) throws InterruptedException {
         mutex.lock();
-        keys.add(key);
-        values.add(value);
+        results.put(key, value);
         mutex.unlock();
     }
 
     public List<String> getKeys() {
-        return keys;
+        List<String> list= new ArrayList<>(results.keySet());
+        return list;
     }
     public List<Long> getValues() {
-        return values;
+        List<Long> list= new ArrayList<>(results.values());
+        return list;
+    }
+    public Map<String, Long> getMap(){
+        return results;
     }
 }
 
