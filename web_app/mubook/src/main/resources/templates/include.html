@@ -29,10 +29,12 @@
             $('.dp').datepicker();
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
+    <!--<script src="/js/chart.js"></script>-->
     <!--header.css-->
     <link rel="stylesheet" href="/css/header.css"/>
     <link rel="stylesheet" href="/css/footer.css"/>
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="icon" href="/images/logo_trasp.png" />
 
     <!--Select picker-->
@@ -70,6 +72,7 @@
           <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/list?itemModelName=&active=true">My Reservations</a></li>
           <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservations/all?itemModelName=&active=true&username=">Reservations</a></li>
           <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" href="/user/profile?error=">My Profile</a></li>
+          <li sec:authorize= "hasRole('ADMIN')"><a class="dropdown-item" href="/data">Data charts</a></li>
           <li sec:authorize= "isAuthenticated()">
             <hr class="dropdown-divider">
           </li>
@@ -114,7 +117,7 @@
             <hr>
             <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/list?itemModelName=&active=true">My Reservations</a></li>
             <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all?itemModelName=&active=true&username=">Reservations</a></li>
-            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile?error=">My Profile</a></li>
+            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
             <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
             </li>

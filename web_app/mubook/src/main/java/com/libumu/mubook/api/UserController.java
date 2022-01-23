@@ -7,7 +7,7 @@ import com.libumu.mubook.dao.userActivity.UserActivityDao;
 import com.libumu.mubook.dao.userType.UserTypeDao;
 import com.libumu.mubook.entities.*;
 import com.libumu.mubook.mt.Buffer;
-
+import com.libumu.mubook.mt.ResultMap;
 import com.libumu.mubook.security.SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -56,8 +56,6 @@ public class UserController {
         this.userActivityDao = userActivityDao;
     }
 
-    private Buffer buffer = new Buffer(MAXBUFFER);
-    private Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
 
     int [] ageList = new int []{0, 12, 13, 18, 19, 30, 31, 50, 51, 1000};
 
@@ -343,10 +341,10 @@ public class UserController {
     @GetMapping(path="/age")
     public String countUsersByAge(Model model){
         long start = System.currentTimeMillis();
-        List<String> key = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
+        ResultMap results= new ResultMap();
+        Map<String, Long> sortedResult = new TreeMap<String, Long>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS];
-
+        Buffer buffer=new Buffer(ageList.length);
         for(int i = 0; i < ageList.length; i++){
             try {
                 buffer.put(ageList[i]);
@@ -355,35 +353,27 @@ public class UserController {
                 e.printStackTrace();
             }
         }
-
-        for(int i = 0; i < ageList.length / 2 && i < MAXNUMTHREADS; i++){
-            uba[i] = new UsersByAge(i);
+        int numThreads;
+        for(numThreads=0; numThreads < ageList.length && numThreads < MAXNUMTHREADS; numThreads++){
+            uba[numThreads] = new UsersByAge(numThreads,results,buffer);
+            
+        }
+        for (int i = 0; i<numThreads; i++) {
+			uba[i].start();
+		}
+        for (int i = 0; i<numThreads; i++) {
             try {
-                threadsBuffer.put(i);
+                uba[i].join();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-
-        while(buffer.getBuffer().size() > 0){
-            int threadId;
-            try {
-                threadId = threadsBuffer.get();
-                uba[threadId].setLow(buffer.get());
-                uba[threadId].setHigh(buffer.get());
-                uba[threadId].run();
-                key.add(uba[threadId].getKey());
-                value.add(uba[threadId].getValue());
-                threadsBuffer.put(threadId);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+        sortedResult.putAll(results.getMap());
+        List<String> key = new ArrayList<String>(sortedResult.keySet());
+        List<Long> value = new ArrayList<Long>(sortedResult.values());
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("value", value.toArray(new Long[0]));
         model.addAttribute("name", "Number of users by age");
         model.addAttribute("type", "bar");
 
@@ -424,42 +414,39 @@ public class UserController {
     }
 
     class UsersByAge extends Thread{
-        int high, low;
         int threadId;
-        int result;
+        ResultMap results;
+        Buffer buffer;
 
-        public UsersByAge(int threadId){
+        public UsersByAge(int threadId, ResultMap results, Buffer buffer){
             this.threadId = threadId;
+            this.results = results;
+            this.buffer = buffer;
         }
 
         @Override
         public void run() {
-            result = userDao.countUsersByAge(low, high);
+            List<Integer> range=new ArrayList<>();
+            while(!buffer.empty()){
+                try {
+                    range=buffer.get2Values();
+                    int result = userDao.countUsersByAge(range.get(0),range.get(1));
+                    results.put(range.get(0) +"-"+range.get(1), Long.valueOf(result));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        public void setHigh(int high){
-            this.high = high;
-        }
-
-        public void setLow(int low){
-            this.low = low;
-        }
-
-        public String getKey(){
-            return low + "-" + high;
-        }
-
-        public int getValue(){
-            return result;
-        }
+        
     }
 
     @GetMapping(path="/incidence")
     public String countUsersByIncidence(Model model){
         long start = System.currentTimeMillis();
-        List<Integer> key = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
+        ResultMap results = new ResultMap();
         UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS];
+        Buffer buffer=new Buffer(MAXINCIDENCES);
 
         for(int i = 0; i < MAXINCIDENCES; i++){
             try {
@@ -470,35 +457,24 @@ public class UserController {
             }
         }
 
-        for(int i = 0; i < MAXINCIDENCES && i < MAXNUMTHREADS; i++){
-            ubi[i] = new UsersByIncidence(i);
+        int numThreads;
+        for(numThreads=0; numThreads < MAXINCIDENCES && numThreads < MAXNUMTHREADS; numThreads++){
+            ubi[numThreads] = new UsersByIncidence(numThreads,results,buffer);
+            
+        }
+        for (int i = 0; i<numThreads; i++) {
+			ubi[i].start();
+		}
+        for (int i = 0; i<numThreads; i++) {
             try {
-                threadsBuffer.put(i);
+                ubi[i].join();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
 
-        while(buffer.getBuffer().size() > 0){
-            int threadId;
-            try {
-                threadId = threadsBuffer.get();
-                ubi[threadId].setNumIncidence(buffer.get());
-                ubi[threadId].run();
-                if(ubi[threadId].getResult().size() == 2){
-                    key.add(ubi[threadId].getKey());
-                    value.add(ubi[threadId].getValue());
-                }
-                threadsBuffer.put(threadId);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute("key", results.getKeys().toArray(new String[0]));
+        model.addAttribute("value", results.getValues().toArray(new Long[0]));
         model.addAttribute("name", "Number of users by incidence");
         model.addAttribute("type", "bar");
 
@@ -538,33 +514,31 @@ public class UserController {
     }
 
     class UsersByIncidence extends Thread{
-        int numIncidence;
         int threadId;
-        List<Object[]> result;
+        ResultMap results;
+        Buffer buffer;
 
-        public UsersByIncidence(int threadId){
+        public UsersByIncidence(int threadId, ResultMap results, Buffer buffer){
             this.threadId = threadId;
-        }
-
-        public void setNumIncidence(int numIncidence){
-            this.numIncidence = numIncidence;
+            this.results = results;
+            this.buffer = buffer;
         }
 
         @Override
         public void run() {
-            result = userDao.countUsersByIncidence(numIncidence);
-        }
-
-        public int getKey(){
-            return (int) result.get(0)[1];
-        }
-
-        public int getValue(){
-            return (int) result.get(0)[0];
-        }
-
-        public List<Object[]> getResult(){
-            return this.result;
+            while(!buffer.empty()){
+                try {
+                    int peso=(int)buffer.get();
+                    List<Object[]>result = userDao.countUsersByIncidence(peso);
+                    if(result.size()==2){
+                        results.put(Integer.toString(peso), ((BigInteger) result.get(0)[0]).longValue());
+                    }else{
+                        results.put(Integer.toString(peso), 0L);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }

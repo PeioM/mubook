@@ -40,6 +40,18 @@ public class Buffer {
         mutex.unlock();
         return value;
     }
+    public List<Integer> get2Values() throws InterruptedException {
+        List<Integer> value = new ArrayList<>();
+        mutex.lock();
+        if (buffer.size() == 0) {
+            isEmpty.await();
+        }
+        value.add(buffer.remove(0));
+        value.add(buffer.remove(0));
+        isFull.signal();
+        mutex.unlock();
+        return value;
+    }
     public boolean empty() {
 
         return (buffer.size() == 0);

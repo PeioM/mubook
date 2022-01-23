@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chart</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
-    <!--<script src="/js/chart.js" th:inline="javascript"></script>-->
-    <link rel="stylesheet" href="/css/chart.css"/>
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle">Chart</title>
 </head>
 <body>
-    <canvas id="chart-can" width="400" height="400"></canvas>
+    <header th:replace="include.html :: headercontent"></header>
+    <canvas id="chart-can" height="400" width="700"class="d-flex justify-content-center"></canvas>
+    <footer th:replace="include.html :: footercontent"></footer>
 </body>
 <script th:inline="javascript">
     var labels = /*[[${key}]]*/ [];
@@ -39,8 +35,9 @@
                     beginAtZero: true
                 }
             },
-            responsive: true,
-            maintainAspectRatio: false
+            
+            responsive: false,
+            maintainAspectRatio: true
         }
         };
     

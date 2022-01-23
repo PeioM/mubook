@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle">Select chart</title>
+</head>
+
+<body>
+    <header th:replace="include.html :: headercontent"></header>
+    <div class="container">
+        <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center">Charts</h4><br>
+        <div>
+            <form action="/reservations/itemType" method="get">
+                 <button type="submit" class=" mt-1">Reservations by item type</button>
+            </form>
+        </div>
+        <div>
+            <form action="/reservations/itemModel" method="get">
+                <button type="submit" class=" mt-1">Most/Less reserved items</button>
+            </form>
+        </div>
+        <div>
+            <form action="/reservations/itemMonth" method="get">
+                <select class="col form-control" name="itemModelId">
+                    <optgroup label="Select Incidence severity">
+                        <option selected> - </option>
+                        <option  th:value="${model.itemModelId}" th:text="${model.name}" th:each="model:${itemModels}"></option>
+                    </optgroup>
+                </select>
+                <button type="submit" class=" mt-1">Item reservation flow</button>
+            </form>
+        </div>
+        <div>
+            <form action="/user/age" method="get">
+                <button type="submit" class=" mt-1">Users by age range</button>
+            </form>
+        </div>
+        <div>
+            <form action="/user/incidence" method="get">
+                <button type="submit" class=" mt-1">Users by penalty points</button>
+            </form>
+        </div>
+    </div>
+    <footer th:replace="include.html :: footercontent"></footer>
+</body>
+
+</html>
