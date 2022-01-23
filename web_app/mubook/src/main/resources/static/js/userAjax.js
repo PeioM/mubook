@@ -17,23 +17,27 @@ $(document).ready(function() {
 });
 
 function updateUsers(checkSelectedPage){
-    let actionUrl = "/ajax/filterUsers"
-    let containStr = $('#searchUserButton').val();
-    let itemTypeId = $('#selectUserTpe').val();
+    let actionUrl = "/ajax/filterUsers/"
+    let containStr = document.getElementById("searchTextBox").value;
+    let userTypeId = document.getElementById("selectUserType").value;
+    actionUrl += userTypeId+"/"+getSelectedPage(checkSelectedPage);
 
-    ajaxCallGetUsers(actionUrl,getSelectedPage(checkSelectedPage),itemTypeId, containStr);
+    ajaxCallGetUsers(actionUrl, containStr);
 }
 
 function updateUserPages(){
-    let actionUrl = "/ajax/filterUsersGetPages/" + $('#selectUserTpe').val();
-    ajaxCallGetPages(actionUrl)
+    let containStr = document.getElementById("searchTextBox").value;
+    let userTypeId = document.getElementById("selectUserType").value;
+    let actionUrl = "/ajax/filterUsersGetPages/" + userTypeId;
+
+    ajaxCallGetPages(actionUrl, {containStr: containStr})
 }
 
-function ajaxCallGetUsers(actionUrl, page, itemTypeId, containStr){
+function ajaxCallGetUsers(actionUrl, containStr){
     $.ajax({
         method: 'GET',
         url: actionUrl,
-        data:{"containStr":containStr},
+        data:{containStr: containStr},
 
         success: function (result) {
             let innerHTML="";

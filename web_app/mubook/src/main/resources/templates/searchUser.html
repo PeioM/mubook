@@ -15,15 +15,15 @@
                     <div class="main-search-input-wrap p-1">
                         <div class="main-search-input fl-wrap">
                             <div class="main-search-input-item d-inline"> <input type="text" value=""
-                                    placeholder="Search user"> </div>
-                            <button id="searchUserButton" class="main-search-button d-inline">Search</button>
+                                    placeholder="Search user" id="searchTextBox"> </div>
+                            <button id="searchUserButton" class="btn btn-primary main-search-button d-inline">Search</button>
                         </div>
                     </div>
                 </div>
                 
                 <div class="d-flex flex-row p-3 justify-content-center align-items-baseline gap-3">
                     <p>User type:</p>
-                    <select class="form-select w-50" id="selectUserTpe">
+                    <select class="form-select w-50" id="selectUserType">
                         <optgroup label="Select user type">
                             <option selected> - </option>
                             <option th:value="${userType.userTypeId}" th:text="${userType.description}" th:each="userType:${userTypes}"></option>
@@ -59,14 +59,15 @@
                 </div>
             </div>
         </div>
+        <div class="form-group w-25 p-3" id="pageSelector">
+            <label for="selectPage">Select Page: </label>
+            <select class="form-control" name="page" id="selectPage">
+                <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
+            </select>
+        </div>
     </div>
 <!--Select page-->
-    <div class="form-group w-25 p-3" id="pageSelector">
-        <label for="selectPage">Select Page: </label>
-        <select class="form-control" name="page" id="selectPage">
-            <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
-        </select>
-    </div>
+
 <!--------------->
 <footer th:replace="include.html :: footercontent"></footer>
 </body>

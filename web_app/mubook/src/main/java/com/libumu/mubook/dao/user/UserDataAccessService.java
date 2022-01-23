@@ -20,17 +20,17 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public List<User> getUsersBetween(int page) {
+    public List<User> getUsersBetweenContaining(int page, String containStr) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
         int quantity = AjaxController.ITEMS_PER_PAGE;
-        return repository.getUsersBetween(start, quantity);
+        return repository.getUsersBetweenContaining(start, quantity, "%"+containStr+"%");
     }
 
     @Override
     public List<User> getUsersByTypeAndBetweenAndContainig(String userType, int page, String containingStr) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
         int quantity = AjaxController.ITEMS_PER_PAGE;
-        return repository.getUsersByTypeAndBetweenAndContaining(userType, start, quantity, containingStr);
+        return repository.getUsersByTypeAndBetweenAndContaining(userType, start, quantity, "%"+containingStr+"%");
     }
 
     @Override
@@ -119,14 +119,14 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public int getuserCountContaining(String containStr) {
-        List<Object[]> result = repository.getUserCountContaining(containStr);
+        List<Object[]> result = repository.getUserCountContaining("%"+containStr+"%");
         BigInteger totalUsers = (BigInteger) result.get(0)[0];
         return totalUsers.intValue();
     }
 
     @Override
     public int getuserCountByTypeAndContaining(String userType, String containStr) {
-        List<Object[]> result = repository.getUserCountByTypeAndContaining(userType, containStr);
+        List<Object[]> result = repository.getUserCountByTypeAndContaining(userType, "%"+containStr+"%");
         BigInteger totalUsers = (BigInteger) result.get(0)[0];
         return totalUsers.intValue();
     }

@@ -6,7 +6,7 @@ import java.util.List;
 
  public interface UserDao {
      List<User> getAllUsers();
-     List<User> getUsersBetween(int page);
+     List<User> getUsersBetweenContaining(int page, String containStr);
      List<User> getUsersByTypeAndBetweenAndContainig(String userType, int page, String containingStr);
 
      User getUser(long id);

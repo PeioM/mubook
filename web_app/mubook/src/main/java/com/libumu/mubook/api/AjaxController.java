@@ -10,21 +10,18 @@ import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.entities.*;
 import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/ajax")
 public class AjaxController {
 
-    public final static int ITEMS_PER_PAGE = 6;
+    public final static int ITEMS_PER_PAGE = 2;
 
     private Map<String, String[]> itemModelFilters;
 
@@ -141,10 +138,6 @@ public class AjaxController {
         return result;
     }
 
-    public static List<Long> obtainItemModelIds(List<ItemModel> list){
-        return list.stream().map(ItemModel::getItemModelId).collect(Collectors.toList());
-    }
-
     @GetMapping("/filterUsers/{userType}/{page}")
     @ResponseBody
     public String filterUsers(@PathVariable("userType") String userType,
@@ -153,8 +146,8 @@ public class AjaxController {
         int page = Integer.parseInt(pageStr);
         List<User> users;
         String containStr = request.getParameter("containStr");
-        if(userType.equals(" - ")){
-            users = userDao.getUsersBetween(page);
+        if(userType.contains("-")){
+            users = userDao.getUsersBetweenContaining(page, containStr);
         }
         else{
             users = userDao.getUsersByTypeAndBetweenAndContainig(userType, page, containStr);
@@ -171,7 +164,7 @@ public class AjaxController {
                               WebRequest request){
         int totalUsers;
         String containStr = request.getParameter("containStr");
-        if(userType.equals(" - ")){
+        if(userType.contains("-")){
             totalUsers = userDao.getuserCountContaining(containStr);
         }
         else{
