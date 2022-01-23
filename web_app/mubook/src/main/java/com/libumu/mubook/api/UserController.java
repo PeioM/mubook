@@ -281,6 +281,7 @@ public class UserController {
 
         return "editCreateUser";
     }
+
     @GetMapping(path="/profile")
     public String profileUser (Model model,
                                @RequestParam("error") String error) {

@@ -5,7 +5,7 @@
         <title id="Ptitle">Users</title>
     </head>
 
-<body>
+<body class="userBody">
 <header th:replace="include.html :: headercontent"></header>
     <div class="container border bg-white ">
         <div class="filterMenu">
@@ -15,27 +15,18 @@
                     <div class="main-search-input-wrap p-1">
                         <div class="main-search-input fl-wrap">
                             <div class="main-search-input-item d-inline"> <input type="text" value=""
-                                    placeholder="Search by name"> </div>
-                            <button class="main-search-button d-inline">Search</button>
-                        </div>
-                    </div>
-                    <div class="main-search-input-wrap p-1">
-                        <div class="main-search-input fl-wrap">
-                            <div class="main-search-input-item d-inline"> <input type="text" value=""
-                                    placeholder="Search by username"> </div>
-                            <button class="main-search-button d-inline">Search</button>
+                                    placeholder="Search user" id="searchTextBox"> </div>
+                            <button id="searchUserButton" class="btn btn-primary main-search-button d-inline">Search</button>
                         </div>
                     </div>
                 </div>
                 
                 <div class="d-flex flex-row p-3 justify-content-center align-items-baseline gap-3">
                     <p>User type:</p>
-                    <select class="form-select w-50">
+                    <select class="form-select w-50" id="selectUserType">
                         <optgroup label="Select user type">
                             <option selected> - </option>
                             <option th:value="${userType.userTypeId}" th:text="${userType.description}" th:each="userType:${userTypes}"></option>
-                            <!--<option value="2">Librarian</option>
-                            <option value="3">Administrator</option>-->
                         </optgroup>
                     </select>
                 </div>
@@ -43,271 +34,41 @@
             </div>
 
             <div class="createButton d-flex justify-content-center p-3">
-                <a type="button" class="btn btn-lg btn-block salmon" href="/user/create?error=">Create User</a>
+                <a type="button" class="btn btn-lg btn-block salmon" href="/user/create">Create User</a>
             </div>
         </div>
 
         <div class="py-5">
             <div class="container">
-                <div
-                    class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
-
-                    <div class=" card col mb-4 shadow-sm p-0" th:each="user : ${users}">
-                        <a th:href="'/user/'+${user.userId}+'/edit/?error='" class="text-decoration-none text-dark">
+                <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
+                    <!--<div class=" card col mb-4 shadow-sm p-0" th:each="user : ${users}">
+                        <a th:href="'/user/'+${user.userId}+'/edit/'" class="text-decoration-none text-dark">
                             <img class="card-img-top img-fluid" src="/static/images/ItemImages/userIcon.png"
                                 alt="Card image cap">
                             <div class="card-body text-center">
                                 <h5 class="card-title" th:text="${user.userId}"></h5>
                                 <div class="p-1">
-                                    <p class="m-0" th:text="${user.name}"></p>
-                                    <p class="m-0" th:text="${user.surname}"></p>
-                                    <p class="m-0" th:text="${user.username}"></p>
-                                    <p class="m-0" th:text="${user.email}"></p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
+                                    <p class="m-0" th:text="'Name: ' + ${user.name}"></p>
+                                    <p class="m-0" th:text="'Surname: ' + ${user.surname}"></p>
+                                    <p class="m-0" th:text="'Username: ' + ${user.username}"></p>
+                                    <p class="m-0" th:text="'Email: ' + ${user.email}"></p>
                                 </div>
                             </div>
                         </a>
-                    </div>
-<!--
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class=" card col mb-4 shadow-sm p-0">
-                        <a href="https://example.com" class="text-decoration-none text-dark">
-                            <img class="card-img-top img-fluid" src="../static//images/ItemImages/userIcon.png"
-                                alt="Card image cap">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">USER #ID</h5>
-                                <div class="p-1">
-                                    <p class="m-0">Name</p>
-                                    <p class="m-0">Surname</p>
-                                    <p class="m-0">Username</p>
-                                    <p class="m-0">email-direction@example.com</p>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="btn-group">
-                                        <div class="salmon btn btn-sm btn-outline-secondary">View</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
--->
+                    </div>-->
                 </div>
             </div>
         </div>
+        <div class="form-group w-25 p-3" id="pageSelector">
+            <label for="selectPage">Select Page: </label>
+            <select class="form-control" name="page" id="selectPage">
+                <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
+            </select>
+        </div>
     </div>
+<!--Select page-->
+
+<!--------------->
 <footer th:replace="include.html :: footercontent"></footer>
 </body>
 

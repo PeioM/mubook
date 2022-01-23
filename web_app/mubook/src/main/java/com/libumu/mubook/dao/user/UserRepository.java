@@ -19,10 +19,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int countUserByEmail(String email);
     int countUserByDNI(String DNI);
 
+    @Query(value =  "SELECT DISTINCT u.* " +
+                    "FROM user u " +
+                    "WHERE name LIKE ?3 OR surname LIKE ?3 " +
+                    "OR email LIKE ?3 OR username LIKE ?3 " +
+                    "LIMIT ?1,?2" , nativeQuery = true)
+    List<User> getUsersBetweenContaining(int startRow, int quantity, String containStr);
+
     @Query(value = "SELECT COUNT(user_id), '?1 - ?2' AS RANGO "+
                     "FROM user "+
                     "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) BETWEEN ?1 AND ?2", nativeQuery = true)
-    public int countUsersByAge(int low, int high);
+    int countUsersByAge(int low, int high);
 
     @Query(value = "SELECT COUNT(user_id), '0 - 12' AS RANGO "+
                     "FROM user "+
@@ -43,7 +50,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "SELECT COUNT(user_id), '51+'  AS RANGO "+
                     "FROM user "+
                     "WHERE FLOOR(DATEDIFF(CURRENT_DATE, borndate)/365) > 50 ", nativeQuery = true)
-    public List<Object[]> countUsersByAgeWithoutMT();
+    List<Object[]> countUsersByAgeWithoutMT();
 
     @Query(value = "SELECT COUNT(a.user_id), a.peso "+
                     "FROM (SELECT u.user_id, SUM(s.importance) AS peso "+
@@ -53,7 +60,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                             "WHERE s.importance = ?1 "+
                             "GROUP BY u.user_id) AS a "+
                     "GROUP BY a.peso;", nativeQuery = true)
-    public List<Object[]> countUsersByIncidence(int numIncidence);
+    List<Object[]> countUsersByIncidence(int numIncidence);
 
     @Query(value = "SELECT COUNT(a.user_id), a.peso "+
                     "FROM (SELECT u.user_id, SUM(s.importance) AS peso "+
@@ -62,5 +69,28 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                 "JOIN incidence_severity s on s.incidence_severity_id = i.incidence_severity_id "+
                             "GROUP BY u.user_id) AS a "+
                     "GROUP BY a.peso;", nativeQuery = true)
-    public List<Object[]> countUsersByIncidenceWithoutMT();
+    List<Object[]> countUsersByIncidenceWithoutMT();
+
+    @Query(value = "SELECT DISTINCT u.* " +
+                    "FROM user u " +
+                    "JOIN user_type ut on ut.user_type_id = u.user_type_id AND ut.user_type_id LIKE ?1 " +
+                    "WHERE name LIKE ?4 OR surname LIKE ?4 " +
+                    "OR email LIKE ?4 OR username LIKE ?4 " +
+                    "LIMIT ?2,?3" , nativeQuery = true)
+    List<User> getUsersByTypeAndBetweenAndContaining(String userType, int start, int quantity, String containingStr);
+
+    @Query(value = "SELECT COUNT(u.user_id) " +
+                    "FROM user u " +
+                    "WHERE name LIKE ?1 OR surname LIKE ?1 " +
+                    "OR email LIKE ?1 OR username LIKE ?1 "
+                    , nativeQuery = true)
+    List<Object[]> getUserCountContaining(String containStr);
+
+    @Query(value = "SELECT COUNT(u.user_id)" +
+                    "FROM user u " +
+                    "JOIN user_type ut on ut.user_type_id = u.user_type_id AND ut.user_type_id LIKE ?1 " +
+                    "WHERE name LIKE ?2 OR surname LIKE ?2 " +
+                    "OR email LIKE ?2 OR username LIKE ?2 "
+                    , nativeQuery = true)
+    List<Object[]> getUserCountByTypeAndContaining(String userType, String containStr);
 }
