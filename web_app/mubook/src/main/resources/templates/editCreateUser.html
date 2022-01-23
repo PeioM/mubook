@@ -94,7 +94,7 @@
                                                 </label>
                                                 <label class="labels col">Description<input type="text" id="description" placeholder="Enter description" class="col form-control" th:value="${incidence.description}" th:field="*{description}"></label>
                                                 <label class="labels col">Incidence date<input type="date" id="date" placeholder="Enter date" class="col form-control" th:value="${incidence.initDate}" th:field="*{initDate}" required></label>
-
+                                                <label class="labels d-none col"><input type="text" id="user_id" th:value="${userEdit.userId}" name="userId"></label>
                                                 <button type="submit" id="addButton" class="btn btn-primary salmon col-2 p-1">Add</button>
                                             </div>
                                         </div>

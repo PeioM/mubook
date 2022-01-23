@@ -300,10 +300,12 @@ public class UserController {
                                      @ModelAttribute Incidence incidence,
                                      WebRequest request){
         IncidenceSeverity incidenceSeverity = incidenceSeverityDao.getIncidenceSeverityByDescription(request.getParameter("severity"));
-        String userId = request.getParameter("user");
+        String userId = request.getParameter("userId");
         User user = userDao.findUserByUserId(Long.parseLong(userId));
+        String error = "";
+        String returnStr = "";
 
-        if(user != null && incidenceSeverity != null && incidence.getInitDate() != null){
+        if(user != null && incidenceSeverity != null && incidence.getInitDate() != null && !incidence.getDescription().equals("")){
             incidence.setUser(user);
             incidence.setIncidenceSeverity(incidenceSeverity);
             Calendar c = Calendar.getInstance();
@@ -315,9 +317,13 @@ public class UserController {
             List<Incidence> activeIncidences = incidenceDao.getIncidencesByEndDateIsAfterAndUser_UserId(new java.sql.Date(date.getTime()), user.getUserId());
             updateIncidenceDates(activeIncidences, incidence);
             incidenceDao.addIncidence(incidence);
+            returnStr = "redirect:/user/"+user.getUserId()+"/edit?error=";
+        }else{
+            error = "Wrong values for incidence";
+            returnStr = "redirect:/user/"+user.getUserId()+"/edit?error="+error;
         }
 
-        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit";
+        return returnStr;
     }
 
     @PostMapping(path="/incidenceDelete")
@@ -327,7 +333,7 @@ public class UserController {
             incidenceDao.deleteIncidence(incidence);
         }
 
-        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit";
+        return "redirect:/user/"+incidence.getUser().getUserId()+"/edit?error=";
     }
 
     public void updateIncidenceDates(List<Incidence> activeIncidences, Incidence lastIncidence){
