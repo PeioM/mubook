@@ -7,6 +7,7 @@
 
 <body>
     <header th:replace="include.html :: headercontent"></header>
+    <h4 th:text="${error}"></h4>
     <div class="container-fluid d-flex justify-content-center align-items-center">
         <div class="card p-3 text-center py-4 m-4">
             <form name="register-form" th:action="@{/user/add}" th:object="${user}" enctype="multipart/form-data" method="post">

@@ -166,7 +166,7 @@
     </div>
 
     <div class="createNew-div d-flex justify-content-center mt-2">
-        <a sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="btn btn-primary salmon" id="create-new-btn" href="/news/add">Create new</a>
+        <a sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="btn btn-primary salmon" id="create-new-btn" href="/news/add?error=">Create new</a>
     </div>
 
     <footer th:replace="include.html :: footercontent"></footer>

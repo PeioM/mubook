@@ -21,6 +21,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.websocket.server.PathParam;
 import java.math.BigInteger;
 import java.util.*;
 import java.io.File;
@@ -74,7 +75,7 @@ public class UserController {
         @RequestParam("dniImg") MultipartFile file,
         WebRequest request) {
         //Return to user form in case there is any error
-        String returnStr = "userForm";
+        String returnStr = "register";
         String error = checkUserDuplicated(user);
         if(error.length()==0) {
             if (file == null || file.isEmpty() || file.getOriginalFilename()==null || file.getOriginalFilename().equals("")) {
@@ -119,6 +120,7 @@ public class UserController {
                              WebRequest request){
 
         String error="";
+        String returnStr ="";
         if(!passwordsMatch(request) || request.getParameter("password").equals("")){
             error = error + "Wrong password";
         }
@@ -131,7 +133,7 @@ public class UserController {
             error = error + " Wrong email";
         }
 
-        if(user.getDNI().equals("") || user.getDNI().length() < 9){
+        if(user.getDNI().equals("") || user.getDNI().length() != 9 || userDao.countUserByDNI(user.getDNI()) > 0){
             error = error + " The DNI is not correct";
         }
 
@@ -151,18 +153,22 @@ public class UserController {
             UserActivity ua = userActivityDao.getUserActivity(1);
             user.setUserActivity(ua);
             userDao.addUser(user);
+            returnStr = "redirect:/user";
+        }else{
+            returnStr = "redirect:/user/create?error="+error;
         }
 
-        return "redirect:/user";
+        return returnStr;
     }
 
     @PostMapping(path = "/edit")
-    public String editUser(Model model,
+    public ModelAndView editUser(Model model,
                                 @ModelAttribute User user,
                                  WebRequest request) {
 
         String error = "";
         User bdUser;
+        String returnStr = "";
 
         if(!passwordsMatch(request)){
             error = error + "Password mismatch";
@@ -182,21 +188,38 @@ public class UserController {
             error = error + " Email already in use";
         }
 
+        if(userDao.countUserByDNIAndUserIdIsNot(user.getDNI(), user.getUserId()) > 0){
+            error = error + " DNI already in use";
+        }
+
         if(error.length() > 0){
-            model.addAttribute("error", error);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User u = userDao.getUserByUsername(username);
+
+            if(u.getUserId().equals(user.getUserId())){
+                returnStr = "redirect:/user/profile?error="+error;
+            }else{
+                returnStr = "redirect:/user/"+user.getUserId()+"/edit?error="+error;
+            }
         }else{
             bdUser = userDao.getUser(user.getUserId());
             user.setUserActivity(bdUser.getUserActivity());
             user.setDniImgPath(bdUser.getDniImgPath());
             user.setDNI(bdUser.getDNI());
             user.setBornDate(bdUser.getBornDate());
-            String type = request.getParameter("flexRadioDefault");
-            user.setUserType(userTypeDao.getUserType(type));
+            if(bdUser.getUserType().getUserTypeId().equals("ADMIN")){
+                user.setUserType(userTypeDao.getUserType("ADMIN"));
+            }else{
+                String type = request.getParameter("flexRadioDefault");
+                user.setUserType(userTypeDao.getUserType(type));
+            }
             user.setValidated(true);
             userDao.editUser(user);
+            returnStr = "redirect:/index";
         }
 
-        return "redirect:/index";
+        return new ModelAndView(returnStr, new ModelMap(model));
     }
 
     private String checkUserDuplicated(User user){
@@ -235,15 +258,18 @@ public class UserController {
     }
 
     @GetMapping(path="/create")
-    public String addNewUser (Model model) {
+    public String addNewUser (Model model,
+                              @RequestParam("error") String error) {
         model.addAttribute("userEdit", new User());
         model.addAttribute("action", "create");
+        model.addAttribute("error", error);
 
         return "editCreateUser";
     }
 
     @GetMapping(path="/{userId}/edit")
-    public String editUser (Model model, @PathVariable("userId") String userIdStr) {
+    public String editUser (Model model, @PathVariable("userId") String userIdStr,
+                            @RequestParam("error") String error) {
         User user = userDao.findUserByUserId(Long.parseLong(userIdStr));
         List<Incidence> incidences = incidenceDao.getAllByUser(user);
         List<IncidenceSeverity> incidenceSeverities = incidenceSeverityDao.getAllIncidenceSeverities();
@@ -253,17 +279,20 @@ public class UserController {
         model.addAttribute("incidenceSeverities", incidenceSeverities);
         model.addAttribute("incidence", incidence);
         model.addAttribute("action", "edit");
+        model.addAttribute("error", error);
 
         return "editCreateUser";
     }
     @GetMapping(path="/profile")
-    public String profileUser (Model model) {
+    public String profileUser (Model model,
+                               @RequestParam("error") String error) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userDao.getUserByUsername(username);
         List <Incidence> incidences= incidenceDao.getAllByUser(user);
         model.addAttribute("userEdit", user);
         model.addAttribute("incidences", incidences);
+        model.addAttribute("error", error);
         return "userProfile";
     }
 
