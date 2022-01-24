@@ -34,30 +34,23 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path="/user")
 public class UserController {
-    final static int MAXNUMTHREADS = 10;
-    final static int MAXBUFFER = 100;
-    final static int MAXINCIDENCES = 5;
-
     public final String LOCAL_UPLOAD_DIR = "C:/IMAGENES_DNI_PRUEBA/";
     public final String SERVER_UPLOAD_DIR = "/home/dniImg/";
 
-    @Autowired
-    IncidenceSeverityDao incidenceSeverityDao;
-    @Autowired
-    IncidenceDao incidenceDao;
-
+    private final IncidenceSeverityDao incidenceSeverityDao;
+    private final IncidenceDao incidenceDao;
     private final UserDao userDao;
     private final UserTypeDao userTypeDao;
     private final UserActivityDao userActivityDao;
     @Autowired
-    public UserController(UserDao userDao, UserTypeDao userTypeDao, UserActivityDao userActivityDao) {
+    public UserController(UserDao userDao, UserTypeDao userTypeDao, UserActivityDao userActivityDao, IncidenceSeverityDao incidenceSeverityDao, IncidenceDao incidenceDao) {
         this.userDao = userDao;
         this.userTypeDao = userTypeDao;
         this.userActivityDao = userActivityDao;
+        this.incidenceSeverityDao = incidenceSeverityDao;
+        this.incidenceDao = incidenceDao;
     }
 
-
-    int [] ageList = new int []{0, 12, 13, 18, 19, 30, 31, 50, 51, 1000};
 
     @GetMapping(path="")
     public String searchUser(Model model){
@@ -84,7 +77,7 @@ public class UserController {
                 String filename = file.getOriginalFilename();
                 String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
                 try {
-                    String pathStr = LOCAL_UPLOAD_DIR + user.getName() + "_" + user.getSurname() + extension;
+                    String pathStr = SERVER_UPLOAD_DIR + user.getName() + "_" + user.getSurname() + extension;
                     new File(pathStr);  //Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -342,211 +335,6 @@ public class UserController {
                 incidenceDao.editIncidence(incidence);
             }
         }
-    }
-
-    @GetMapping(path="/age")
-    public String countUsersByAge(Model model){
-        long start = System.currentTimeMillis();
-        ResultMap results= new ResultMap();
-        Map<String, Long> sortedResult = new TreeMap<String, Long>();
-        UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS];
-        Buffer buffer=new Buffer(ageList.length);
-        for(int i = 0; i < ageList.length; i++){
-            try {
-                buffer.put(ageList[i]);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        int numThreads;
-        for(numThreads=0; numThreads < ageList.length && numThreads < MAXNUMTHREADS; numThreads++){
-            uba[numThreads] = new UsersByAge(numThreads,results,buffer);
-            
-        }
-        for (int i = 0; i<numThreads; i++) {
-			uba[i].start();
-		}
-        for (int i = 0; i<numThreads; i++) {
-            try {
-                uba[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        sortedResult.putAll(results.getMap());
-        List<String> key = new ArrayList<String>(sortedResult.keySet());
-        List<Long> value = new ArrayList<Long>(sortedResult.values());
-
-        model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Long[0]));
-        model.addAttribute("name", "Number of users by age");
-        model.addAttribute("type", "bar");
-
-        long end = System.currentTimeMillis();
-
-        System.out.println((end - start + "ms"));
-
-        return "chart";
-    }
-
-    @GetMapping(path="/ageWithoutMT")
-    public String countUsersByAgeWithoutMT(Model model){
-        long start = System.currentTimeMillis();
-        List<String> key = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
-        List<Object[]> resultList;
-        int i = 0;
-
-        resultList = userDao.countUsersByAgeWithoutMT();
-
-        while(i < resultList.size()){
-            BigInteger num = (BigInteger) resultList.get(i)[0];
-            key.add((String) resultList.get(i)[1]);
-            value.add(num.intValue());
-            i++;
-        }
-
-        model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
-        model.addAttribute("name", "Number of users by age");
-        model.addAttribute("type", "bar");
-
-        long end = System.currentTimeMillis();
-
-        System.out.println(end - start + "ms");
-
-        return "chart";
-    }
-
-    class UsersByAge extends Thread{
-        int threadId;
-        ResultMap results;
-        Buffer buffer;
-
-        public UsersByAge(int threadId, ResultMap results, Buffer buffer){
-            this.threadId = threadId;
-            this.results = results;
-            this.buffer = buffer;
-        }
-
-        @Override
-        public void run() {
-            List<Integer> range=new ArrayList<>();
-            while(!buffer.empty()){
-                try {
-                    range=buffer.get2Values();
-                    int result = userDao.countUsersByAge(range.get(0),range.get(1));
-                    results.put(range.get(0) +"-"+range.get(1), Long.valueOf(result));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        
-    }
-
-    @GetMapping(path="/incidence")
-    public String countUsersByIncidence(Model model){
-        long start = System.currentTimeMillis();
-        ResultMap results = new ResultMap();
-        UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS];
-        Buffer buffer=new Buffer(MAXINCIDENCES);
-
-        for(int i = 0; i < MAXINCIDENCES; i++){
-            try {
-                buffer.put(i);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        int numThreads;
-        for(numThreads=0; numThreads < MAXINCIDENCES && numThreads < MAXNUMTHREADS; numThreads++){
-            ubi[numThreads] = new UsersByIncidence(numThreads,results,buffer);
-            
-        }
-        for (int i = 0; i<numThreads; i++) {
-			ubi[i].start();
-		}
-        for (int i = 0; i<numThreads; i++) {
-            try {
-                ubi[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        model.addAttribute("key", results.getKeys().toArray(new String[0]));
-        model.addAttribute("value", results.getValues().toArray(new Long[0]));
-        model.addAttribute("name", "Number of users by incidence");
-        model.addAttribute("type", "bar");
-
-        long end = System.currentTimeMillis();
-
-        System.out.println(end - start + "ms");
-
-        return "chart";
-    }
-
-    @GetMapping(path="/incidenceWithoutMT")
-    public String countUsersByIncidenceWithoutMT(Model model){
-        long start = System.currentTimeMillis();
-        List<Integer> key = new ArrayList<>();
-        List<Integer> value = new ArrayList<>();
-        List<Object[]> resultList;
-        int i = 0;
-
-        resultList = userDao.countUsersByIncidenceWithoutMT();
-
-        while(i < resultList.size()){
-            key.add((int) resultList.get(i)[1]);
-            value.add((int) resultList.get(i)[0]);
-            i++;
-        }
-
-        model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
-        model.addAttribute("name", "Number of users by incidence");
-        model.addAttribute("type", "bar");
-
-        long end = System.currentTimeMillis();
-
-        System.out.println(end - start + "ms");
-
-        return "chart";
-    }
-
-    class UsersByIncidence extends Thread{
-        int threadId;
-        ResultMap results;
-        Buffer buffer;
-
-        public UsersByIncidence(int threadId, ResultMap results, Buffer buffer){
-            this.threadId = threadId;
-            this.results = results;
-            this.buffer = buffer;
-        }
-
-        @Override
-        public void run() {
-            while(!buffer.empty()){
-                try {
-                    int peso=(int)buffer.get();
-                    List<Object[]>result = userDao.countUsersByIncidence(peso);
-                    if(result.size()==2){
-                        results.put(Integer.toString(peso), ((BigInteger) result.get(0)[0]).longValue());
-                    }else{
-                        results.put(Integer.toString(peso), 0L);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
     }
 
 }

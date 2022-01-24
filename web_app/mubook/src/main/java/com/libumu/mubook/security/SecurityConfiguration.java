@@ -20,12 +20,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static int REMEMBER_ME_TIME = 86400;  //1 day
     public final static int ENCRYPT_STRENGTH = 10;
-    private final static String[] ADMIN_MATCHERS = {"/user","b"};
-    private final static String[] WORKER_MATCHERS = {"a","b"};
-    private final static String[] ADMIN_WORKER_MATCHERS = {"/user","b"};
-    private final static String[] USER_MATCHERS = {"a","b"};
-    private final static String[] AUTHENTICATED_MATCHERS = {"a","b"};
-    private final static String[] ANONYMOUS_MATCHERS = {"a","b"};
+    private final static String[] ADMIN_MATCHERS = {"/data/**"};
+    private final static String[] ADMIN_WORKER_MATCHERS = {"/itemModel/**", };
+    private final static String[] AUTHENTICATED_MATCHERS = {"/reservations/**","/user/profile"};
+    private final static String[] ANY_USER_MATCHERS = {
+            "/","/index","/home","/search","/search/**","/itemModel/*/view","/faq","/aboutUs","/login","/login_process","/logout",
+            "/css/**","/images/**","/js/**","/templates/**"};
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -39,10 +39,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 //Filter pages based on the authority or role the user has
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/worker").hasAnyRole("ADMIN", "WORKER")
-                .antMatchers("/normalUser", "/mainPage").authenticated()
-                .anyRequest().permitAll()
+                .antMatchers(ADMIN_MATCHERS).hasRole("ADMIN")
+                .antMatchers(ADMIN_WORKER_MATCHERS).hasAnyRole("ADMIN", "WORKER")
+                .antMatchers(AUTHENTICATED_MATCHERS).authenticated()
+                .antMatchers(ANY_USER_MATCHERS).permitAll()
+                .anyRequest().denyAll()
                 .and()
                 //Login control
                 .formLogin()

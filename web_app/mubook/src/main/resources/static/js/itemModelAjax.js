@@ -88,7 +88,7 @@ function ajaxCallGetItemModels(actionUrl,mapAsJson){
                 }
 
                 let innerHTML =
-                    '<div class="itemModel card col mb-4 shadow bg-light p-0" id="itemModel-'+itemModel.itemModelId+'">' +
+                    '<div class="itemModelCard card col mb-4 shadow bg-light p-0" id="itemModel-'+itemModel.itemModelId+'">' +
                     '<a href="/itemModel/'+itemModel.itemModelId+'/view" class="text-decoration-none text-dark">' +
                     '   <img class="card-img-top img-fluid" src="'+itemModel.img+'" alt="Image '+itemModel.name+'">' +
                     '   <div class="card-body text-center">' +

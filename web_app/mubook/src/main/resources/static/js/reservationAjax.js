@@ -55,8 +55,7 @@ function ajaxCallGetReservations(actionUrl, data){
                 }
 
                 let reservationHTML =
-                    ' <div class="col shadow bg-light"> ' +
-                    '     <div class="card mb-3" style="max-width: 540px;"> ' +
+                    '     <div class="reservationCard card col mb-4 shadow bg-light p-0" style="max-width: 540px;"> ' +
                     '         <a th:href="/reservations/' + reservation.reservationId + '/view" class="text-decoration-none text-dark"> ' +
                     '             <div class="row no-gutters m-2"> ' +
                     '                 <div class="col-md-4 "> ' +
@@ -73,8 +72,7 @@ function ajaxCallGetReservations(actionUrl, data){
                     '              </div> ' +
                     '          </a> ' +
                     cancelHTML+
-                    '      </div> ' +
-                    '  </div>';
+                    '      </div> ';
                 innerHTML += reservationHTML;
             }
             $('#resultBlock').html(innerHTML);

@@ -2,10 +2,8 @@ package com.libumu.mubook.api;
 
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.news.NewsDao;
-import com.libumu.mubook.security.MyUserDetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,34 +42,6 @@ public class HomeController implements ServletContextAware {
     public String dataChart(Model model){ 
         model.addAttribute("itemModels", itemModelDao.getAllItemModels());
         return "selectChart"; 
-    }
-
-    @GetMapping("/normalUser")
-    @ResponseBody
-    public String user() {
-        return ("<h1>Welcome User</h1>");
-    }
-
-    @GetMapping("/admin")
-    @ResponseBody
-    public String admin() {
-        return ("<h1>Welcome Admin</h1>");
-    }
-
-    @GetMapping("/worker")
-    @ResponseBody
-    public String worker() {
-        return ("<h1>Welcome worker</h1>");
-    }
-
-    @GetMapping("/mainPage")
-    public String mainPage(Model model, Authentication auth){
-        //From the HTML (using Thymleaf) the UserDetails methods can only be accessed
-        //That's why to access other columns apart from the default ones we cast
-        //the "principal" to "MyUserDetails" to be able to access to other columns
-        MyUserDetails userDetails= (MyUserDetails) auth.getPrincipal();
-        model.addAttribute("loggedUser", userDetails.getUser());
-        return "mainPage";
     }
 
     @Override

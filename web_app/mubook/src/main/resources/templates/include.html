@@ -56,7 +56,7 @@
             class="m-2 w-50 d-lg-none d-flex justify-content-center d-block" aria-label="Bootstrap" />
         </a>
       </div>
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto col">
+      <!--<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-auto col">
         <div class="input-group rounded">
           <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
             aria-describedby="search-addon" />
@@ -64,15 +64,15 @@
             <i class="fas fa-search"></i>
           </span>
         </div>
-      </form>
+      </form>-->
       <div class="dropdown text-end d-none d-lg-flex justify-content-end col">
         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownProfile"
           data-bs-toggle="dropdown" aria-expanded="false">
           <img src="/images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile">
-          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/list?itemModelName=&active=true">My Reservations</a></li>
-          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservations/all?itemModelName=&active=true&username=">Reservations</a></li>
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/all">My Reservations</a></li>
+          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservations/all">Reservations</a></li>
           <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" href="/user/profile">My Profile</a></li>
           <li sec:authorize= "hasRole('ADMIN')"><a class="dropdown-item" href="/data">Data charts</a></li>
           <li sec:authorize= "isAuthenticated()">
@@ -117,8 +117,8 @@
               <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}">Users</a>
             </li>
             <hr>
-            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/list?itemModelName=&active=true">My Reservations</a></li>
-            <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all?itemModelName=&active=true&username=">Reservations</a></li>
+            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">My Reservations</a></li>
+            <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">Reservations</a></li>
             <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
             <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
@@ -154,9 +154,9 @@
           <h6 class="text-uppercase fw-bold mb-4">
             <i class="fas fa-envelope me-3"></i>Contact us:
           </h6>
-          <p>
+          <a href="mailto:mubook@mondragon.edu" class="text-white">
             mubook@mondragon.edu
-          </p>
+          </a>
         </div>
         <!-- Grid column -->
         <div class="col-md-2 col-lg-3 col-xl-3 mx-auto mb-4 text-center">
@@ -181,7 +181,7 @@
               <a
                 class="btn btn-primary btn-floating m-1"
                 style="background-color: #3b5998;"
-                href="#!"
+                href="https://www.facebook.com/mubook"
                 role="button"
                 ><i class="fab fa-facebook-f"></i
               ></a>
@@ -189,7 +189,7 @@
               <a
               class="btn btn-primary btn-floating m-1"
               style="background-color: #ac2bac;"
-              href="#!"
+              href="https://www.instagram.com/mubook"
               role="button"
               ><i class="fab fa-instagram"></i
             ></a>
@@ -197,7 +197,7 @@
               <a
                 class="btn btn-primary btn-floating m-1"
                 style="background-color: #55acee;"
-                href="#!"
+                href="https://www.twitter.com/mubook"
                 role="button"
                 ><i class="fab fa-twitter"></i
               ></a>
@@ -205,7 +205,7 @@
               <a
                 class="btn btn-primary btn-floating m-1"
                 style="background-color: #333333;"
-                href="#!"
+                href="https://github.com/PeioM/mubook"
                 role="button"
                 ><i class="fab fa-github"></i
               ></a>
@@ -221,9 +221,9 @@
   <!-- Section: Links  -->
   
     <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    <div class="text-center p-3 text-dark" style="background-color: rgba(0, 0, 0, 0.2);">
       © 2021 Copyright:
-      <a class="text-white" href="#">MuBook Company</a>
+      <a class="text-black" href="https://libumu.com">Libumu Company</a>
     </div>
     <!-- Copyright -->
   </footer>
