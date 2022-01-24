@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include.html :: headerfiles">
     <title id="Ptitle">Reservation</title>
 </head>
@@ -7,66 +8,82 @@
 <body>
     <header th:replace="include.html :: headercontent"></header>
     <div class="container rounded bg-white mt-3 mb-3 border center">
-        <div class="row d-flex justify-content-center">
+        <div class="d-flex justify-content-center">
             <form name="reservation-form" th:action="@{/reservations/add}" th:object="${reserve}" method="post">
-            <h3 class="text-center m-2">Reservation Details</h3>
-            <div class="col-lg-4 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <h5 th:text="'BOOK '+${reserve.item.itemModel.name}"></h5>
-                    <input th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}" readonly></input>
-                    <div class="user-img-div">
-                        <img class="mt-5 img-fluid" th:src="${reserve.item.itemModel.img}" alt="Item image">
+                <h3 class="text-center m-2">Reservation Details</h3>
+                <div class="row">
+                    <div class="d-flex justify-content-center border-right col-md-6">
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                            <div class="item-name-div">
+                                <h5 th:text="'BOOK '+${reserve.item.itemModel.name}"></h5>
+                                <input th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}" readonly />
+                            </div>
+                            <div class="user-img-div">
+                                <img class="mt-5 img-fluid" th:src="${reserve.item.itemModel.img}" alt="Item image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center  col-md-6">
+                        <div class="row m-4 details-div d-flex justify-content-center">
+                            <h4 class="mb-2 text-center">Item Details</h4>
+                            <div class="col m-3  d-flex justify-content-center">
+                                <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded d-flex justify-content-center">
+                                    <label class="text-dark">Book ID: </label> <label
+                                        th:text="${reserve.item.itemModel.itemModelId}"></label>
+                                </div>
+                                <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded d-flex justify-content-center"
+                                    th:each="specificationList: ${reserve.item.itemModel.specificationLists}">
+                                    <label class="text-dark"
+                                        th:text="${specificationList.specification.description}"></label> <label
+                                        th:text="${specificationList.value}"></label>
+                                </div>
+                                <!--<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
+                                <label class="text-dark">Author: </label> <label>JK Rowling</label>
+                            </div>
+                            <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
+                                <label class="text-dark">Book Genre: </label> <label>Science fiction</label>
+                            </div>
+                        </div>
+                        <div class="col m-3">
+                            <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
+                                <label class="text-dark">Book ID: </label> <label>564561</label>
+                            </div>
+                            <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
+                                <label class="text-dark">Author: </label> <label>JK Rowling</label>
+                            </div>
+                            <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
+                                <label class="text-dark">Book Genre: </label> <label>Science fiction</label>
+                            </div>-->
+                            </div>
+                            <div class="start-date-div d-flex justify-content-center">
+                                <h4 class="mb-2 text-center align-middle">Start Date</h4>
+                                <input class="m-2" th:field="*{initDate}" th:attr="value=${reserve.initDate}" readonly />
+                            </div>
+                            <div class="end-date-div  d-flex justify-content-center">
+                                <h4 class="mb-2 text-center align-middle">End Date</h4>
+                                <input class="m-2 text-center" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
+                                    sec:authorize="hasAnyRole('ADMIN','WORKER')" />
+                                <input class="m-2 text-center" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
+                                    sec:authorize="hasRole('USER')" readonly />
+                            </div>
+                            <div class="username-div  d-flex justify-content-center">
+                                <h4 class="mb-2 text-center align-middle">User id</h4>
+                                <input class="m-2" th:field="*{user.userId}"
+                                    th:attr="value=${reserve.user != null? reserve.user.userId:''}"
+                                    sec:authorize="hasAnyRole('ADMIN','WORKER')" />
+                                <input class="m-2" th:field="*{user.userId}"
+                                    th:attr="value=${reserve.user != null? reserve.user.userId:''}"
+                                    sec:authorize="hasAnyRole('USER')" readonly />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center" th:if="${offer == 'offer'}">
+                            <button type="submit" class="btn btn-primary salmon" id="create-reservation-btn">BOOK
+                                NOW</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-8 align-items-center border-right">
-                <div class="row m-4 details-div">
-                    <h4 class="mb-2">Item Details</h4>
-                    <div class="col m-3">
-                        <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Book ID: </label> <label th:text="${reserve.item.itemModel.itemModelId}"></label>
-                        </div>
-                        <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded" th:each="specificationList: ${reserve.item.itemModel.specificationLists}">
-                            <label class="text-dark" th:text="${specificationList.specification.description}"></label> <label th:text="${specificationList.value}"></label>
-                        </div>
-                        <!--<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-						<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Book Genre: </label> <label>Science fiction</label>
-                        </div>
-                    </div>
-					<div class="col m-3">
-                        <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Book ID: </label> <label>564561</label>
-                        </div>
-                        <div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Author: </label> <label>JK Rowling</label>
-                        </div>
-						<div class="row each-specification-div shadow-sm p-1 mb-2 bg-body rounded">
-                            <label class="text-dark">Book Genre: </label> <label>Science fiction</label>
-                        </div>-->
-                    </div>
-                    <div class="start-date-div">
-                        <h4 class="mb-2">Start Date</h4>
-                        <input class="m-2" th:field="*{initDate}" th:attr="value=${reserve.initDate}" readonly></input>
-                    </div>
-                    <div class="end-date-div">
-                        <h4 class="mb-2">End Date</h4>
-                        <input class="m-2" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}" sec:authorize= "hasAnyRole('ADMIN','WORKER')"></input>
-                        <input class="m-2" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}" sec:authorize= "hasRole('USER')" readonly></input>
-                    </div>
-                    <div class="username-div">
-                        <h4 class="mb-2">User id</h4>
-                        <input class="m-2" th:field="*{user.userId}" th:attr="value=${reserve.user != null? reserve.user.userId:''}" sec:authorize= "hasAnyRole('ADMIN','WORKER')"></input>
-                        <input class="m-2" th:field="*{user.userId}" th:attr="value=${reserve.user != null? reserve.user.userId:''}" sec:authorize= "hasAnyRole('USER')" readonly></input>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center" th:if="${offer == 'offer'}">
-                    <button type="submit" class="btn btn-primary salmon" id="create-reservation-btn">BOOK NOW</button>
-                </div>
-            </div>
-        </form> 
+
+            </form>
         </div>
     </div>
     <footer th:replace="include.html :: footercontent"></footer>

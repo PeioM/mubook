@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="notify-messages" th:if="${error != null}">
-    <div th:text="${error}"></div>
+    <p th:text="${error}" class="errorMsg"></p>
 </div>
 <form th:action="@{/user/add}" th:object="${user}" enctype="multipart/form-data" method="post">
     <table>

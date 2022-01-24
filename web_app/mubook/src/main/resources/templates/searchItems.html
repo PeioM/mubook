@@ -12,17 +12,18 @@
         <div class="filters container">
 <!--ITEM TYPE SELECTION-->
             <div>
-                <br>
+                <br/>
                 <h4 id="defaultSearchTitle" th:if="${itemTypes != null}">Filter by Item Type</h4>
                 <h4 id="itemTypeSearch" th:if="${actualItemType != null}" th:text="'Item Type: ' + ${actualItemType.description}"></h4>
                 <hr>
             </div>
-
-            <div class="mt-2 col-md-12" th:each="itemType : ${itemTypes}">
-                <a th:href="@{/search/} + ${itemType.description}">
-                    <button class="btn btn-secondary" th:text="${itemType.description}" style="font-size: 15px"></button>
-                </a>
-            </div>
+            <div class="d-flex justify-content-center row m-3">
+                <div class="mt-2 col-md-3 d-flex justify-content-center" th:each="itemType : ${itemTypes}">
+                    <a th:href="@{/search/} + ${itemType.description}">
+                        <span class="btn btn-secondary" th:text="${itemType.description}" style="font-size: 15px"></span>
+                    </a>
+                </div>
+            
 <!----------------------->
 <!---FILTERS SELECTION--->
             <div class="especification-filters d-md-flex justify-content-center row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-2">
@@ -39,13 +40,14 @@
             </div>
 <!----------------------->
 <!-----CREATE BUTTON----->
-            <div class="createButton d-flex justify-content-center p-3">
+            <div class="createButton d-flex justify-content-center p-2 col-md-3">
                 <a th:href="@{/itemModel/add}">
-                    <button sec:authorize="hasAnyRole('ADMIN','WORKER')" type="button"
-                            class="btn btn-lg btn-block salmon" th:text="#{searchItems.createItem}"></button>
+                    <span sec:authorize="hasAnyRole('ADMIN','WORKER')"
+                            class="btn btn-lg btn-block salmon" th:text="#{searchItems.createItem}"></span>
                 </a>
             </div>
         </div>
+    </div>
 <!----------------------->
 <!----ITEM MODEL SHOW---->
         <div class="py-5">
