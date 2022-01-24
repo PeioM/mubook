@@ -55,7 +55,7 @@ function ajaxCallGetReservations(actionUrl, data){
                 }
 
                 let reservationHTML =
-                    ' <div class="col"> ' +
+                    ' <div class="col shadow bg-light"> ' +
                     '     <div class="card mb-3" style="max-width: 540px;"> ' +
                     '         <a th:href="/reservations/' + reservation.reservationId + '/view" class="text-decoration-none text-dark"> ' +
                     '             <div class="row no-gutters m-2"> ' +

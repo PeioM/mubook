@@ -120,21 +120,19 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.getItemsWithoutReservation(itemModelId);
     }
 
-    //Ajax functions
+    //Reservations
     @Override
     public List<Reservation> getReservationsByItemModelBetween(Long itemModel, int page) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.findByItemModelBetween(itemModel, start,quantity);
     }
-
     @Override
     public List<Reservation> getReservationsByItemTypeBetween(Integer itemType, int page) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.findByItemTypeBetween(itemType, start,quantity);
     }
-
     @Override
     public List<Reservation> getReservationsBetween(int page) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
@@ -142,26 +140,24 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.findBetween(start,quantity);
     }
 
+
+
+    //Reservations count
     @Override
     public int getReservationCountByItemModel(Long itemModel) {
-        List<Object[]> result = repository.countReservationsByItemModel(itemModel);
-        BigInteger totalReservations = (BigInteger) result.get(0)[0];
-        return totalReservations.intValue();
+        return repository.countAllByItemItemModelItemModelId(itemModel);
     }
-
     @Override
     public int getReservationCountByItemType(Integer itemType) {
-        List<Object[]> result = repository.countReservationsByItemType(itemType);
-        BigInteger totalReservations = (BigInteger) result.get(0)[0];
-        return totalReservations.intValue();
+        return repository.countAllByItemItemModelItemTypeItemTypeId(itemType);
     }
-
     @Override
     public int getTotalReservationCount() {
         Long result = repository.count();
         return result.intValue();
     }
 
+    //Active reservations
     @Override
     public List<Reservation> getActiveReservationsBetween(int page) {
         java.util.Date date = new java.util.Date();
@@ -170,7 +166,6 @@ public class ReservationDataAccessService implements ReservationDao {
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.getActiveReservationsBetween(sqlDate, start, quantity);
     }
-
     @Override
     public List<Reservation> getActiveReservationsByItemTypeBetween(int itemType, int page) {
         java.util.Date date = new java.util.Date();
@@ -179,7 +174,6 @@ public class ReservationDataAccessService implements ReservationDao {
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.getActiveReservationsByItemTypeBetween(itemType, sqlDate, start, quantity);
     }
-
     @Override
     public List<Reservation> getActiveReservationsByItemModelBetween(long itemModel, int page) {
         java.util.Date date = new java.util.Date();
@@ -189,20 +183,19 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.getActiveReservationsByItemModelBetween(itemModel, sqlDate, start, quantity);
     }
 
+    //Active reservation counts
     @Override
     public int getTotalActiveReservationCount() {
         java.util.Date date = new java.util.Date();
         Date sqlDate = new java.sql.Date(date.getTime());
         return repository.countAllByEndDateGreaterThanEqualAndInitDateLessThanEqual(sqlDate, sqlDate);
     }
-
     @Override
     public int getActiveReservationCountByItemType(int itemType) {
         java.util.Date date = new java.util.Date();
         Date sqlDate = new java.sql.Date(date.getTime());
         return repository.countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeId(sqlDate, sqlDate, itemType);
     }
-
     @Override
     public int getActiveReservationCountByItemModel(long itemModel) {
         java.util.Date date = new java.util.Date();
@@ -210,20 +203,21 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelId(sqlDate, sqlDate, itemModel);
     }
 
+
+
+    //All reservations for user
     @Override
     public List<Reservation> getReservationsByItemModelBetweenForUser(Long itemModel, int page, long userId) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.findByItemModelBetweenForUser(itemModel,start, quantity, userId);
     }
-
     @Override
     public List<Reservation> getReservationsByItemTypeBetweenForUser(Integer itemType, int page, long userId) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.findByItemTypeBetweenForUser(itemType,start, quantity, userId);
     }
-
     @Override
     public List<Reservation> getReservationsBetweenForUser(int page, long userId) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;
@@ -231,21 +225,21 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.findBetweenForUser(start, quantity, userId);
     }
 
+    //All reservations count for user
     @Override
     public int getTotalReservationCountForUser(long userId) {
         return repository.countAllByUserUserId(userId);
     }
-
     @Override
     public int getReservationCountByItemTypeForUser(int itemType, long userId) {
         return repository.countAllByItemItemModelItemTypeItemTypeIdAndUserUserId(itemType, userId);
     }
-
     @Override
     public int getReservationCountByItemModelForUser(long itemModel, long userId) {
         return repository.countAllByItemItemModelItemModelIdAndUserUserId(itemModel, userId);
     }
 
+    //Active reservation for user
     @Override
     public List<Reservation> getActiveReservationsBetweenForUser(int page, long userId) {
         java.util.Date date = new java.util.Date();
@@ -254,7 +248,6 @@ public class ReservationDataAccessService implements ReservationDao {
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.getActiveReservationsBetweenForUser(sqlDate, start, quantity, userId);
     }
-
     @Override
     public List<Reservation> getActiveReservationsByItemTypeBetweenForUser(int itemType, int page, long userId) {
         java.util.Date date = new java.util.Date();
@@ -263,7 +256,6 @@ public class ReservationDataAccessService implements ReservationDao {
         int quantity = AjaxController.ITEMS_PER_PAGE;
         return repository.getActiveReservationsByItemTypeBetweenForUser(itemType, sqlDate, start, quantity, userId);
     }
-
     @Override
     public List<Reservation> getActiveReservationsByItemModelBetweenForUser(long itemModel, int page, long userId) {
         java.util.Date date = new java.util.Date();
@@ -273,6 +265,7 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.getActiveReservationsByItemModelBetweenForUser(itemModel, sqlDate, start, quantity, userId);
     }
 
+    //Active reservation count for user
     @Override
     public int getTotalActiveReservationCountForUser(long userId) {
         java.util.Date date = new java.util.Date();
@@ -280,7 +273,6 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndUserUserId(
                 sqlDate, sqlDate, userId);
     }
-
     @Override
     public int getActiveReservationCountByItemTypeForUser(int itemType, long userId) {
         java.util.Date date = new java.util.Date();
@@ -288,7 +280,6 @@ public class ReservationDataAccessService implements ReservationDao {
         return repository.countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeIdAndUserUserId(
                 sqlDate, sqlDate, itemType, userId);
     }
-
     @Override
     public int getActiveReservationCountByItemModelForUser(long itemModel, long userId) {
         java.util.Date date = new java.util.Date();

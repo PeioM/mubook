@@ -26,7 +26,7 @@ import java.util.*;
 @RequestMapping("/ajax")
 public class AjaxController {
 
-    public final static int ITEMS_PER_PAGE = 2;
+    public final static int ITEMS_PER_PAGE = 9;
 
     private Map<String, String[]> itemModelFilters;
 

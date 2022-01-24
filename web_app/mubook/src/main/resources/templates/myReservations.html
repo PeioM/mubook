@@ -8,10 +8,10 @@
 <body class="reservationBody">
     <header th:replace="include.html :: headercontent"></header>
     <div class="container rounded bg-white mt-3 mb-3 border center">
-        <div class="filterMenu">
-            <div class="container filters d-md-flex justify-content-between flex-row p-2">
+        <div class="d-flex align-items-end filterMenu container filters d-md-flex justify-content-right flex-row p-2">
 <!--SELECT ITEM MODEL-->
-                <label for="selectReservationItemModel">Select Item Model</label>
+            <div class="m-3">
+                <label class="px-3" for="selectReservationItemModel">Select Item Model</label>
                 <select id="selectReservationItemModel" class="form-select form m-2">
                     <optgroup label="">
                         <option value="-" selected>All models</option>
@@ -23,7 +23,9 @@
                                 th:value="${itemModel.itemModelId}"></option>
                     </optgroup>
                 </select>
+            </div>
 <!--SELECT ACTIVE-->
+            <div class="m-3 p-3">
                 <label for="checkBoxActive">Active</label>
                 <input type="checkbox" id="checkBoxActive" checked>
             </div>

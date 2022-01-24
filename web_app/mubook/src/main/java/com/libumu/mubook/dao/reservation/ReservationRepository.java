@@ -3,8 +3,6 @@ package com.libumu.mubook.dao.reservation;
 import java.sql.Date;
 import java.util.List;
 
-import com.libumu.mubook.entities.ItemModel;
-import com.libumu.mubook.entities.ItemType;
 import com.libumu.mubook.entities.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -107,28 +105,44 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     "ORDER BY Year, Month ", nativeQuery = true)
     List<Object[]> countReservationsOfItemEachMonthWithoutMT(long item_model_id);
 
+    //All reservations count for admin
+    int countAllByItemItemModelItemModelId(Long item_itemModel_itemModelId);
+    int countAllByItemItemModelItemTypeItemTypeId(Integer item_itemModel_itemType_itemTypeId);
+    long count();
+    //Active reservations count for admin
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqual(Date endDate, Date initDate);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelId(Date endDate, Date initDate, Long item_itemModel_itemModelId);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeId(Date endDate, Date initDate, Integer item_itemModel_itemType_itemTypeId);
+    //Active reservations count for specific user
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndUserUserId(Date endDate, Date initDate, Long user_userId);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelIdAndUserUserId(Date endDate, Date initDate, Long item_itemModel_itemModelId, Long user_userId);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeIdAndUserUserId(Date endDate, Date initDate, Integer item_itemModel_itemType_itemTypeId, Long user_userId);
+    //All reservations count for specific user
+    int countAllByUserUserId(Long user_userId);
+    int countAllByItemItemModelItemModelIdAndUserUserId(Long item_itemModel_itemModelId, Long user_userId);
+    int countAllByItemItemModelItemTypeItemTypeIdAndUserUserId(Integer item_itemModel_itemType_itemTypeId, Long user_userId);
+
+
+    //All reservations for admin
     @Query(value = "SELECT r.* " +
-                    "FROM reservation r " +
-                    "JOIN item i on r.item_id = i.item_id " +
-                    "WHERE i.item_model_id = ?1 " +
-                    "LIMIT ?2,?3", nativeQuery = true)
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id " +
+            "WHERE i.item_model_id = ?1 " +
+            "LIMIT ?2,?3", nativeQuery = true)
     List<Reservation> findByItemModelBetween(long itemModel, int startRow, int quantity);
     @Query(value = "SELECT r.* " +
-                    "FROM reservation r " +
-                    "JOIN item i on r.item_id = i.item_id " +
-                    "JOIN item_model im on i.item_model_id = im.item_model_id " +
-                    "WHERE im.item_type_id = ?1 " +
-                    "LIMIT ?2,?3", nativeQuery = true)
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id " +
+            "JOIN item_model im on i.item_model_id = im.item_model_id " +
+            "WHERE im.item_type_id = ?1 " +
+            "LIMIT ?2,?3", nativeQuery = true)
     List<Reservation> findByItemTypeBetween(int itemType, int startRow, int quantity);
     @Query(value = "SELECT r.* " +
             "FROM reservation r " +
             "LIMIT ?1,?2", nativeQuery = true)
     List<Reservation> findBetween(int startRow, int quantity);
 
-    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqual(Date endDate, Date initDate);
-    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelId(Date endDate, Date initDate, Long item_itemModel_itemModelId);
-    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeId(Date endDate, Date initDate, Integer item_itemModel_itemType_itemTypeId);
-
+    //Active reservations for admin
     @Query(value = "SELECT r.* " +
             "FROM reservation r " +
             "WHERE r.init_date <= ?1 AND r.end_date >= ?1 " +
@@ -150,14 +164,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "LIMIT ?3,?4", nativeQuery = true)
     List<Reservation> getActiveReservationsByItemModelBetween(long itemModel, Date sqlDate, int start, int quantity);
 
-    //User logged
-    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndUserUserId(Date endDate, Date initDate, Long user_userId);
-    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelIdAndUserUserId(Date endDate, Date initDate, Long item_itemModel_itemModelId, Long user_userId);
-    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeIdAndUserUserId(Date endDate, Date initDate, Integer item_itemModel_itemType_itemTypeId, Long user_userId);
-    int countAllByUserUserId(Long user_userId);
-    int countAllByItemItemModelItemModelIdAndUserUserId(Long item_itemModel_itemModelId, Long user_userId);
-    int countAllByItemItemModelItemTypeItemTypeIdAndUserUserId(Integer item_itemModel_itemType_itemTypeId, Long user_userId);
-
+    //All reservations for specific user
     @Query(value = "SELECT r.* " +
             "FROM reservation r " +
             "JOIN item i on r.item_id = i.item_id AND r.user_id = ?4 " +
@@ -177,6 +184,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "LIMIT ?1,?2", nativeQuery = true)
     List<Reservation> findBetweenForUser(int startRow, int quantity, long userID);
 
+    //Active reservations for specific user
     @Query(value = "SELECT r.* " +
             "FROM reservation r " +
             "WHERE r.init_date <= ?1 AND r.end_date >= ?1 AND r.user_id = ?4 " +

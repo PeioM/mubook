@@ -45,7 +45,7 @@ function ajaxCallGetUsers(actionUrl, containStr){
 
             for (let user of users){
                 let usersHTML =
-                    '<div class=" card col mb-4 shadow-sm p-0"> ' +
+                    '<div class=" card col mb-4 shadow bg-light p-0"> ' +
                     '    <a href="/user/'+user.userId+'/edit" class="text-decoration-none text-dark"> ' +
                     '       <img class="card-img-top img-fluid" src="/static/images/ItemImages/userIcon.png" alt="Card image cap">' +
                     '       <div class="card-body text-center"> ' +
