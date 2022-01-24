@@ -22,16 +22,16 @@
 
         <div class="carousel-inner">
             <div th:each="actualNew, iterator: ${news}" class="carousel-item" th:classappend="${iterator.first}? active">
-                <div class="carousel-container d-flex justify-content-center align-items-center h-100">
+                <div class="carousel-container container-fluid d-flex justify-content-center align-items-center h-100">
                     <div class="general-carousel d-flex justify-content-center align-items-center row">
-                        <div class="carousel-img d-flex justify-content-center align-items-center col-md-4">
+                        <div class="carousel-img d-flex justify-content-center align-items-center col-md-5">
                             <img th:attr="src=@{${actualNew.image}},alt=${actualNew.title}" class="d-block img-fluid p-md-1"/>
                         </div>
-                        <div class="carousel-text d-flex justify-content-center align-items-center col-md-4">
-                            <div class="carousel-title me-2">
+                        <div class="carousel-text d-flex justify-content-center align-items-center col-md-6">
+                            <div class="carousel-title me-2 col-md-4">
                                 <h5 th:text="${actualNew.title}"> </h5>
                             </div>
-                            <div class="carousel-description">
+                            <div class="carousel-description col-md-6">
                                 <div class="accordion" id="accordionExample">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" th:id="'heading'+${iterator.index}">

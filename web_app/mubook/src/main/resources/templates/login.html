@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include.html :: headerfiles">
-     <title id="Ptitle">Login</title>
+    <title id="Ptitle">Login</title>
 </head>
 
 <body>
@@ -24,8 +24,8 @@
                                 <!--Cambiado name=f a name=login-form....-->
                                 <div class="logo-header col">
                                     <a href="/index">
-                                    <img src="/images/logo_web.png" alt="MUBook logo with text"
-                                        class="mx-auto d-block" />
+                                        <img src="/images/logo_web.png" alt="MUBook logo with text"
+                                            class="mx-auto d-block" />
                                     </a>
                                 </div>
                                 <div class="form-group">
@@ -42,12 +42,10 @@
                                                 type="checkbox"></span></label><br>
                                     <div class="buttons-div d-flex justify-content-center m-3">
                                         <input type="submit" name="submit" class="btn btn-login m-2" value="Login">
+                                        <a href="/user/add" class="btn salmon text-center m-2">Register</a>
                                     </div>
                                 </div>
                             </form>
-                            <a href="/user/add">
-                                <button >Register</button>
-                            </a>
                         </div>
                     </div>
                 </div>

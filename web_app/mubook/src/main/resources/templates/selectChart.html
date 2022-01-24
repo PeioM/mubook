@@ -7,36 +7,36 @@
 
 <body>
     <header th:replace="include.html :: headercontent"></header>
-    <div class="container-fluid bg-white">
+    <div class="container bg-white">
         <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center">Charts</h4><br>
         <div
             class="charts-selection row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <p class="text-center">Reservations by item type</p>
+                    <h6 class="text-center">Reservations by item type</h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/reservations/itemType" method="get">
-                        <button type="submit" class=" mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <p class="text-center">Most/Less reserved items</p>
+                    <h6 class="text-center">Most/Less reserved items</h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/reservations/itemModel" method="get">
-                        <button type="submit" class=" mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <p class="text-center">Item reservation flow</p>
+                    <h6 class="text-center">Item reservation flow</h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/reservations/itemMonth" method="get">
@@ -49,30 +49,32 @@
                                 </option>
                             </optgroup>
                         </select>
-                        <button type="submit" class=" mt-1">Chart</button>
+                        <div class="center-button d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary mt-1 text-center">Chart</button>
+                        </div>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <p class="text-center">Users by age range</p>
+                    <h6 class="text-center">Users by age range</h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/user/age" method="get">
-                        <button type="submit" class=" mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <p class="text-center">Users by penalty points</p>
+                    <h6 class="text-center">Users by penalty points</h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/user/incidence" method="get">
                         <div class="card-title"></div>
-                        <button type="submit" class=" mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
                     </form>
                 </div>
             </div>
