@@ -1,6 +1,5 @@
 package com.libumu.mubook.controllers;
 
-import com.libumu.mubook.api.NewsController;
 import com.libumu.mubook.dao.news.NewsDao;
 import com.libumu.mubook.entities.News;
 import org.apache.commons.io.IOUtils;
@@ -30,9 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NewsControllerTests {
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private NewsController newsController;
 
     @Autowired
     private NewsDao newsDao;
