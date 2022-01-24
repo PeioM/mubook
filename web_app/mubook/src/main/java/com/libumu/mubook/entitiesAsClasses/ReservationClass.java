@@ -1,5 +1,7 @@
 package com.libumu.mubook.entitiesAsClasses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.libumu.mubook.entities.*;
 
 import java.sql.Date;
@@ -8,20 +10,20 @@ public class ReservationClass {
     private Long reservationId;
     private UserClass user;
     private ItemClass item;
-    private Date initDate;
-    private Date endDate;
+    private Long initDate;
+    private Long endDate;
     private Date returnDate;
 
     public ReservationClass(Reservation reservation){
         this.reservationId = reservation.getReservationId();
         this.user = new UserClass(reservation.getUser());
         this.item = new ItemClass(reservation.getItem());
-        this.initDate = reservation.getInitDate();
-        this.endDate = reservation.getEndDate();
+        this.initDate = reservation.getInitDate().getTime();
+        this.endDate = reservation.getEndDate().getTime();
         this.returnDate = reservation.getReturnDate();
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
@@ -29,7 +31,7 @@ public class ReservationClass {
         return returnDate;
     }
 
-    public Date getInitDate() {
+    public Long getInitDate() {
         return initDate;
     }
 

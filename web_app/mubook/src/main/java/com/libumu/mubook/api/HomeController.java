@@ -17,17 +17,20 @@ import java.util.Date;
 public class HomeController implements ServletContextAware {
 
     private ServletContext servletContext;
+    private final NewsDao newsDao;
+    private final ItemModelDao itemModelDao;
     @Autowired
-    NewsDao newsDao;
-    @Autowired
-    ItemModelDao itemModelDao;
+    public HomeController(NewsDao newsDao, ItemModelDao itemModelDao) {
+        this.newsDao = newsDao;
+        this.itemModelDao = itemModelDao;
+    }
 
-    @GetMapping(path = {"/", "/index", "/home"})
+    @GetMapping(path = {"/", "/index", "/home", "/undefined"})
     public String home(Model model){
-        
-     //   if(isSameDay((Date) servletContext.getAttribute("lastFetchDate"), new Date())){
+
+        if(servletContext.getAttribute("lastFetchDate") == null || isSameDay((Date) servletContext.getAttribute("lastFetchDate"), new Date())){
             updateNews(servletContext, newsDao);
-       // }
+        }
         model.addAttribute("news", servletContext.getAttribute("news"));
         return "index";
     }
@@ -54,5 +57,13 @@ public class HomeController implements ServletContextAware {
         servletContext.setAttribute("news",  newsDao.getActiveNews());
     }
 
-
+    public static boolean isSameDay(Date date1, Date date2) {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(date1);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(date2);
+        return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
+                && calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH)
+                && calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
+    }
 }

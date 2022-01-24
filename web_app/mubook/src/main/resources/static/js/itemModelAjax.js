@@ -109,10 +109,20 @@ function updateItemModelPageWithFilters() {
     let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
     let actionUrl = "/ajax/filterItemModelsGetPages/" + itemType;
 
+    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
+        '  <span class="sr-only">Loading...</span>\n' +
+        '</div>';
+    $('#resultBlock').html(loadingHTML);
+
     ajaxCallGetPages(actionUrl, null)
 }
 function updateItemModelPageWithoutFilters() {
     let actionUrl = "/ajax/filterItemModelsGetPages/all";
+
+    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
+        '  <span class="sr-only">Loading...</span>\n' +
+        '</div>';
+    $('#resultBlock').html(loadingHTML);
 
     ajaxCallGetPages(actionUrl,null)
 }

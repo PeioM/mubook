@@ -30,6 +30,11 @@ function updateUserPages(){
     let userTypeId = document.getElementById("selectUserType").value;
     let actionUrl = "/ajax/filterUsersGetPages/" + userTypeId;
 
+    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
+        '  <span class="sr-only">Loading...</span>\n' +
+        '</div>';
+    $('#resultBlock').html(loadingHTML);
+
     ajaxCallGetPages(actionUrl, {containStr: containStr})
 }
 
