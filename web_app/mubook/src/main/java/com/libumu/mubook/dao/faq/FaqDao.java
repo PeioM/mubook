@@ -12,5 +12,6 @@ public interface FaqDao {
     public void deleteFaq(int id);
     public void deleteFaq(Faq faq);
     public void addFaq(Faq faq);
+    Faq findByQuestion(String question);
 
 }

@@ -46,34 +46,6 @@ public class HomeController implements ServletContextAware {
         return "selectChart"; 
     }
 
-    @GetMapping("/normalUser")
-    @ResponseBody
-    public String user() {
-        return ("<h1>Welcome User</h1>");
-    }
-
-    @GetMapping("/admin")
-    @ResponseBody
-    public String admin() {
-        return ("<h1>Welcome Admin</h1>");
-    }
-
-    @GetMapping("/worker")
-    @ResponseBody
-    public String worker() {
-        return ("<h1>Welcome worker</h1>");
-    }
-
-    @GetMapping("/mainPage")
-    public String mainPage(Model model, Authentication auth){
-        //From the HTML (using Thymleaf) the UserDetails methods can only be accessed
-        //That's why to access other columns apart from the default ones we cast
-        //the "principal" to "MyUserDetails" to be able to access to other columns
-        MyUserDetails userDetails= (MyUserDetails) auth.getPrincipal();
-        model.addAttribute("loggedUser", userDetails.getUser());
-        return "mainPage";
-    }
-
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
@@ -84,13 +56,5 @@ public class HomeController implements ServletContextAware {
         servletContext.setAttribute("news",  newsDao.getActiveNews());
     }
 
-    public static boolean isSameDay(Date date1, Date date2) {
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTime(date1);
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.setTime(date2);
-        return calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
-                && calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH)
-                && calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
-    }
+
 }

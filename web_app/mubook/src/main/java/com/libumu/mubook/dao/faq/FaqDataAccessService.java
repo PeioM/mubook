@@ -41,4 +41,9 @@ public class FaqDataAccessService implements FaqDao {
     public void addFaq(Faq faq) {
         repository.save(faq);
     }
+
+    @Override
+    public Faq findByQuestion(String question) {
+        return repository.findByQuestion(question);
+    }
 }
