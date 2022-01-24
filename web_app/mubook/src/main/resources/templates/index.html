@@ -32,7 +32,7 @@
                                 <h5 th:text="${actualNew.title}"> </h5>
                             </div>
                             <div class="carousel-description col-md-6">
-                                <div class="accordion" id="accordionExample">
+                                <div class="accordion" th:id="'accordion'+${iterator.index}">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" th:id="'heading'+${iterator.index}">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -40,8 +40,8 @@
                                                 More info
                                             </button>
                                         </h2>
-                                        <div th:id="'collapse'+${iterator.index}" class="accordion-collapse collapse " th:attr="aria-labelledby='heading'+${iterator.index}"
-                                            data-bs-parent="#accordionExample">
+                                        <div th:id="'collapse'+${iterator.index}" class="accordion-collapse collapse " th:attr="aria-labelledby='heading'+${iterator.index},
+                                            data-bs-parent='#accordion'+${iterator.index}">
                                             <div class="accordion-body text-dark" th:text="${actualNew.description}">
                                             </div>
                                         </div>
