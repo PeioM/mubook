@@ -87,7 +87,7 @@ public class ItemModelClass {
     }
 
     //CLASSES FOR ITEM MODEL
-    private static class ItemTypeClass {
+    public static class ItemTypeClass {
         private Integer itemTypeId;
         private String description;
 
@@ -113,7 +113,7 @@ public class ItemModelClass {
         }
     }
 
-    private static class SpecificationListClass {
+    public static class SpecificationListClass {
 
         private SpecificationClass specification;
         private String value;
@@ -150,7 +150,7 @@ public class ItemModelClass {
         }
     }
 
-    private static class SpecificationClass {
+    public static class SpecificationClass {
         private Integer specificationId;
         private String description;
 

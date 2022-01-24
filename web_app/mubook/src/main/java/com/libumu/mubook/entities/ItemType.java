@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "item_type")
-public class ItemType {
+public class ItemType implements Comparable{
 
     @Id
     @GenericGenerator(name="itemType" , strategy="increment")
@@ -33,4 +33,9 @@ public class ItemType {
         this.description = description;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        ItemType it = (ItemType) o;
+        return this.getDescription().compareTo(it.getDescription());
+    }
 }

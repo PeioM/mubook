@@ -5,35 +5,36 @@
     <title id="Ptitle">Reservations</title>
 </head>
 
-<body>
+<body class="reservationBody">
     <header th:replace="include.html :: headercontent"></header>
     <div class="container rounded bg-white mt-3 mb-3 border center">
-        <div class="filterMenu">
-            <div class="container filters d-md-flex justify-content-between flex-row p-2">
-                <select class="form-select m-2">
-                    <option selected>Type</option>
-                    <option value="1">Book</option>
-                    <option value="2">Computer</option>
-                    <option value="3">Service</option>
+        <div class="d-flex align-items-end filterMenu container filters d-md-flex justify-content-right flex-row p-2">
+<!--SELECT ITEM MODEL-->
+            <div class="m-3">
+                <label class="px-3" for="selectReservationItemModel">Select Item Model</label>
+                <select id="selectReservationItemModel" class="form-select form m-2">
+                    <optgroup label="">
+                        <option value="-" selected>All models</option>
+                    </optgroup>
+                    <optgroup th:each="entry, stat : ${filters}" th:label="${entry.key.description}">
+                        <option th:value="'itemType-' + ${entry.key.itemTypeId}"
+                                th:text="'All ' + ${entry.key.description} + ' models'"></option>
+                        <option th:each="itemModel : ${entry.value}" th:text="${itemModel.name}"
+                                th:value="${itemModel.itemModelId}"></option>
+                    </optgroup>
                 </select>
-
-                <select class="form-select  m-2">
-                    <option selected>Model</option>
-                    <option value="1">Photographs from the Edge</option>
-                    <option value="2">Fix It with Food: Every Meal Easy</option>
-                    <option value="3">Fear No Evil (Alex Cross, 27)</option>
-                </select>
-                <div class="checkbox-div d-flex justify-content-center align-items-center">
-                    <input type="checkbox" name="active" id="active" checked ><label for="active">Active</label>
-                </div>
+            </div>
+<!--SELECT ACTIVE-->
+            <div class="m-3 p-3">
+                <label for="checkBoxActive">Active</label>
+                <input type="checkbox" id="checkBoxActive" checked>
             </div>
         </div>
 
 
         <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">
-            <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-3">
-
-                <div class="col" th:each="reservation : ${reserves}">
+            <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-3">
+                <!--<div class="col" th:each="reservation : ${reserves}">
                     <div class="card mb-3" style="max-width: 540px;">
                         <a th:href="'/reservations/'+${reservation.reservationId}+'/view'" class="text-decoration-none text-dark">
                             <div class="row no-gutters m-2">
@@ -57,153 +58,17 @@
                             
                         </div>
                     </div>
-                </div>
-<!--
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> 
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a href="" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2">Card title</h5>
-                                    <img src="../static/images/computadora.png" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text">This is a wider card with supporting text below as a
-                                            natural
-                                            lead-in to
-                                            additional content. This content is a little bit longer.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2">
-                            <a class="btn btn-warning">Cancel Reservation</a>
-                        </div>
-                    </div>
-                </div>
-            -->
+                </div>-->
             </div>
         </div>
+        <!-----PAGE SELECTION---->
+        <div class="form-group w-25 p-3" id="pageSelector">
+            <label for="selectPage">Select Page: </label>
+            <select class="form-control" name="page" id="selectPage">
+                <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
+            </select>
+        </div>
+        <!----------------------->
     </div>
     <footer th:replace="include.html :: footercontent"></footer>
 </body>

@@ -5,11 +5,16 @@ import com.libumu.mubook.dao.button.ButtonDao;
 import com.libumu.mubook.dao.buttonClick.ButtonClickDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
 import com.libumu.mubook.dao.itemType.ItemTypeDao;
+import com.libumu.mubook.dao.reservation.ReservationDao;
 import com.libumu.mubook.dao.specification.SpecificationDao;
 import com.libumu.mubook.dao.user.UserDao;
 import com.libumu.mubook.entities.*;
 import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
+import com.libumu.mubook.entitiesAsClasses.ReservationClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -21,7 +26,7 @@ import java.util.*;
 @RequestMapping("/ajax")
 public class AjaxController {
 
-    public final static int ITEMS_PER_PAGE = 2;
+    public final static int ITEMS_PER_PAGE = 9;
 
     private Map<String, String[]> itemModelFilters;
 
@@ -31,10 +36,12 @@ public class AjaxController {
     UserDao userDao;
     ButtonClickDao buttonClickDao;
     ButtonDao buttonDao;
+    ReservationDao reservationDao;
     @Autowired
     public AjaxController(ItemTypeDao itemTypeDao, ItemModelDao itemModelDao,
                           SpecificationDao specificationDao, UserDao userDao,
-                          ButtonClickDao buttonClickDao, ButtonDao buttonDao) {
+                          ButtonClickDao buttonClickDao, ButtonDao buttonDao,
+                          ReservationDao reservationDao) {
         this.itemTypeDao = itemTypeDao;
         this.itemModelDao = itemModelDao;
         this.specificationDao = specificationDao;
@@ -42,6 +49,7 @@ public class AjaxController {
         this.userDao = userDao;
         this.buttonClickDao = buttonClickDao;
         this.buttonDao = buttonDao;
+        this.reservationDao = reservationDao;
     }
 
     @GetMapping("/filterItemModels/{itemType}/{page}")
@@ -146,7 +154,7 @@ public class AjaxController {
         int page = Integer.parseInt(pageStr);
         List<User> users;
         String containStr = request.getParameter("containStr");
-        if(userType.contains("-")){
+        if(userType.equals("-")){
             users = userDao.getUsersBetweenContaining(page, containStr);
         }
         else{
@@ -164,7 +172,7 @@ public class AjaxController {
                               WebRequest request){
         int totalUsers;
         String containStr = request.getParameter("containStr");
-        if(userType.contains("-")){
+        if(userType.equals("-")){
             totalUsers = userDao.getuserCountContaining(containStr);
         }
         else{
@@ -172,9 +180,171 @@ public class AjaxController {
         }
         double pages = (double) totalUsers/AjaxController.ITEMS_PER_PAGE;
 
-        Gson gson = new Gson();
         return String.valueOf(pages);
     }
+
+    @GetMapping("/filterReservations/{itemModel}/{page}")
+    @ResponseBody
+    public String filterReservations(@PathVariable("itemModel") String itemModel,
+                                     @PathVariable("page") String pageStr,
+                                     WebRequest request){
+        int page = Integer.parseInt(pageStr);
+        List<Reservation> reservations;
+        boolean active = Boolean.parseBoolean(request.getParameter("active"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = userDao.getUserByUsername(authentication.getName());
+        long loggedUserId = userDao.getUserByUsername(authentication.getName()).getUserId();
+        //If its admin
+        if(loggedUser.getUserType().getUserTypeId().equals("ADMIN")){
+            if(itemModel.equals("-")){
+                if(active){
+                    reservations = reservationDao.getActiveReservationsBetween(page);
+                }
+                else{
+                    reservations = reservationDao.getReservationsBetween(page);
+                }
+            }
+            else if(itemModel.contains("itemType-")){
+                String itemType = itemModel.replace("itemType-","");
+                if(active){
+                    reservations = reservationDao.getActiveReservationsByItemTypeBetween(
+                            Integer.parseInt(itemType), page);
+                }
+                else{
+                    reservations = reservationDao.getReservationsByItemTypeBetween(
+                            Integer.parseInt(itemType), page);
+                }
+            }
+            else{
+                if(active){
+                    reservations = reservationDao.getActiveReservationsByItemModelBetween(
+                            Long.parseLong(itemModel), page);
+                }
+                else{
+                    reservations = reservationDao.getReservationsByItemModelBetween(
+                            Long.parseLong(itemModel), page);
+                }
+            }
+        }
+        else{
+            if(itemModel.equals("-")){
+                if(active){
+                    reservations = reservationDao.getActiveReservationsBetweenForUser(page, loggedUserId);
+                }
+                else{
+                    reservations = reservationDao.getReservationsBetweenForUser(page, loggedUserId);
+                }
+            }
+            else if(itemModel.contains("itemType-")){
+                String itemType = itemModel.replace("itemType-","");
+                if(active){
+                    reservations = reservationDao.getActiveReservationsByItemTypeBetweenForUser(
+                            Integer.parseInt(itemType), page, loggedUserId);
+                }
+                else{
+                    reservations = reservationDao.getReservationsByItemTypeBetweenForUser(
+                            Integer.parseInt(itemType), page, loggedUserId);
+                }
+            }
+            else{
+                if(active){
+                    reservations = reservationDao.getActiveReservationsByItemModelBetweenForUser(
+                            Long.parseLong(itemModel), page, loggedUserId);
+                }
+                else{
+                    reservations = reservationDao.getReservationsByItemModelBetweenForUser(
+                            Long.parseLong(itemModel), page, loggedUserId);
+                }
+            }
+        }
+        List<ReservationClass> resultList = new ArrayList<>();
+        for(Reservation res : reservations){
+            resultList.add(new ReservationClass(res));
+        }
+
+        Gson gson = new Gson();
+        return gson.toJson(resultList);
+    }
+
+
+    @GetMapping("/filterReservationsGetPages/{itemModel}")
+    @ResponseBody
+    public String filterReservationsGetPage(@PathVariable("itemModel") String itemModel,
+                                            WebRequest request){
+        int totalReservations;
+        boolean active = Boolean.parseBoolean(request.getParameter("active"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = userDao.getUserByUsername(authentication.getName());
+        long loggedUserId = userDao.getUserByUsername(authentication.getName()).getUserId();
+        //If its admin
+        if(loggedUser.getUserType().getUserTypeId().equals("ADMIN")){
+            if(active) {
+                if (itemModel.equals("-")){
+                    totalReservations = reservationDao.getTotalActiveReservationCount();
+                }
+                else if(itemModel.contains("itemType-")){
+                    String itemType = itemModel.replace("itemType-","");
+                    totalReservations = reservationDao.getActiveReservationCountByItemType(
+                            Integer.parseInt(itemType));
+                }
+                else{
+                    totalReservations = reservationDao.getActiveReservationCountByItemModel(
+                            Long.parseLong(itemModel));
+                }
+            }
+            else{
+                if (itemModel.equals("-")){
+                    totalReservations = reservationDao.getTotalReservationCount();
+                }
+                else if(itemModel.contains("itemType-")){
+                    String itemType = itemModel.replace("itemType-","");
+                    totalReservations = reservationDao.getReservationCountByItemType(
+                            Integer.parseInt(itemType));
+                }
+                else{
+                    totalReservations = reservationDao.getReservationCountByItemModel(
+                            Long.parseLong(itemModel));
+                }
+            }
+        }
+        else{
+            if(active) {
+                if (itemModel.equals("-")){
+                    totalReservations = reservationDao.getTotalActiveReservationCountForUser(loggedUserId);
+                }
+                else if(itemModel.contains("itemType-")){
+                    String itemType = itemModel.replace("itemType-","");
+                    totalReservations = reservationDao.getActiveReservationCountByItemTypeForUser(
+                            Integer.parseInt(itemType),loggedUserId);
+                }
+                else{
+                    totalReservations = reservationDao.getActiveReservationCountByItemModelForUser(
+                            Long.parseLong(itemModel),loggedUserId);
+                }
+            }
+            else{
+                if (itemModel.equals("-")){
+                    totalReservations = reservationDao.getTotalReservationCountForUser(loggedUserId);
+                }
+                else if(itemModel.contains("itemType-")){
+                    String itemType = itemModel.replace("itemType-","");
+                    totalReservations = reservationDao.getReservationCountByItemTypeForUser(
+                            Integer.parseInt(itemType),loggedUserId);
+                }
+                else{
+                    totalReservations = reservationDao.getReservationCountByItemModelForUser(
+                            Long.parseLong(itemModel),loggedUserId);
+                }
+            }
+        }
+
+        double pages = (double) totalReservations/AjaxController.ITEMS_PER_PAGE;
+
+        return String.valueOf(pages);
+    }
+
 
     @GetMapping("/registerGrafana/{buttonId}")
     @ResponseBody

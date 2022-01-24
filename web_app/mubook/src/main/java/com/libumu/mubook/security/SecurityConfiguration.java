@@ -20,6 +20,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static int REMEMBER_ME_TIME = 86400;  //1 day
     public final static int ENCRYPT_STRENGTH = 10;
+    private final static String[] ADMIN_MATCHERS = {"/user","b"};
+    private final static String[] WORKER_MATCHERS = {"a","b"};
+    private final static String[] ADMIN_WORKER_MATCHERS = {"/user","b"};
+    private final static String[] USER_MATCHERS = {"a","b"};
+    private final static String[] AUTHENTICATED_MATCHERS = {"a","b"};
+    private final static String[] ANONYMOUS_MATCHERS = {"a","b"};
 
     @Autowired
     UserDetailsService userDetailsService;

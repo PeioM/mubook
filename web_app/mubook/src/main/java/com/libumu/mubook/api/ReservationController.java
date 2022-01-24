@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 
+import java.lang.invoke.CallSite;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,36 +61,28 @@ public class ReservationController {
     private Buffer buffer = new Buffer(MAXBUFFER);
 
     @GetMapping(path="/all")
-    public ModelAndView getActiveReservations(@RequestParam("username") String username,
-                                                                     @RequestParam("itemModelName") String itemModelName,
-                                                                     @RequestParam("active") Boolean active,
-                                                                     Model model){
-        Date now = new Date();
-        java.sql.Date date = new java.sql.Date(now.getTime());
-        List<Reservation> reservations;
+    public String getActiveReservations(Model model){
+        Map<ItemType,Set<ItemModel>> filters = new TreeMap<>();
+        List<ItemModel> itemModelList = itemModelDao.getAllItemModels();
+        Set<ItemModel> itemModels = new TreeSet<>(itemModelList);
 
-        if(itemModelName.equals("") && !username.equals("") && !active){
-            reservations = reservationDao.findAllByUserUsername(username);
-        }else if(username.equals("") && !itemModelName.equals("") && !active){
-            reservations = reservationDao.findAllByItemItemModelName(itemModelName);
-        }else if(username.equals("") && itemModelName.equals("") && !active){
-            reservations = reservationDao.getAllReservations();
-        }else if(itemModelName.equals("") && !username.equals("") && active){
-            reservations = reservationDao.findAllByUserUsernameAndEndDateIsAfter(username, date);
-        }else if(username.equals("") && !itemModelName.equals("") && active){
-            reservations = reservationDao.findAllByItemItemModelNameAndEndDateIsAfter(itemModelName, date);
-        }else{
-            reservations = reservationDao.findAllByEndDateIsAfter(date);
+        //Create map for ItemType and Models
+        for(ItemModel im : itemModels){
+            ItemType it = im.getItemType();
+            Set<ItemModel> values;
+            if(filters.containsKey(it)){
+                values = filters.get(it);
+                values.add(im);
+            }
+            else{
+                values = new TreeSet<>();
+                values.add(im);
+                filters.put(it, values);
+            }
         }
+        model.addAttribute("filters", filters);
 
-        Calendar c = Calendar.getInstance();
-        c.setTime(now);
-        c.add(Calendar.DATE, -1);
-
-        model.addAttribute("reserves", reservations);
-        model.addAttribute("today", c.getTime());
-
-        return new ModelAndView("myReservations", new ModelMap(model));
+        return "myReservations";
     }
 
     @GetMapping(path="/list")
@@ -255,60 +248,6 @@ public class ReservationController {
 
         return "redirect:/reservations/list?itemModelName=&active=true";
     }
-/*
-    @GetMapping(path="/itemType")
-    public String countReservationByType(Model model){
-        long start = System.currentTimeMillis();
-        List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
-        List<String> key = new ArrayList<>();
-        List<Long> value = new ArrayList<>();
-        ReservationByType[] rbt = new ReservationByType[MAXNUMTHREADS];
-        Buffer threadsBuffer = new Buffer(MAXNUMTHREADS);
-
-        for(int i = 0; i < itemTypeId.size(); i++){
-            try {
-                buffer.put((int) itemTypeId.get(i)[0]);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        for(int i = 0; i < itemTypeId.size() && i < MAXNUMTHREADS; i++){
-            rbt[i] = new ReservationByType(i);
-            try {
-                threadsBuffer.put(i);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        while(buffer.getBuffer().size() > 0){
-            int threadId;
-            try {
-                threadId = threadsBuffer.get();
-                rbt[threadId].setId(buffer.get());
-                rbt[threadId].run();
-                key.add(rbt[threadId].getKey());
-                value.add(rbt[threadId].getValue());
-                threadsBuffer.put(threadId);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            model.addAttribute("key", key.toArray(new String[0]));
-            model.addAttribute("value", value.toArray(new Long[0]));
-            model.addAttribute("name", "Reservations of item model each month");
-            model.addAttribute("type", "bar");
-        }
-
-        long end = System.currentTimeMillis();
-
-        System.out.println(end - start + "ms");
-
-        return "chart";
-    }*/
 
     @GetMapping(path="/itemType")
     public String countReservationByType(Model model){
