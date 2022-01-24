@@ -179,5 +179,5 @@ color: black;
 .errorMsg{
     background-color: rgb(209, 18, 18);
     color: white;
-    border-radius: 2;
+    border-radius: 8px;
 }
