@@ -12,7 +12,7 @@
         <div class="card p-3 text-center py-4 m-4">
             <form name="register-form" th:action="@{/user/add}" th:object="${user}" enctype="multipart/form-data" method="post">
                 <h4>Create account</h4>
-                <div> <span>Already have an account?</span> <a href="/login" class="text-decoration-none">Sign in</a> </div>
+                <div> <span>Already have an account?</span> <a href="/login" class="text-primary">Sign in</a> </div>
                 <div class="input-group px-3 mt-3">
                     <input type="text" class="form-control" th:field="*{name}" placeholder="First Name" aria-label="Username" required> 
                     <span></span>

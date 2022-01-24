@@ -97,7 +97,7 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th scope="col">#</th>
+                                           <!--<th scope="col">#</th>-->
                                             <th scope="col">Item Model</th>
                                             <th scope="col">Attribute</th>
                                             <th scope="col">Value</th>
@@ -107,7 +107,7 @@
                                         <tbody>
                                         <tr th:each="spec : ${specList}">
                                             <form th:action="'/itemModel/deleteSpec?id=' + ${spec.specificationListId}" method="post">
-                                                <td th:text="${spec.specificationListId}"></td>
+                                               <!--<td th:text="${spec.specificationListId}"></td>--> 
                                                 <td th:text="${spec.itemModel.name}"></td>
                                                 <td th:text="${spec.specification.description}"></td>
                                                 <td th:text="${spec.value}"></td>
