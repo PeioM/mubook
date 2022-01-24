@@ -13,5 +13,6 @@ public interface NewsDao {
     public void deleteNews(long id);
     public void deleteNews(News news);
     public void addNews(News news);
+    News getNewsByDescription(String description);
 
 }
