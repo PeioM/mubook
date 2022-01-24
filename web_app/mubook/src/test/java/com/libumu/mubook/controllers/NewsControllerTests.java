@@ -65,7 +65,7 @@ public class NewsControllerTests {
         assertEquals(newCreated.getTitle(), "Testing");
     }
 
-   @Test
+    @Test
     public void deleteNew() throws Exception {
         News news = newsDao.getNewsByDescription("Testing");
         mvc.perform(post("/news/delete").with(csrf()).param("id", String.valueOf(news.getNewsid())));
