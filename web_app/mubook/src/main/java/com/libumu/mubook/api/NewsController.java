@@ -39,9 +39,8 @@ public class NewsController implements ServletContextAware {
     @PostMapping(path="/add")
     public String createNew(Model model,
                         @ModelAttribute News news,
-                        @RequestParam("newImg") MultipartFile file,
-                        WebRequest request
-                            ){                     
+                        @RequestParam(value = "newImg", required = false) MultipartFile file
+                            ){
         String error="";
         if(news.getTitle().equals("")){
             error = "Title is empty";

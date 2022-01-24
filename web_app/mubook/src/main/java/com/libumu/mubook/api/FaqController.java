@@ -48,5 +48,4 @@ public class FaqController {
         return "faq";
     }
 
-
 }

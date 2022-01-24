@@ -48,4 +48,9 @@ public class NewsDataAccessService implements NewsDao {
     public void addNews(News news) {
         repository.save(news);
     }
+
+    @Override
+    public News getNewsByDescription(String description) {
+        return repository.getNewsByDescription(description);
+    }
 }
