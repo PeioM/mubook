@@ -70,7 +70,6 @@ public class NewsController implements ServletContextAware {
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                     String imagePath = "images/news/" + news.getTitle() + extension;
                     news.setImage(imagePath);
-                    System.out.println("SE CREA IMAGEN: "+ news.getTitle());
                     //In case there is no error redirect to home
                     returnStr = "index";
                 } catch (IOException e) {

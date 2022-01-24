@@ -28,24 +28,42 @@
                             <h4 class="text-right">Profile Settings</h4>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Id</label><input type="text" class="form-control" th:field="*{userId}" th:attr="value=${userEdit.userId != null? userEdit.userId:''}" readonly></div>
-                            <div class="col-md-6"><label class="labels">User type</label><input type="text" name="flexRadioDefault" class="form-control" th:attr="value=${userEdit.userType.userTypeId != null? userEdit.userType.userTypeId:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels">Id</label><input type="text"
+                                    class="form-control" th:field="*{userId}"
+                                    th:attr="value=${userEdit.userId != null? userEdit.userId:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels">User type</label><input type="text"
+                                    name="flexRadioDefault" class="form-control"
+                                    th:attr="value=${userEdit.userType.userTypeId != null? userEdit.userType.userTypeId:''}"
+                                    readonly></div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" th:field="*{name}" th:attr="value=${userEdit.name != null? userEdit.name:''}" readonly></div>
-                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text" class="form-control" th:field="*{surname}" th:attr="value=${userEdit.surname != null? userEdit.surname:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels">Name</label><input type="text"
+                                    class="form-control" th:field="*{name}"
+                                    th:attr="value=${userEdit.name != null? userEdit.name:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text"
+                                    class="form-control" th:field="*{surname}"
+                                    th:attr="value=${userEdit.surname != null? userEdit.surname:''}" readonly></div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-12"><label class="labels">Email</label><input type="email" class="form-control" th:field="*{email}" th:attr="value=${userEdit.email != null? userEdit.email:''}"></div>
-                            <div class="col-md-12"><label class="labels">Username</label><input type="text" class="form-control" th:field="*{username}" th:attr="value=${userEdit.username != null? userEdit.username:''}"></div>
+                            <div class="col-md-12"><label class="labels">Email</label><input type="email"
+                                    class="form-control" th:field="*{email}"
+                                    th:attr="value=${userEdit.email != null? userEdit.email:''}"></div>
+                            <div class="col-md-12"><label class="labels">Username</label><input type="text"
+                                    class="form-control" th:field="*{username}"
+                                    th:attr="value=${userEdit.username != null? userEdit.username:''}"></div>
                         </div>
                         <div class="row mt-3">
                             <h5>Change Password</h5>
-                            <div class="col-md-6"><label class="labels">Password</label><input type="password" class="form-control" placeholder="" value="" id="password" name="password"></div>
-                            <div class="col-md-6"><label class="labels">Repeat Password</label><input type="password" class="form-control" value="" placeholder="" id="passwordRep" name="passwordRep"></div>
+                            <div class="col-md-6"><label class="labels">Password</label><input type="password"
+                                    class="form-control" placeholder="" value="" id="password" name="password"></div>
+                            <div class="col-md-6"><label class="labels">Repeat Password</label><input type="password"
+                                    class="form-control" value="" placeholder="" id="passwordRep" name="passwordRep">
+                            </div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-6"><input type="checkbox" name="validate" th:checked="${userEdit.validated}" disabled><label for="validate">Validated</label></div>
+                            <div class="col-md-6"><input type="checkbox" id="validate" name="validate"
+                                    th:checked="${userEdit.validated}" disabled><label for="validate">Validated</label>
+                            </div>
                         </div>
                         <div class="mt-5 text-center">
                             <button class="btn salmon" type="submit">Save Profile</button>
@@ -64,16 +82,19 @@
                             <tbody>
                                 <tr th:each="incidence, iterator: ${incidences}">
                                     <th scope="row" th:text="${iterator.index}"></th>
-                                    <td><input type="text" th:attr="value=${incidence.incidenceSeverity.description}" disabled></td>
+                                    <td><input type="text" th:attr="value=${incidence.incidenceSeverity.description}"
+                                            disabled></td>
                                     <td><input type="text" th:attr="value=${incidence.description}" disabled> </td>
                                     <td><input type="date" th:attr="value=${incidence.endDate}" disabled></td>
-                                </tr> 
-                    </tbody>
+                                </tr>
+                            </tbody>
                         </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer th:replace="include.html :: footercontent"></footer>
+        <footer th:replace="include.html :: footercontent"></footer>
 </body>
+
 </html>

@@ -5,7 +5,9 @@
 </head>
 <body>
     <header th:replace="include.html :: headercontent"></header>
-    <canvas id="chart-can" height="400" width="700"class="d-flex justify-content-center"></canvas>
+    <div class="container d-flex justify-content-center align-items-center mb-4 mt-4 table-responsive">
+        <canvas id="chart-can" height="400" width="700" class="d-flex justify-content-center"></canvas>
+    </div>
     <footer th:replace="include.html :: footercontent"></footer>
 </body>
 <script th:inline="javascript">

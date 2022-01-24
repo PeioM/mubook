@@ -16,7 +16,7 @@
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                             <div class="item-name-div">
                                 <h5 th:text="'Book: '+${reserve.item.itemModel.name}"></h5>
-                                <input th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}" readonly />
+                                <input class="form-group w-25 text-center fluid" th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}" readonly />
                             </div>
                             <div class="user-img-div">
                                 <img class="mt-5 img-fluid" th:src="${reserve.item.itemModel.img}" alt="Item image">
@@ -27,11 +27,11 @@
                         <div class="row m-4 details-div d-flex justify-content-center">
                             <h4 class="mb-2 text-center mb-2">Item Details</h4>
                             <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex gap-3">
-                                <div class="col-6 flex-grow bg-grey each-specification-div shadow-sm p-1 mb-2 bg-body border rounded d-flex">
+                                <div class="col-6 flex-grow bg-grey each-specification-div shadow p-1 mb-2 bg-body border rounded d-flex">
                                     <label class="text-dark">Book ID: </label> <label
                                         th:text="${reserve.item.itemModel.itemModelId}"></label>
                                 </div>
-                                <div class="col-6 flex-grow each-specification-div shadow-sm p-1 mb-2 bg-body rounded border d-flex"
+                                <div class="col-6 flex-grow each-specification-div shadow p-1 mb-2 bg-body rounded border d-flex"
                                     th:each="specificationList: ${reserve.item.itemModel.specificationLists}">
                                     <label class="text-dark"
                                         th:text="${specificationList.specification.description}"></label><span>:  </span> <label
@@ -59,21 +59,21 @@
                                 <hr/>
                                 <div class="start-date-div col-md text-center">
                                     <h5 class="mb-2 text-center align-middle">Start Date</h5>
-                                    <input class="m-2 text-center fluid" th:field="*{initDate}" th:attr="value=${reserve.initDate}" readonly />
+                                    <input class="m-2 text-center fluid w-75" th:field="*{initDate}" th:attr="value=${reserve.initDate}" readonly />
                                 </div>
                                 <div class="end-date-div col-md text-center">
                                     <h5 class="mb-2 text-center align-middle">End Date</h5>
-                                    <input class="m-2 text-center fluid" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
+                                    <input class="m-2 text-center fluid w-75" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
                                         sec:authorize="hasAnyRole('ADMIN','WORKER')" />
-                                    <input class="m-2 text-center fluid" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
+                                    <input class="m-2 text-center fluid w-75" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
                                         sec:authorize="hasRole('USER')" readonly />
                                 </div>
                                 <div class="username-div col-md text-center">
                                     <h5 class="mb-2 text-center align-middle">User id</h5>
-                                    <input class="m-2 fluid" th:field="*{user.userId}"
+                                    <input class="m-2 fluid w-75" th:field="*{user.userId}"
                                         th:attr="value=${reserve.user != null? reserve.user.userId:''}"
                                         sec:authorize="hasAnyRole('ADMIN','WORKER')" />
-                                    <input class="m-2 fluid" th:field="*{user.userId}"
+                                    <input class="m-2 fluid w-75" th:field="*{user.userId}"
                                         th:attr="value=${reserve.user != null? reserve.user.userId:''}"
                                         sec:authorize="hasAnyRole('USER')" readonly />
                                 </div>

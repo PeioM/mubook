@@ -23,7 +23,9 @@
                     <option value="2">Fix It with Food: Every Meal Easy</option>
                     <option value="3">Fear No Evil (Alex Cross, 27)</option>
                 </select>
-                <input type="checkbox" name="active" checked ><label for="active">Active</label>
+                <div class="checkbox-div d-flex justify-content-center align-items-center">
+                    <input type="checkbox" name="active" id="active" checked ><label for="active">Active</label>
+                </div>
             </div>
         </div>
 
@@ -203,5 +205,6 @@
             </div>
         </div>
     </div>
+    <footer th:replace="include.html :: footercontent"></footer>
 </body>
 </html>
