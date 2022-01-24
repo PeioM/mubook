@@ -20,12 +20,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static int REMEMBER_ME_TIME = 86400;  //1 day
     public final static int ENCRYPT_STRENGTH = 10;
-    private final static String[] ADMIN_MATCHERS = {"/data/**"};
-    private final static String[] ADMIN_WORKER_MATCHERS = {"/itemModel/**", };
-    private final static String[] AUTHENTICATED_MATCHERS = {"/reservations/**","/user/profile"};
+    private final static String[] ADMIN_MATCHERS = {"/data/**", "/ajax/filterUsers/**", "/ajax/filterUsersGetPages/**"};
+
+    private final static String[] ADMIN_WORKER_MATCHERS = {"/user/**", "/news/**","/itemModel/{itemModelId}/edit", "/itemModel/add",
+            "/itemModel/create","/itemModel/addSpecification","/itemModel/addItem","/itemModel/deleteSpec","/itemModel/disableItem", "/itemModel/edit"};
+
+    private final static String[] AUTHENTICATED_MATCHERS = {"/reservations/**","/user/profile"
+            ,"/ajax/filterReservationsGetPages/**","/ajax/filterReservations/**"};
+
+    private final static String[] USER_MATCHERS = {"/itemModel/comment","/itemModel/deleteComment"};
+
     private final static String[] ANY_USER_MATCHERS = {
-            "/","/index","/home","/search","/search/**","/itemModel/*/view","/faq","/aboutUs","/login","/login_process","/logout",
-            "/css/**","/images/**","/js/**","/templates/**"};
+            "/","/index","/home","/search","/search/**","/itemModel/{itemModelId}/view","/faq","/aboutUs","/login","/login_process","/logout",
+            "/css/**","/images/**","/js/**","/templates/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**"};
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -41,6 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 //Filter pages based on the authority or role the user has
                 .antMatchers(ADMIN_MATCHERS).hasRole("ADMIN")
                 .antMatchers(ADMIN_WORKER_MATCHERS).hasAnyRole("ADMIN", "WORKER")
+                .antMatchers(USER_MATCHERS).hasRole("USER")
                 .antMatchers(AUTHENTICATED_MATCHERS).authenticated()
                 .antMatchers(ANY_USER_MATCHERS).permitAll()
                 .anyRequest().denyAll()
@@ -51,11 +59,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login_process")
                 .usernameParameter("txtUsername")
                 .passwordParameter("txtPassword")
+                .failureUrl("/login?error")
                 .defaultSuccessUrl("/")
                 .and()
                 //Logout control
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/login?logout")
                 .and()
                 //Login remember me control
                 .rememberMe()

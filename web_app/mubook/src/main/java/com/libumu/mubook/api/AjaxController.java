@@ -52,6 +52,7 @@ public class AjaxController {
         this.reservationDao = reservationDao;
     }
 
+    //Item Model filters
     @GetMapping("/filterItemModels/{itemType}/{page}")
     @ResponseBody
     public String filterItemModels(@PathVariable("itemType") String itemType,
@@ -146,6 +147,7 @@ public class AjaxController {
         return result;
     }
 
+    //User filters
     @GetMapping("/filterUsers/{userType}/{page}")
     @ResponseBody
     public String filterUsers(@PathVariable("userType") String userType,
@@ -183,6 +185,7 @@ public class AjaxController {
         return String.valueOf(pages);
     }
 
+    //Reservation filters
     @GetMapping("/filterReservations/{itemModel}/{page}")
     @ResponseBody
     public String filterReservations(@PathVariable("itemModel") String itemModel,
@@ -267,7 +270,6 @@ public class AjaxController {
         return gson.toJson(resultList);
     }
 
-
     @GetMapping("/filterReservationsGetPages/{itemModel}")
     @ResponseBody
     public String filterReservationsGetPage(@PathVariable("itemModel") String itemModel,
@@ -345,7 +347,7 @@ public class AjaxController {
         return String.valueOf(pages);
     }
 
-
+    //Grafana inserts
     @GetMapping("/registerGrafana/{buttonId}")
     @ResponseBody
     public String registryButtonClickGrafana(@PathVariable("buttonId") String buttonId,

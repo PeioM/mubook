@@ -36,22 +36,25 @@ import java.util.Objects;
 public class ItemModelController {
     public final String ITEMS_IMAGES_DIR = "src/main/resources/static/images/createdItems/";
 
+    private final ItemModelDao itemModelDao;
+    private final ItemTypeDao itemTypeDao;
+    private final StatusDao statusDao;
+    private final ItemDao itemDao;
+    private final SpecificationDao specificationDao;
+    private final SpecificationListDao specificationListDao;
+    private final CommentDao commentDao;
+    private final UserDao userDao;
     @Autowired
-    ItemModelDao itemModelDao;
-    @Autowired
-    ItemTypeDao itemTypeDao;
-    @Autowired
-    StatusDao statusDao;
-    @Autowired
-    ItemDao itemDao;
-    @Autowired
-    SpecificationDao specificationDao;
-    @Autowired
-    SpecificationListDao specificationListDao;
-    @Autowired
-    CommentDao commentDao;
-    @Autowired
-    UserDao userDao;
+    public ItemModelController(ItemModelDao itemModelDao, ItemTypeDao itemTypeDao, StatusDao statusDao, ItemDao itemDao, SpecificationDao specificationDao, SpecificationListDao specificationListDao, CommentDao commentDao, UserDao userDao) {
+        this.itemModelDao = itemModelDao;
+        this.itemTypeDao = itemTypeDao;
+        this.statusDao = statusDao;
+        this.itemDao = itemDao;
+        this.specificationDao = specificationDao;
+        this.specificationListDao = specificationListDao;
+        this.commentDao = commentDao;
+        this.userDao = userDao;
+    }
 
     @GetMapping(path = "/{itemModelId}/view")
     public ModelAndView getItemModel(Model model,

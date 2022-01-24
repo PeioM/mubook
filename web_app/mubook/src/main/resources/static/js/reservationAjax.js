@@ -46,7 +46,7 @@ function ajaxCallGetReservations(actionUrl, data){
             for (let reservation of reservations){
                 let today = new Date();
                 let cancelHTML ='';
-                if(reservation.initDate > today){
+                if(Date.parse(reservation.initDate) > today){
                     cancelHTML = '<div class="card-bottom d-flex justify-content-center m-2"> ' +
                         '    <form action="/reservations/delete?id='+reservation.reservationId+'/edit" method="post"> ' +
                         '        <button type="submit">Cancel Reservation</button> ' +

@@ -50,9 +50,9 @@
                         role="button">Edit Item</a>
                     <a class="col-2 btn salmon m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
                         role="button">Create Reservation</a>
-                    <a class="col-2 btn salmon m-2 "
+                    <!--<a class="col-2 btn salmon m-2 "
                         th:href="@{'/reservations/all?username=&itemModelName=' + ${itemModel.name}+'&active=false'}"
-                        role="button">Reservation History</a>
+                        role="button">Reservation History</a>-->
                 </div>
                 <div class="row m-4 specifications-div">
                     <h3 class="mb-2">Specifications</h3>
@@ -69,7 +69,7 @@
                     </textarea>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-center" sec:authorize="isAuthenticated()">
+                <div class="d-flex justify-content-center" sec:authorize="hasRole('USER')">
                     <a class="col-2 btn salmon m-2 d-flex justify-content-center"
                         th:href="@{'/reservations/'+${itemModel.itemModelId}+'/offer' }" role="button">BOOK NOW</a>
                 </div>

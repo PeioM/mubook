@@ -10,10 +10,10 @@
         <div id="login">
             <div class="container">
                 <div class="notify-messages">
-                    <div th:if="${param.error}">
+                    <div class="alert alert-danger" th:if="${param.error}">
                         Invalid username and password.
                     </div>
-                    <div th:if="${param.logout}">
+                    <div class="alert alert-success" th:if="${param.logout}">
                         You have been logged out.
                     </div>
                 </div>
