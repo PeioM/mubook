@@ -29,29 +29,31 @@
                                     <hr>
                                     <div class="row mt-2">
                                         <div class="col-md-4">
-                                            <label class="labels">Item Model Type
+                                            <span class="labels">Item Model Type
                                                 <select class="form-select" name="type">
                                                     <optgroup label="Select Item Model type">
                                                         <option selected th:text="${itemModel.itemType != null ? itemModel.itemType.description : '-'}"></option>
                                                         <option th:value="${itemType.description}" th:text="${itemType.description}" th:each="itemType : ${itemTypes}"></option>
                                                     </optgroup>
                                                 </select>
-                                            </label>
+                                            </span>
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="labels">Name
+                                            <span class="labels">Name
                                                 <input type="text" class="form-control" th:value="${itemModel.name}" th:field="*{name}" placeholder="Name">
-                                            </label>
+                                            </span>
                                         </div>
                                         <div class="col-md-4 xs-m-2">
-                                            <label class="labels">ID
+                                            <span class="labels">ID
                                                 <input type="text" class="form-control" th:value="${itemModel.identifier}" th:field="*{identifier}" placeholder="ID Number">
-                                                <label class="labels d-none col">Item Model<input type="text" id="model" th:value="${itemModel.itemModelId}" name="itemModelId"></label>
-                                            </label>
+                                                <label class="labels d-none col">Item Model
+                                                    <input type="text" id="model" th:value="${itemModel.itemModelId}" name="itemModelId">
+                                                </label>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
-                                        <label class="labels">Image*</label>
+                                        <span class="labels">Image*</span>
                                         <div class="upload-img-div d-flex justify-content-start">
                                             <input type="file" class="custom-file-input" id="customFile" name="itemImg">
                                         </div>
