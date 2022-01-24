@@ -61,7 +61,6 @@ public class UserController {
 
     @GetMapping(path="")
     public String searchUser(Model model){
-        model.addAttribute("users", userDao.getAllUsers());
         model.addAttribute("userTypes", userTypeDao.getAllUserTypes());
 
         return "searchUser";

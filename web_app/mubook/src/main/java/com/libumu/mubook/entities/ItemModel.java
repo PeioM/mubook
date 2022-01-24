@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name= "item_model")
-public class ItemModel {
+public class ItemModel implements Comparable{
 
     @Id
     @GenericGenerator(name="itemModel" , strategy="increment")
@@ -89,5 +89,11 @@ public class ItemModel {
 
     public void setSpecificationLists(List<SpecificationList> specificationLists) {
         this.specificationLists = specificationLists;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        ItemModel im = (ItemModel) o;
+        return this.getDescription().compareTo(im.getDescription());
     }
 }

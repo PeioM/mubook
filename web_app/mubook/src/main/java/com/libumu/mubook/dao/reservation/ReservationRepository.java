@@ -3,6 +3,7 @@ package com.libumu.mubook.dao.reservation;
 import java.sql.Date;
 import java.util.List;
 
+import com.libumu.mubook.entities.ItemModel;
 import com.libumu.mubook.entities.ItemType;
 import com.libumu.mubook.entities.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -105,4 +106,95 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     "GROUP BY Year, Month "+
     "ORDER BY Year, Month ", nativeQuery = true)
     List<Object[]> countReservationsOfItemEachMonthWithoutMT(long item_model_id);
+
+    @Query(value = "SELECT r.* " +
+                    "FROM reservation r " +
+                    "JOIN item i on r.item_id = i.item_id " +
+                    "WHERE i.item_model_id = ?1 " +
+                    "LIMIT ?2,?3", nativeQuery = true)
+    List<Reservation> findByItemModelBetween(long itemModel, int startRow, int quantity);
+    @Query(value = "SELECT r.* " +
+                    "FROM reservation r " +
+                    "JOIN item i on r.item_id = i.item_id " +
+                    "JOIN item_model im on i.item_model_id = im.item_model_id " +
+                    "WHERE im.item_type_id = ?1 " +
+                    "LIMIT ?2,?3", nativeQuery = true)
+    List<Reservation> findByItemTypeBetween(int itemType, int startRow, int quantity);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "LIMIT ?1,?2", nativeQuery = true)
+    List<Reservation> findBetween(int startRow, int quantity);
+
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqual(Date endDate, Date initDate);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelId(Date endDate, Date initDate, Long item_itemModel_itemModelId);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeId(Date endDate, Date initDate, Integer item_itemModel_itemType_itemTypeId);
+
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "WHERE r.init_date <= ?1 AND r.end_date >= ?1 " +
+            "LIMIT ?2,?3", nativeQuery = true)
+    List<Reservation> getActiveReservationsBetween(Date sqlDate, int start, int quantity);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id " +
+            "JOIN item_model im on i.item_model_id = im.item_model_id " +
+            "WHERE im.item_type_id = ?1 " +
+            "AND r.init_date <= ?2 AND r.end_date >= ?2 " +
+            "LIMIT ?3,?4", nativeQuery = true)
+    List<Reservation> getActiveReservationsByItemTypeBetween(int itemType, Date sqlDate, int start, int quantity);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id " +
+            "WHERE i.item_model_id = ?1 " +
+            "AND r.init_date <= ?2 AND r.end_date >= ?2 " +
+            "LIMIT ?3,?4", nativeQuery = true)
+    List<Reservation> getActiveReservationsByItemModelBetween(long itemModel, Date sqlDate, int start, int quantity);
+
+    //User logged
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndUserUserId(Date endDate, Date initDate, Long user_userId);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemModelIdAndUserUserId(Date endDate, Date initDate, Long item_itemModel_itemModelId, Long user_userId);
+    int countAllByEndDateGreaterThanEqualAndInitDateLessThanEqualAndItemItemModelItemTypeItemTypeIdAndUserUserId(Date endDate, Date initDate, Integer item_itemModel_itemType_itemTypeId, Long user_userId);
+    int countAllByUserUserId(Long user_userId);
+    int countAllByItemItemModelItemModelIdAndUserUserId(Long item_itemModel_itemModelId, Long user_userId);
+    int countAllByItemItemModelItemTypeItemTypeIdAndUserUserId(Integer item_itemModel_itemType_itemTypeId, Long user_userId);
+
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id AND r.user_id = ?4 " +
+            "WHERE i.item_model_id = ?1 " +
+            "LIMIT ?2,?3", nativeQuery = true)
+    List<Reservation> findByItemModelBetweenForUser(long itemModel, int startRow, int quantity, long userID);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id AND r.user_id = ?4 " +
+            "JOIN item_model im on i.item_model_id = im.item_model_id " +
+            "WHERE im.item_type_id = ?1 " +
+            "LIMIT ?2,?3", nativeQuery = true)
+    List<Reservation> findByItemTypeBetweenForUser(int itemType, int startRow, int quantity, long userID);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "WHERE r.user_id = ?3 " +
+            "LIMIT ?1,?2", nativeQuery = true)
+    List<Reservation> findBetweenForUser(int startRow, int quantity, long userID);
+
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "WHERE r.init_date <= ?1 AND r.end_date >= ?1 AND r.user_id = ?4 " +
+            "LIMIT ?2,?3", nativeQuery = true)
+    List<Reservation> getActiveReservationsBetweenForUser(Date sqlDate, int start, int quantity, long userID);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id AND r.user_id = ?5 " +
+            "JOIN item_model im on i.item_model_id = im.item_model_id " +
+            "WHERE im.item_type_id = ?1 " +
+            "AND r.init_date <= ?2 AND r.end_date >= ?2 " +
+            "LIMIT ?3,?4", nativeQuery = true)
+    List<Reservation> getActiveReservationsByItemTypeBetweenForUser(int itemType, Date sqlDate, int start, int quantity, long userID);
+    @Query(value = "SELECT r.* " +
+            "FROM reservation r " +
+            "JOIN item i on r.item_id = i.item_id AND r.user_id = ?5 " +
+            "WHERE i.item_model_id = ?1 " +
+            "AND r.init_date <= ?2 AND r.end_date >= ?2 " +
+            "LIMIT ?3,?4", nativeQuery = true)
+    List<Reservation> getActiveReservationsByItemModelBetweenForUser(long itemModel, Date sqlDate, int start, int quantity, long userID);
 }
