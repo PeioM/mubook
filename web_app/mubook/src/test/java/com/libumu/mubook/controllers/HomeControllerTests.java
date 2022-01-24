@@ -10,7 +10,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -23,6 +25,13 @@ public class HomeControllerTests {
 
     @Test
     public void testIndex() throws Exception {
+        mvc
+                .perform(
+                        formLogin("/login_process")
+                                .user("txtUsername", "admin")
+                                .password("txtPassword", "admin")
+                )                .andExpect(status().isFound());
+
         mvc.perform(get("/"))
                 .andExpect(model().attributeExists("news"))
                 .andExpect(view().name("index"));
