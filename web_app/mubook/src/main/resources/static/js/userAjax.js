@@ -30,10 +30,8 @@ function updateUserPages(){
     let userTypeId = document.getElementById("selectUserType").value;
     let actionUrl = "/ajax/filterUsersGetPages/" + userTypeId;
 
-    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
-        '  <span class="sr-only">Loading...</span>\n' +
-        '</div>';
-    $('#resultBlock').html(loadingHTML);
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
 
     ajaxCallGetPages(actionUrl, {containStr: containStr})
 }
@@ -67,6 +65,7 @@ function ajaxCallGetUsers(actionUrl, containStr){
                 innerHTML += usersHTML;
             }
             $('#resultBlock').html(innerHTML);
+            toggleFilters(document.getElementsByClassName("filterOption"));
         }
     });
 }

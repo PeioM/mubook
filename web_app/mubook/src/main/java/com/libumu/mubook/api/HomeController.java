@@ -25,7 +25,7 @@ public class HomeController implements ServletContextAware {
         this.itemModelDao = itemModelDao;
     }
 
-    @GetMapping(path = {"/", "/index", "/home", "/undefined"})
+    @GetMapping(path = {"/", "/index", "/home", "/undefined", "/login_process"})
     public String home(Model model){
 
         if(servletContext.getAttribute("lastFetchDate") == null || isSameDay((Date) servletContext.getAttribute("lastFetchDate"), new Date())){
