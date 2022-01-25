@@ -50,9 +50,6 @@ public class NewsController implements ServletContextAware {
         if(news.getInitDate() == null || news.getEndDate() == null){
             error = error + " Some of the dates are empty";
         }
-
-        //Return to user form in case there is any error
-        String returnStr = "";
         if(error.length()==0) {
             if (file == null || file.isEmpty() || file.getOriginalFilename()==null || file.getOriginalFilename().equals("")) {
                 error = "Please upload the new image";
@@ -69,7 +66,6 @@ public class NewsController implements ServletContextAware {
                     String imagePath = "images/news/" + news.getTitle().replace(" ", "_") + extension;
                     news.setImage(imagePath);
                     //In case there is no error redirect to home
-                    returnStr = "index";
                 } catch (IOException e) {
                     error = "Error uploading file";
                 }

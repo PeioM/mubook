@@ -47,7 +47,7 @@
                         <div class="row mt-3">
                             <div class="col-md-12"><label class="labels">Email</label><input type="email"
                                     class="form-control" th:field="*{email}"
-                                    th:attr="value=${userEdit.email != null? userEdit.email:''}"></div>
+                                    th:attr="value=${userEdit.email != null? userEdit.email:''}" autofocus></div>
                             <div class="col-md-12"><label class="labels">Username</label><input type="text"
                                     class="form-control" th:field="*{username}"
                                     th:attr="value=${userEdit.username != null? userEdit.username:''}"></div>

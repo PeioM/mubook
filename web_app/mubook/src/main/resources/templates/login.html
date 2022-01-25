@@ -19,19 +19,18 @@
                 </div>
                 <div id="login-row" class="row justify-content-center align-items-center">
                     <div id="login-column" class="col-md-6">
-                        <div id="login-box" class="col-md-12">
+                        <div id="login-box fluid" class="col-md-12">
                             <form name="login-form" th:action="@{/login_process}" method="post">
-                                <!--Cambiado name=f a name=login-form....-->
                                 <div class="logo-header col">
                                     <a href="/index">
                                         <img src="/images/logo_web.png" alt="MUBook logo with text"
-                                            class="mx-auto d-block" />
+                                            class="mx-auto d-block img-fluid" />
                                     </a>
                                 </div>
                                 <div class="form-group">
                                     <label for="txtUsername">Username</label>
                                     <input type="text" id="txtUsername" name="txtUsername" placeholder="Username"
-                                        class="form-control">
+                                        class="form-control" autofocus>
                                 </div>
                                 <label for="txtPassword">Password</label>
                                 <input type="password" id="txtPassword" name="txtPassword" placeholder="Password"
@@ -45,7 +44,7 @@
                                         <a href="/user/add" class="btn salmon text-center m-2 trackGrafana" grafanaId="13">Register</a>
                                     </div>
                                 </div>
-                            </form>
+                            </form>     
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,7 @@
                                             th:value="${userEdit.userId}"></div>
                                     <div class="col-md-6"><label class="labels">Name</label><input type="text"
                                             class="form-control" placeholder="Name" th:field="*{name}"
-                                            th:value="${userEdit.name}"></div>
+                                            th:value="${userEdit.name}" autofocus></div>
                                     <div class="col-md-6"><label class="labels">Surnames</label><input type="text"
                                             class="form-control" th:value="${userEdit.surname}" th:field="*{surname}"
                                             placeholder="Example1 Example2"></div>
@@ -117,7 +117,7 @@
                                             <label class="labels d-none col"><input type="text" id="user_id"
                                                     th:value="${userEdit.userId}" name="userId"></label>
                                             <button type="submit" id="addButton"
-                                                class="btn btn-primary salmon col-2 p-1">Add</button>
+                                                class="btnbtn btn-dark salmon col-md-2 col-sm-3 mt-sm-4">Add</button>
                                         </div>
                                     </div>
                                 </form>
