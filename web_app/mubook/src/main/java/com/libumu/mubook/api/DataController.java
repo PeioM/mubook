@@ -352,7 +352,7 @@ public class DataController {
                         results.put(keyStr, valueLong);
                     }
                 } catch (InterruptedException | ParseException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
