@@ -31,4 +31,9 @@ public class SpecificationListDataAccessService implements SpecificationListDao{
     public void deleteSpecificationList(SpecificationList specificationList) {
         repository.deleteById(specificationList.getSpecificationListId());
     }
+
+    @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
 }

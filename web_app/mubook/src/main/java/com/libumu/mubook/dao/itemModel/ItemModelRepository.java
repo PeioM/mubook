@@ -48,4 +48,7 @@ public interface ItemModelRepository extends JpaRepository<ItemModel, Long> {
     @Query(value =  "SELECT COUNT(DISTINCT i.item_model_id) " +
             "FROM item_model i ", nativeQuery = true)
     List<Object[]> getTotalItemModelCount();
+
+    @Query(value = "SELECT MAX(im.item_model_id) FROM item_model im ", nativeQuery =  true)
+    Long getTopId();
 }

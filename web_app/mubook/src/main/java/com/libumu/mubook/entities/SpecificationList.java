@@ -1,7 +1,6 @@
 package com.libumu.mubook.entities;
 
-import com.libumu.mubook.entities.ItemModel;
-import com.libumu.mubook.entities.Specification;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,7 +10,8 @@ import java.io.Serializable;
 public class SpecificationList  implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="specification_list" , strategy="increment")
+    @GeneratedValue(generator = "specification_list")
     @Column(name = "specification_list_id")
     private Long specificationListId;
 

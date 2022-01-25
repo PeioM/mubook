@@ -51,4 +51,9 @@ public class ItemDataAccessService implements ItemDao {
     public List<Item> getItemByItemModelItemModelId(Long itemModel_itemModelId) {
         return repository.getItemByItemModelItemModelId(itemModel_itemModelId);
     }
+
+    @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
 }

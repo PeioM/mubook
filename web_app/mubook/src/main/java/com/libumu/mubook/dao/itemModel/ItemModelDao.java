@@ -23,4 +23,5 @@ public interface ItemModelDao {
     List<ItemModel> getAllItemModelsBetween( int page);
     List<ItemModel> getAllItemModelsByTypeAndBetween(int itemTypeId, int page);
     int countItemModelByIdentifier(String identifier);
+    Long getTopId();
 }

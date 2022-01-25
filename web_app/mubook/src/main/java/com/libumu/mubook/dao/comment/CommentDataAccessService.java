@@ -46,4 +46,14 @@ public class CommentDataAccessService implements CommentDao{
     public void addComent(Comment comment) {
         repository.save(comment);
     }
+
+    @Override
+    public Comment findCommentByContent(String content) {
+        return repository.findCommentByContent(content);
+    }
+
+    @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
 }

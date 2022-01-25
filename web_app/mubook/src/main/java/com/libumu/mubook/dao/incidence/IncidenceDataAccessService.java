@@ -68,4 +68,9 @@ public class IncidenceDataAccessService implements IncidenceDao {
         return repository.countSumIncidenceByUserId(userId);
     }
 
+    @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
+
 }
