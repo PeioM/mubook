@@ -93,19 +93,19 @@
           <!-- this list contains the "menu options (items)" such as download, contact, pricing, etc. -->
           <ul id="my-ul" class="navbar-nav w-100">
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="1" th:classappend="${true}? active"  th:href="@{/}" th:text="#{menu.home}"></a>
+              <a class="nav-link text-white trackGrafana" grafanaId="1" th:classappend="${navPage eq 'index'}? active"  th:href="@{/}" th:text="#{menu.home}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="2" th:classappend="${false}? active" th:href="@{/search}" th:text="#{menu.search}"></a>
+              <a class="nav-link text-white trackGrafana" grafanaId="2" th:classappend="${navPage eq 'search'}? active" th:href="@{/search}" th:text="#{menu.search}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="3" th:classappend="${false}? active" th:href="@{/faq}" th:text="#{menu.faq}"></a>
+              <a class="nav-link text-white trackGrafana" grafanaId="3" th:classappend="${navPage eq 'faq'}? active" th:href="@{/faq}" th:text="#{menu.faq}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="4" th:classappend="${false}? active" th:href="@{/aboutUs}" th:text="#{menu.aboutUs}"></a>
+              <a class="nav-link text-white trackGrafana" grafanaId="4" th:classappend="${navPage eq 'aboutUs'}? active" th:href="@{/aboutUs}" th:text="#{menu.aboutUs}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="5" th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}" th:text="#{menu.users}"></a>
+              <a class="nav-link text-white trackGrafana" grafanaId="5" th:classappend="${navPage eq 'userPage'}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}" th:text="#{menu.users}"></a>
             </li>
             <hr>
             <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/all" th:text="#{menu.myReservations}"></a></li>

@@ -53,6 +53,7 @@ public class UserController {
     @GetMapping(path = "")
     public String searchUser(Model model) {
         model.addAttribute("userTypes", userTypeDao.getAllUserTypes());
+        model.addAttribute("navPage", "userPage");
 
         return "searchUser";
     }
