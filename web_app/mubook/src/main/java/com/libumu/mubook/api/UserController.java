@@ -31,8 +31,8 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
-    public final String LOCAL_UPLOAD_DIR = "C:/IMAGENES_DNI_PRUEBA/";
-    public final String SERVER_UPLOAD_DIR = "/home/dniImg/";
+    public final static String LOCAL_UPLOAD_DIR = "C:/IMAGENES_DNI_PRUEBA/";
+    public final static String SERVER_UPLOAD_DIR = "/home/dniImg/";
 
     private final IncidenceSeverityDao incidenceSeverityDao;
     private final IncidenceDao incidenceDao;

@@ -43,7 +43,9 @@ public class User {
     @JoinColumn(name = "user_activity_id", nullable = false)
     private UserActivity userActivity;
 
-    public User() {}
+    public User() {
+        //this is empty
+    }
 
     public String getEmail() {
         return email;

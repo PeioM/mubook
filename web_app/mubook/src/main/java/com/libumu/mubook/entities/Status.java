@@ -18,7 +18,9 @@ public class Status {
     @Column(name = "description")
     private String description;
 
-    public Status(){}
+    public Status(){
+        //This is empty
+    }
 
     public Integer getStatusId() {
         return statusId;

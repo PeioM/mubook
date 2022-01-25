@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/data")
 public class DataController {
     int [] ageList = new int []{0, 12, 13, 18, 19, 30, 31, 50, 51, 1000};
+    String valueStr= "value";
+    String chartStr= "chart";
 
     final static int MAXNUMTHREADS_RESERVATIONS = 5;
     final static int MAXMONTHS_RESERVATIONS = 24;
@@ -52,7 +54,6 @@ public class DataController {
     //ItemType
     @GetMapping(path="/reservations/itemType")
     public String countReservationByType(Model model) throws IOException, InterruptedException{
-        long start = System.currentTimeMillis();
         List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
         ResultMap results= new ResultMap();
         ReservationByType[] rbt = new ReservationByType[MAXNUMTHREADS_RESERVATIONS];
@@ -74,21 +75,15 @@ public class DataController {
         }
 
         model.addAttribute("key", results.getKeys().toArray(new String[0]));
-        model.addAttribute("value", results.getValues().toArray(new Long[0]));
+        model.addAttribute(valueStr, results.getValues().toArray(new Long[0]));
         model.addAttribute("name", "Reservations of item model each type");
         model.addAttribute("type", "bar");
 
-
-        long end = System.currentTimeMillis();
-
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     @GetMapping(path="/reservations/itemTypeWithoutMT")
     public String countReservationByTypeWithoutMT(Model model){
-        long start = System.currentTimeMillis();
         List<Object[]> resultList;
         List<String> key = new ArrayList<>();
         List<Long> value = new ArrayList<>();
@@ -104,15 +99,11 @@ public class DataController {
         }
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Long[0]));
+        model.addAttribute(valueStr, value.toArray(new Long[0]));
         model.addAttribute("name", "Reservations of item model each type");
         model.addAttribute("type", "bar");
 
-        long end = System.currentTimeMillis();
-
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     class ReservationByType extends Thread{
@@ -143,7 +134,6 @@ public class DataController {
     //ItemModel
     @GetMapping(path="/reservations/itemModel")
     public String countReservationByModel(Model model) throws InterruptedException{
-        long start = System.currentTimeMillis();
         List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
         ResultMap results= new ResultMap();
         Map<String, Long> tmpResult = new HashMap<String, Long>();
@@ -181,16 +171,11 @@ public class DataController {
         valueList.addAll(lastNElementsValue);
 
         model.addAttribute("key", keyList.toArray(new String[0]));
-        model.addAttribute("value", valueList.toArray(new Long[0]));
+        model.addAttribute(valueStr, valueList.toArray(new Long[0]));
         model.addAttribute("name", "Reservations of item model each model");
         model.addAttribute("type", "bar");
 
-
-        long end = System.currentTimeMillis();
-
-        System.out.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     public static Map<String, Long>  sortByValue(Map<String, Long> map){
@@ -205,7 +190,6 @@ public class DataController {
 
     @GetMapping(path="/reservations/itemModelWithoutMT")
     public String countReservationByModelWithoutMT(Model model){
-        long start = System.currentTimeMillis();
         List<Object[]> resultList;
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
@@ -221,15 +205,11 @@ public class DataController {
         }
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute(valueStr, value.toArray(new Integer[0]));
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "bar");
 
-        long end = System.currentTimeMillis();
-
-        System.out.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     class ReservationByModel extends Thread{
@@ -261,11 +241,10 @@ public class DataController {
     //ItemMonth
     @GetMapping(path="/reservations/itemMonth")
     public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model) throws InterruptedException{
-        long start = System.currentTimeMillis();
         List<Object[]> itemId = itemDao.getItemWithModelId(itemModelId);
         DateResultMap results = new DateResultMap();
         Map<String, Long> sortedResult = new TreeMap<String, Long>();
-        ReservationsByItem rbi[] = new ReservationsByItem[MAXNUMTHREADS_RESERVATIONS];
+        ReservationsByItem[] rbi = new ReservationsByItem[MAXNUMTHREADS_RESERVATIONS];
         Buffer buffer = new Buffer(itemId.size());
 
         for(int i = 0; i < itemId.size(); i++){
@@ -290,20 +269,15 @@ public class DataController {
         List<Long> value = new ArrayList<Long>(sortedResult.values());
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Long[0]));
+        model.addAttribute(valueStr, value.toArray(new Long[0]));
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "line");
 
-        long end = System.currentTimeMillis();
-
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     @GetMapping(path="/reservations/itemMonthWithoutMT")
     public String countReservationOfModelByMonthWithoutMT(@RequestParam("itemModelId") long itemModelId, Model model){
-        long start = System.currentTimeMillis();
         List<Object[]> resultList;
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
@@ -319,15 +293,11 @@ public class DataController {
         }
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute(valueStr, value.toArray(new Integer[0]));
         model.addAttribute("name", "Reservations of item model each month");
         model.addAttribute("type", "line");
 
-        long end = System.currentTimeMillis();
-
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     class ReservationsByItem extends Thread{
@@ -376,7 +346,6 @@ public class DataController {
     //User Age
     @GetMapping(path="/user/age")
     public String countUsersByAge(Model model) throws InterruptedException{
-        long start = System.currentTimeMillis();
         ResultMap results= new ResultMap();
         Map<String, Long> sortedResult = new TreeMap<String, Long>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS_RESERVATIONS];
@@ -400,20 +369,15 @@ public class DataController {
         List<Long> value = new ArrayList<Long>(sortedResult.values());
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Long[0]));
+        model.addAttribute(valueStr, value.toArray(new Long[0]));
         model.addAttribute("name", "Number of users by age");
         model.addAttribute("type", "bar");
 
-        long end = System.currentTimeMillis();
-
-        System.out.println((end - start + "ms"));
-
-        return "chart";
+        return chartStr;
     }
 
     @GetMapping(path="/user/ageWithoutMT")
     public String countUsersByAgeWithoutMT(Model model){
-        long start = System.currentTimeMillis();
         List<String> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
         List<Object[]> resultList;
@@ -429,15 +393,12 @@ public class DataController {
         }
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute(valueStr, value.toArray(new Integer[0]));
         model.addAttribute("name", "Number of users by age");
         model.addAttribute("type", "bar");
 
-        long end = System.currentTimeMillis();
 
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     class UsersByAge extends Thread{
@@ -470,7 +431,6 @@ public class DataController {
     //User incidence
     @GetMapping(path="/user/incidence")
     public String countUsersByIncidence(Model model) throws InterruptedException{
-        long start = System.currentTimeMillis();
         ResultMap results = new ResultMap();
         UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS_RESERVATIONS];
         Buffer buffer=new Buffer(MAXINCIDENCES);
@@ -492,20 +452,16 @@ public class DataController {
         }
 
         model.addAttribute("key", results.getKeys().toArray(new String[0]));
-        model.addAttribute("value", results.getValues().toArray(new Long[0]));
+        model.addAttribute(valueStr, results.getValues().toArray(new Long[0]));
         model.addAttribute("name", "Number of users by incidence");
         model.addAttribute("type", "bar");
 
-        long end = System.currentTimeMillis();
 
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     @GetMapping(path="/user/incidenceWithoutMT")
     public String countUsersByIncidenceWithoutMT(Model model){
-        long start = System.currentTimeMillis();
         List<Integer> key = new ArrayList<>();
         List<Integer> value = new ArrayList<>();
         List<Object[]> resultList;
@@ -520,15 +476,12 @@ public class DataController {
         }
 
         model.addAttribute("key", key.toArray(new String[0]));
-        model.addAttribute("value", value.toArray(new Integer[0]));
+        model.addAttribute(valueStr, value.toArray(new Integer[0]));
         model.addAttribute("name", "Number of users by incidence");
         model.addAttribute("type", "bar");
 
-        long end = System.currentTimeMillis();
 
-        System.err.println(end - start + "ms");
-
-        return "chart";
+        return chartStr;
     }
 
     class UsersByIncidence extends Thread{
@@ -558,6 +511,5 @@ public class DataController {
                 }
             }
         }
-
     }
 }
