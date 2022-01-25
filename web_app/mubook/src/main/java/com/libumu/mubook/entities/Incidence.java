@@ -31,7 +31,9 @@ public class Incidence {
     @Column(name = "endDate")
     private Date endDate;
 
-    public Incidence(){}
+    public Incidence(){
+        //This is empty
+    }
 
     public Long getIncidenceId() {
         return incidenceId;

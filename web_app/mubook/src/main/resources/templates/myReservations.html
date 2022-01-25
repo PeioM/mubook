@@ -34,39 +34,12 @@
 
         <div class="container py-5" style="position: relative;">
             <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
-                <!--<div class="col" th:each="reservation : ${reserves}">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <a th:href="'/reservations/'+${reservation.reservationId}+'/view'" class="text-decoration-none text-dark">
-                            <div class="row no-gutters m-2">
-                                <div class="col-md-4 ">
-                                    <h5 class="card-title mb-2" th:text="'ID '+${reservation.reservationId}">Card title</h5>
-                                    <img th:src="${reservation.item.itemModel.img}" class="card-img" alt="reservation image">
-                                </div>
-                                <div class="col-md-8 ">
-                                    <div class="card-body">
-                                        <p class="card-text" th:text="${reservation.item.itemModel.name}"></p>
-                                        <p class="card-text" th:text="${reservation.initDate}"></p>
-                                        <p class="card-text" th:text="${reservation.endDate}"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-bottom d-flex justify-content-center m-2" th:if="${reservation.initDate.after(today)}">
-                            <form th:action="'/reservations/delete?id='+${reservation.reservationId}" method="post">
-                                <button type="submit">Cancel Reservation</button>
-                            </form>
-                            
-                        </div>
-                    </div>
-                </div>-->
             </div>
         </div>
         <!-----PAGE SELECTION---->
         <div class="form-group w-25 p-3" id="pageSelector">
             <label for="selectPage">Select Page: </label>
-            <select class="form-control filterOption" name="page" id="selectPage">
-                <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
-            </select>
+            <select class="form-control filterOption" name="page" id="selectPage"></select>
         </div>
         <!----------------------->
     </div>

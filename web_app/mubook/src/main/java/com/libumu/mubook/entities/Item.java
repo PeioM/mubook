@@ -26,7 +26,9 @@ public class Item {
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
-    public Item(){}
+    public Item(){
+        //This is empty
+    }
 
     public Long getItemId() {
         return itemId;

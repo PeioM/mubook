@@ -217,11 +217,11 @@ public class ItemModelController {
             item.setStatus(status);
             itemDao.addItem(item);
             returnStr = "redirect:/itemModel/" + itemModel.getItemModelId() + "/edit";
-        } if(itemModel != null && (status == null || item.getSerialNum().equals(""))) {
+        } else if(itemModel != null && (status == null || item.getSerialNum().equals(""))) {
             error = "Incorrect item values";
             returnStr = "redirect:/itemModel/" + itemModel.getItemModelId() + "/edit?error=" + error;
         }else{
-            System.out.println("ItenModel is null");
+            System.err.println("ItenModel is null");
             returnStr = "redirect:/index";
         }
 
@@ -255,7 +255,7 @@ public class ItemModelController {
             itemDao.editItem(item);
             return "redirect:/itemModel/" + item.getItemModel().getItemModelId() + "/edit";
         }else{
-            System.out.println("Item is null");
+            System.err.println("Item is null");
             return "redirect:/index";
         }
 

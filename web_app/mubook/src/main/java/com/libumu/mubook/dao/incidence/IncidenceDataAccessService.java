@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -46,11 +47,11 @@ public class IncidenceDataAccessService implements IncidenceDao {
 
     @Override
     public List<Integer> getIncidenceWithSeverityId(int incidenceSeverityId) {
-        return null;
+        return Collections.emptyList();
     }
     @Override
     public List<Integer> getIncidenceWithUserId(long incidenceUserId) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -59,8 +60,8 @@ public class IncidenceDataAccessService implements IncidenceDao {
     }
 
     @Override
-    public List<Incidence> getIncidencesByEndDateIsAfterAndUser_UserId(Date endDate, Long user_userId) {
-        return repository.getIncidencesByEndDateIsAfterAndUser_UserId(endDate, user_userId);
+    public List<Incidence> getIncidencesByEndDateIsAfterAndUser_UserId(Date endDate, Long LUserId) {
+        return repository.getIncidencesByEndDateIsAfterAndUser_UserId(endDate, LUserId);
     }
 
     @Override

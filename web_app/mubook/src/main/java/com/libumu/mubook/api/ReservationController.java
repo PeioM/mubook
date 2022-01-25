@@ -94,10 +94,10 @@ public class ReservationController {
 
         List<Long> itemsWithoutR = reservationDao.getItemsWithoutReservation(itemModel.getItemModelId());
         List<Object[]> result = reservationDao.getFirstReservationDate(itemModel.getItemModelId());
-        if(itemsWithoutR.size() != 0){
+        if(!itemsWithoutR.isEmpty()){
             item = itemDao.getItem(itemsWithoutR.get(0));
             initDate = new Date();
-        }else if(result.size() != 0) {
+        }else if(!result.isEmpty()) {
             initDate = (Date) result.get(0)[0];
             BigInteger itemId = (BigInteger) result.get(0)[1];
             item = itemDao.getItem(itemId.longValue());

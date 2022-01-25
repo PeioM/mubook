@@ -52,27 +52,13 @@
 <!----ITEM MODEL SHOW---->
         <div class="container py-5">
             <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
-                <!--<div th:each="itemModel: ${itemModels}" class=" card col mb-4 shadow-sm p-0">
-                    <a th:href="'/itemModel/view/'+${itemModel.itemModelId}" class="text-decoration-none text-dark">
-                        <img class="card-img-top img-fluid" th:src="@{${itemModel.img}}"
-                             alt="Card image cap">
-                        <div class="card-body text-center">
-                            <h5 class="card-title" th:text="${itemModel.name}">This is the book Title</h5>
-                            <div class="p-1" th:each="specificationList: ${itemModel.specificationLists}">
-                                <p class="m-0" th:text="${specificationList.specification.description}+' : ' +${specificationList.value}"></p>
-                            </div>
-                        </div>
-                    </a>
-                </div>-->
             </div>
         </div>
 <!----------------------->
 <!-----PAGE SELECTION---->
         <div class="form-group w-25 p-3 filterOption" id="pageSelector">
             <label for="selectPage">Select Page: </label>
-            <select class="form-control" name="page" id="selectPage">
-                <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
-            </select>
+            <select class="form-control" name="page" id="selectPage"></select>
         </div>
 <!----------------------->
     </div>

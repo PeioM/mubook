@@ -12,6 +12,7 @@ public class OpinionId implements Serializable{
     private Long itemModel;
 
     public OpinionId() {
+        //This is empty
     }
 
     public long getItemModel() {

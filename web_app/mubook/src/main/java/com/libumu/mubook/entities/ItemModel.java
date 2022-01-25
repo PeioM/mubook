@@ -1,7 +1,5 @@
 package com.libumu.mubook.entities;
 
-
-import com.libumu.mubook.entities.SpecificationList;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -33,7 +31,9 @@ public class ItemModel implements Comparable{
     @OneToMany(mappedBy = "itemModel")
     List<SpecificationList> specificationLists;
 
-    public ItemModel(){}
+    public ItemModel(){
+        //This is empty
+    }
 
     public Long getItemModelId() {
         return itemModelId;

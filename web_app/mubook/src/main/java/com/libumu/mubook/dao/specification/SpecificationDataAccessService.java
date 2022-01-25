@@ -54,7 +54,7 @@ public class SpecificationDataAccessService implements SpecificationDao {
     
     @Override
     public List<Integer> getSpecificationWithModelId(long itemModelId) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

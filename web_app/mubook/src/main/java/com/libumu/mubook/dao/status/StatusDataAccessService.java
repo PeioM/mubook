@@ -4,6 +4,7 @@ import com.libumu.mubook.entities.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -44,7 +45,7 @@ public class StatusDataAccessService implements StatusDao {
     
     @Override
     public List<Integer> getStatusWithItemId(long itemId) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

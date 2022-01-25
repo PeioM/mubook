@@ -28,7 +28,9 @@ public class Comment {
     @Column(name = "date")
     private Date date;
 
-    public Comment(){}
+    public Comment(){
+        //This is empty
+    }
 
     public Long getCommentId(){
         return this.commentId;

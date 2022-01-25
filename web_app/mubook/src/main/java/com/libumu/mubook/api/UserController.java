@@ -214,7 +214,6 @@ public class UserController {
 
     private String checkUserDuplicated(User user) {
         String errorStr = "User already exists: ";
-        //User u = userDao.getUserByUsername(user.getUsername());
         if (userDao.getUserByUsername(user.getUsername()) != null) {
             errorStr += "Username already in use";
         } else if (userDao.getUserByDNI(user.getDNI()) != null) {
@@ -310,11 +309,12 @@ public class UserController {
             updateIncidenceDates(activeIncidences, incidence);
             incidenceDao.addIncidence(incidence);
             returnStr = "redirect:/user/" + user.getUserId() + "/edit";
-        } if(user!=null && (incidenceSeverity==null || incidence.getInitDate() == null || incidence.getDescription().equals(""))) {
+        }
+        else if(user!=null && (incidenceSeverity==null || incidence.getInitDate() == null || incidence.getDescription().equals(""))) {
             error = "Wrong values for incidence";
             returnStr = "redirect:/user/" + user.getUserId() + "/edit?error=" + error;
         }else{
-            System.out.println("User is null");
+            System.err.println("User is null");
             returnStr = "redirect:/index";
         }
         return returnStr;

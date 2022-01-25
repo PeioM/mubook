@@ -35,7 +35,6 @@
                                         th:attr="value=${commentItem.content}" required></textarea>
                                 </div>
                             </div>
-
                             <div class="d-flex justify-content-end mt-2 pt-1">
                                 <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
                             </div>
@@ -50,9 +49,6 @@
                         role="button">Edit Item</a>
                     <a class="col-2 btn salmon m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
                         role="button">Create Reservation</a>
-                    <!--<a class="col-2 btn salmon m-2 "
-                        th:href="@{'/reservations/all?username=&itemModelName=' + ${itemModel.name}+'&active=false'}"
-                        role="button">Reservation History</a>-->
                 </div>
                 <div class="row m-4 specifications-div">
                     <h3 class="mb-2">Specifications</h3>

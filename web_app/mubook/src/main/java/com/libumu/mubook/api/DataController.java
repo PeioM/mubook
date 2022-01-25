@@ -29,11 +29,12 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/data")
 public class DataController {
+    int [] ageList = new int []{0, 12, 13, 18, 19, 30, 31, 50, 51, 1000};
+
     final static int MAXNUMTHREADS_RESERVATIONS = 5;
     final static int MAXMONTHS_RESERVATIONS = 24;
-
     final static int MAXINCIDENCES = 5;
-    int [] ageList = new int []{0, 12, 13, 18, 19, 30, 31, 50, 51, 1000};
+
 
 
     @Autowired
@@ -80,7 +81,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -109,7 +110,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -132,7 +133,6 @@ public class DataController {
                     List<Object[]>result = reservationDao.countReservationsByItemType(buffer.get());
                     results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
                 } catch (InterruptedException e) {
-                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -296,7 +296,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -325,7 +325,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -352,7 +352,6 @@ public class DataController {
                         results.put(keyStr, valueLong);
                     }
                 } catch (InterruptedException | ParseException e) {
-                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -436,7 +435,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -461,7 +460,6 @@ public class DataController {
                     int result = userDao.countUsersByAge(range.get(0),range.get(1));
                     results.put(range.get(0) +"-"+range.get(1), Long.valueOf(result));
                 } catch (InterruptedException e) {
-                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -500,7 +498,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -528,7 +526,7 @@ public class DataController {
 
         long end = System.currentTimeMillis();
 
-        System.out.println(end - start + "ms");
+        System.err.println(end - start + "ms");
 
         return "chart";
     }
@@ -556,7 +554,6 @@ public class DataController {
                         results.put(Integer.toString(peso), 0L);
                     }
                 } catch (InterruptedException e) {
-                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }

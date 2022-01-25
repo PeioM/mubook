@@ -2,7 +2,6 @@ package com.libumu.mubook.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.libumu.mubook.entities.SpecificationList;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -26,6 +25,7 @@ public class Specification implements Comparable<Specification>{
     private List<SpecificationList> specificationLists;
 
     public Specification() {
+        //This is empty
     }
 
     public String getDescription() {

@@ -21,6 +21,7 @@ public class Faq {
     private String answer;
 
     public Faq() {
+        //This is empty
     }
 
     public Integer getFaqid() {

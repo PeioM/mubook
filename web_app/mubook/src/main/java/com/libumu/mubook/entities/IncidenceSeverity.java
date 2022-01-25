@@ -22,7 +22,9 @@ public class IncidenceSeverity {
     private Integer importance;
 
 
-    public IncidenceSeverity(){}
+    public IncidenceSeverity(){
+        //This is empty
+    }
 
     public String getDescription() {
         return description;

@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
 
 <head th:replace="include.html :: headerfiles">
@@ -8,18 +7,6 @@
 <body class=" justify-content-center">
     <header th:replace="include.html :: headercontent"></header>
     <div id="carouselExampleCaptions" class="carousel slide container" data-bs-ride="carousel">
-        <!--<div class="carousel-indicators" >
-            <button type="button" data-bs-target="#carouselExampleCaptions" th:attrappend="data-slide-to=${iterator.index},
-            aria-label='Slide '+'${iterator.index}+1', aria-current=${iterator.first}?'true'"  th:each="actualNew, iterator: ${news}"
-            th:classappend="${iterator.first}? active"
-            ></button>
-             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
-        </div>
-        -->
-
         <div class="carousel-inner">
             <div th:each="actualNew, iterator: ${news}" class="carousel-item" th:classappend="${iterator.first}? active">
                 <div class="carousel-container container-fluid d-flex justify-content-center align-items-center h-100">

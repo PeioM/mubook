@@ -28,6 +28,7 @@ public class News {
     private String image;
 
     public News() {
+        //This is empty
     }
 
     public Long getNewsid() {
