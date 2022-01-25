@@ -30,10 +30,8 @@ function updateReservationPages(){
     let actionUrl = "/ajax/filterReservationsGetPages/" + itemModel;
     let active = document.getElementById("checkBoxActive").checked;
 
-    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
-        '  <span class="sr-only">Loading...</span>\n' +
-        '</div>';
-    $('#resultBlock').html(loadingHTML);
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
 
     ajaxCallGetPages(actionUrl, {active: active})
 }
@@ -65,7 +63,7 @@ function ajaxCallGetReservations(actionUrl, data){
                     '             <div class="row no-gutters m-2"> ' +
                     '                 <div class="col-md-4 "> ' +
                     '                     <h5 class="card-title mb-2">ID: ' + reservation.reservationId+ '</h5> ' +
-                    '                     <img src="reservation.item.itemModel.img" class="card-img" alt="reservation image"> ' +
+                    '                     <img src="'+ reservation.item.itemModel.img +'" class="card-img" alt="reservation image"> ' +
                     '                 </div> ' +
                     '                 <div class="col-md-8 "> ' +
                     '                     <div class="card-body"> ' +
@@ -81,6 +79,7 @@ function ajaxCallGetReservations(actionUrl, data){
                 innerHTML += reservationHTML;
             }
             $('#resultBlock').html(innerHTML);
+            toggleFilters(document.getElementsByClassName("filterOption"));
         }
     });
 

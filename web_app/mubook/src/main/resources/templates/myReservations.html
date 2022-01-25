@@ -12,7 +12,7 @@
 <!--SELECT ITEM MODEL-->
             <div class="m-3">
                 <label class="px-3" for="selectReservationItemModel">Select Item Model</label>
-                <select id="selectReservationItemModel" class="form-select form m-2">
+                <select id="selectReservationItemModel" class="form-select form m-2 filterOption">
                     <optgroup label="">
                         <option value="-" selected>All models</option>
                     </optgroup>
@@ -27,7 +27,7 @@
 <!--SELECT ACTIVE-->
             <div class="m-3 p-3">
                 <label for="checkBoxActive">Active</label>
-                <input type="checkbox" id="checkBoxActive" checked>
+                <input type="checkbox" id="checkBoxActive" class="filterOption" checked>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
         <!-----PAGE SELECTION---->
         <div class="form-group w-25 p-3" id="pageSelector">
             <label for="selectPage">Select Page: </label>
-            <select class="form-control" name="page" id="selectPage">
+            <select class="form-control filterOption" name="page" id="selectPage">
                 <!--<option th:each="i: ${#numbers.sequence(1, pages)}" th:text="${i}"></option>-->
             </select>
         </div>

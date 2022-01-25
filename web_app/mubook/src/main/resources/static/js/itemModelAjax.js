@@ -22,7 +22,7 @@ $(document).ready(function(){
 
     }
 });
-
+//Ajax call for itemModels
 function updateItemModelsWithFilters(checkSelectedPage){
     let options = document.getElementsByClassName("filterCheckBox");
     let dataMap = new Map();
@@ -55,16 +55,6 @@ function updateItemModelsWithoutFilters(checkSelectedPage) {
     let actionUrl = "/ajax/filterItemModels/all/" + getSelectedPage(checkSelectedPage);
 
     ajaxCallGetItemModels(actionUrl, null);
-}
-function getSelectedPage(checkSelectedPage){
-    let selectedPage;
-    if(checkSelectedPage){
-        selectedPage = $('#selectPage option:selected').val();
-    }
-    else{
-        selectedPage = 1;
-    }
-    return selectedPage;
 }
 function ajaxCallGetItemModels(actionUrl,mapAsJson){
     $.ajax({
@@ -100,32 +90,31 @@ function ajaxCallGetItemModels(actionUrl,mapAsJson){
                 itemModelsHTML += innerHTML;
             }
             $('#resultBlock').html(itemModelsHTML);
+            toggleFilters(document.getElementsByClassName("filterOption"));
         }
     });
 }
-
+//Ajax call for pages
 function updateItemModelPageWithFilters() {
     let itemTypeHeader = document.getElementsByTagName("h4")[0].textContent;
     let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
     let actionUrl = "/ajax/filterItemModelsGetPages/" + itemType;
 
-    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
-        '  <span class="sr-only">Loading...</span>\n' +
-        '</div>';
-    $('#resultBlock').html(loadingHTML);
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
 
     ajaxCallGetPages(actionUrl, null)
 }
 function updateItemModelPageWithoutFilters() {
     let actionUrl = "/ajax/filterItemModelsGetPages/all";
 
-    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
-        '  <span class="sr-only">Loading...</span>\n' +
-        '</div>';
-    $('#resultBlock').html(loadingHTML);
-
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
     ajaxCallGetPages(actionUrl,null)
 }
+
+
+//General methods
 function ajaxCallGetPages(actionUrl, data) {
     $.ajax({
         method: 'GET',
@@ -149,4 +138,24 @@ function ajaxCallGetPages(actionUrl, data) {
         }
     });
 }
-
+function toggleFilters(elements) {
+    for(let element of elements){
+        element.disabled = !element.disabled;
+    }
+}
+function getSelectedPage(checkSelectedPage){
+    let selectedPage;
+    if(checkSelectedPage){
+        selectedPage = $('#selectPage option:selected').val();
+    }
+    else{
+        selectedPage = 1;
+    }
+    return selectedPage;
+}
+function loadingSearch(){
+    let loadingHTML = '<div class="align-self-center spinner-border" role="status">\n' +
+        '  <span class="sr-only">Loading...</span>\n' +
+        '</div>';
+    $('#resultBlock').html(loadingHTML);
+}
