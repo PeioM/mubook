@@ -314,7 +314,8 @@ public class ItemModelController {
         if (file.getOriginalFilename().equals("")) {
             itemModelEdited.setImg((itemModelDao.getItemModel(itemModelEdited.getItemModelId())).getImg());
         } else {
-            String filename = file.getOriginalFilename();
+            String filename = "";
+            filename = file.getOriginalFilename();
             String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
             try {
                 String pathStr = ITEMS_IMAGES_DIR + itemModelEdited.getName() + extension;
