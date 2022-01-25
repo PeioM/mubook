@@ -47,4 +47,9 @@ public class ButtonClickDataAccessService implements ButtonClickDao {
     public void addButtonClick(ButtonClick buttonClick) {
         repository.save(buttonClick);
     }
+
+    @Override
+    public long countButtonClicks() {
+        return repository.count();
+    }
 }

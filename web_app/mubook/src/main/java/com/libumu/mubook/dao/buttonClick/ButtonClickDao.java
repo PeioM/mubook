@@ -1,7 +1,6 @@
 package com.libumu.mubook.dao.buttonClick;
 
 import com.libumu.mubook.entities.ButtonClick;
-import com.libumu.mubook.entities.Comment;
 
 import java.util.List;
 
@@ -14,4 +13,5 @@ public interface ButtonClickDao {
     void deleteButtonClick(long buttonClick);
     void deleteButtonClick(ButtonClick buttonClick);
     void addButtonClick(ButtonClick buttonClick);
+    long countButtonClicks();
 }

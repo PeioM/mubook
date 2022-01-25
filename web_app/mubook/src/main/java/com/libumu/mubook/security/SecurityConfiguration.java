@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static String[] ANY_USER_MATCHERS = {
             "/","/index","/home","/search","/search/**","/itemModel/{itemModelId}/view","/faq","/aboutUs","/login","/login_process","/logout",
-            "/css/**","/images/**","/js/**","/templates/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**"};
+            "/css/**","/images/**","/js/**","/templates/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**", "/ajax/registerGrafana/*"};
 
     @Autowired
     UserDetailsService userDetailsService;

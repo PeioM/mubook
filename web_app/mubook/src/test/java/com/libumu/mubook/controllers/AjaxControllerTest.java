@@ -3,6 +3,8 @@ package com.libumu.mubook.controllers;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.libumu.mubook.api.AjaxController;
+import com.libumu.mubook.dao.buttonClick.ButtonClickDao;
+import com.libumu.mubook.entities.ButtonClick;
 import com.libumu.mubook.entities.Reservation;
 import com.libumu.mubook.entities.User;
 import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,13 +40,15 @@ public class AjaxControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ButtonClickDao buttonClickDao;
 
+    //SEARCH
     @Test
     public void searchReturnsItemModels() throws Exception {
         //Search Book works
         MvcResult result =  mockMvc.perform(get("/ajax/filterItemModels/Book/1"))
                         .andReturn();
-
         String content = result.getResponse().getContentAsString();
         Type listType = new TypeToken<ArrayList<ItemModelClass>>(){}.getType();
         List<ItemModelClass> itemModelClassList = new Gson().fromJson(content, listType);
@@ -54,7 +59,6 @@ public class AjaxControllerTest {
         //All ItemModel search works
         result =  mockMvc.perform(get("/ajax/filterItemModels/all/1"))
                 .andReturn();
-
         content = result.getResponse().getContentAsString();
         itemModelClassList = new Gson().fromJson(content, listType);
         assertTrue(itemModelClassList.size() <= AjaxController.ITEMS_PER_PAGE);
@@ -67,7 +71,6 @@ public class AjaxControllerTest {
         result =  mockMvc.perform(get("/ajax/filterItemModels/Book/1")
                         .param(String.valueOf(3)+"[]", editorial))
                 .andReturn();
-
         content = result.getResponse().getContentAsString();
         itemModelClassList = new Gson().fromJson(content, listType);
         assertTrue(itemModelClassList.size() <= AjaxController.ITEMS_PER_PAGE);
@@ -81,21 +84,13 @@ public class AjaxControllerTest {
         //Search Book works
         MvcResult result =  mockMvc.perform(get("/ajax/filterItemModelsGetPages/Book"))
                 .andReturn();
-
-        String bookPageStr = result.getResponse().getContentAsString();
-        assertDoesNotThrow(() -> {
-            Double.parseDouble(bookPageStr);
-        }, NumberFormatException.class.toString());
+        assertReturnIsDouble(result);
 
 
         //All ItemModel search works
         result =  mockMvc.perform(get("/ajax/filterItemModelsGetPages/all"))
                 .andReturn();
-
-        String allItemsPageStr = result.getResponse().getContentAsString();
-        assertDoesNotThrow(() -> {
-            Double.parseDouble(allItemsPageStr);
-        }, NumberFormatException.class.toString());
+        assertReturnIsDouble(result);
 
 
         //Search Book with filters
@@ -104,13 +99,11 @@ public class AjaxControllerTest {
         result =  mockMvc.perform(get("/ajax/filterItemModelsGetPages/Book")
                         .param(String.valueOf(3)+"[]", editorial))
                 .andReturn();
-
-        String bookFilteredPageStr = result.getResponse().getContentAsString();
-        assertDoesNotThrow(() -> {
-            Double.parseDouble(allItemsPageStr);
-        }, NumberFormatException.class.toString());
+        assertReturnIsDouble(result);
     }
 
+
+    //USERS
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void searchUsers() throws Exception{
@@ -118,7 +111,6 @@ public class AjaxControllerTest {
         MvcResult result = mockMvc.perform(get("/ajax/filterUsers/-/1")
                         .param("containStr",""))
                 .andReturn();
-
         String content = result.getResponse().getContentAsString();
         Type listType = new TypeToken<ArrayList<User>>(){}.getType();
         List<User> users = new Gson().fromJson(content, listType);
@@ -129,9 +121,7 @@ public class AjaxControllerTest {
         result = mockMvc.perform(get("/ajax/filterUsers/USER/1")
                         .param("containStr",""))
                 .andReturn();
-
         content = result.getResponse().getContentAsString();
-        listType = new TypeToken<ArrayList<User>>(){}.getType();
         users = new Gson().fromJson(content, listType);
         assertTrue(users.size() <= AjaxController.ITEMS_PER_PAGE);
         assertEquals(users.get(0).getUserType().getUserTypeId(), "USER");
@@ -144,23 +134,18 @@ public class AjaxControllerTest {
         MvcResult result = mockMvc.perform(get("/ajax/filterUsersGetPages/-")
                         .param("containStr",""))
                 .andReturn();
-
-        String allUserPageStr = result.getResponse().getContentAsString();
-        assertDoesNotThrow(() -> {
-            Double.parseDouble(allUserPageStr);
-        }, NumberFormatException.class.toString());
+        assertReturnIsDouble(result);
 
         //Filter by User type page count working
         result = mockMvc.perform(get("/ajax/filterUsersGetPages/USER")
                         .param("containStr",""))
                 .andReturn();
-
-        String userTypePageStr = result.getResponse().getContentAsString();
-        assertDoesNotThrow(() -> {
-            Double.parseDouble(userTypePageStr);
-        }, NumberFormatException.class.toString());
+        assertReturnIsDouble(result);
     }
 
+
+    //RESERVATIONS
+    //AS ADMIN
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void searchAllReservationsAsAdmin() throws Exception{
@@ -180,7 +165,6 @@ public class AjaxControllerTest {
                         .param("active","false"))
                 .andReturn();
         content = result.getResponse().getContentAsString();
-        listType = new TypeToken<ArrayList<ReservationClass>>(){}.getType();
         reservations = new Gson().fromJson(content, listType);
         assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
         assertEquals(reservations.get(0).getItem().getItemModel().getItemType().getItemTypeId(), 1);
@@ -191,7 +175,6 @@ public class AjaxControllerTest {
                         .param("active","false"))
                 .andReturn();
         content = result.getResponse().getContentAsString();
-        listType = new TypeToken<ArrayList<ReservationClass>>(){}.getType();
         reservations = new Gson().fromJson(content, listType);
         assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
         assertEquals(reservations.get(0).getItem().getItemModel().getItemModelId(), 1);
@@ -216,7 +199,6 @@ public class AjaxControllerTest {
                         .param("active","true"))
                 .andReturn();
         content = result.getResponse().getContentAsString();
-        listType = new TypeToken<ArrayList<ReservationClass>>(){}.getType();
         reservations = new Gson().fromJson(content, listType);
         assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
         assertEquals(reservations.get(0).getItem().getItemModel().getItemType().getItemTypeId(), 1);
@@ -227,7 +209,6 @@ public class AjaxControllerTest {
                         .param("active","true"))
                 .andReturn();
         content = result.getResponse().getContentAsString();
-        listType = new TypeToken<ArrayList<ReservationClass>>(){}.getType();
         reservations = new Gson().fromJson(content, listType);
         assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
         assertEquals(reservations.get(0).getItem().getItemModel().getItemModelId(), 1);
@@ -235,8 +216,194 @@ public class AjaxControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
+    public void searchReservationPagesAsAdmin() throws Exception{
+        //All reservations
+        MvcResult result = mockMvc.perform(get("/ajax/filterReservationsGetPages/-")
+                        .param("active","false"))
+                .andReturn();
+        assertReturnIsDouble(result);
+
+
+        //All reservations by Item Type
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/itemType-1")
+                        .param("active","false"))
+                .andReturn();
+        assertReturnIsDouble(result);;
+
+        //All reservations by Item Model
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/1")
+                        .param("active","false"))
+                .andReturn();
+        assertReturnIsDouble(result);
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
+    public void searchActiveReservationPagesAsAdmin() throws Exception{
+        //All reservations
+        MvcResult result = mockMvc.perform(get("/ajax/filterReservationsGetPages/-")
+                        .param("active","true"))
+                .andReturn();
+        assertReturnIsDouble(result);
+
+
+        //All reservations by Item Type
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/itemType-1")
+                        .param("active","true"))
+                .andReturn();
+        assertReturnIsDouble(result);;
+
+        //All reservations by Item Model
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/1")
+                        .param("active","true"))
+                .andReturn();
+        assertReturnIsDouble(result);
+    }
+
+    //AS USER
+    @Test
+    @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
+    public void searchAllReservationsAsUser() throws Exception{
+        //All reservations
+        MvcResult result = mockMvc.perform(get("/ajax/filterReservations/-/1")
+                        .param("active","false"))
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Type listType = new TypeToken<ArrayList<ReservationClass>>(){}.getType();
+        List<ReservationClass> reservations = new Gson().fromJson(content, listType);
+        assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
+        assertEquals(reservations.get(0).getUser().getUsername(), "user");
+
+
+        //All reservations by Item Type
+        result = mockMvc.perform(get("/ajax/filterReservations/itemType-1/1")
+                        .param("active","false"))
+                .andReturn();
+        content = result.getResponse().getContentAsString();
+        reservations = new Gson().fromJson(content, listType);
+        assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
+        assertEquals(reservations.get(0).getUser().getUsername(), "user");
+        assertEquals(reservations.get(0).getItem().getItemModel().getItemType().getItemTypeId(), 1);
+
+
+        //All reservations by Item Model
+        result = mockMvc.perform(get("/ajax/filterReservations/1/1")
+                        .param("active","false"))
+                .andReturn();
+        content = result.getResponse().getContentAsString();
+        reservations = new Gson().fromJson(content, listType);
+        assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
+        assertEquals(reservations.get(0).getUser().getUsername(), "user");
+        assertEquals(reservations.get(0).getItem().getItemModel().getItemModelId(), 1);
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
+    public void searchActiveReservationsAsUser() throws Exception{
+        //All reservations
+        MvcResult result = mockMvc.perform(get("/ajax/filterReservations/-/1")
+                        .param("active","true"))
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Type listType = new TypeToken<ArrayList<ReservationClass>>(){}.getType();
+        List<ReservationClass> reservations = new Gson().fromJson(content, listType);
+        assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
+        assertTrue(reservations.get(0).getInitDate() < new Date().getTime());
+        assertEquals(reservations.get(0).getUser().getUsername(), "user");
+
+
+
+        //All reservations by Item Type
+        result = mockMvc.perform(get("/ajax/filterReservations/itemType-1/1")
+                        .param("active","true"))
+                .andReturn();
+        content = result.getResponse().getContentAsString();
+        reservations = new Gson().fromJson(content, listType);
+        assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
+        assertEquals(reservations.get(0).getItem().getItemModel().getItemType().getItemTypeId(), 1);
+        assertTrue(reservations.get(0).getInitDate() < new Date().getTime());
+        assertEquals(reservations.get(0).getUser().getUsername(), "user");
+
+
+        //All reservations by Item Model
+        result = mockMvc.perform(get("/ajax/filterReservations/1/1")
+                        .param("active","true"))
+                .andReturn();
+        content = result.getResponse().getContentAsString();
+        reservations = new Gson().fromJson(content, listType);
+        assertTrue(reservations.size() <= AjaxController.ITEMS_PER_PAGE);
+        assertEquals(reservations.get(0).getItem().getItemModel().getItemModelId(), 1);
+        assertTrue(reservations.get(0).getInitDate() < new Date().getTime());
+        assertEquals(reservations.get(0).getUser().getUsername(), "user");
+
+    }
+
+    @Test
     @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
     public void searchReservationPagesAsUser() throws Exception{
+        //All reservations
+        MvcResult result = mockMvc.perform(get("/ajax/filterReservationsGetPages/-")
+                        .param("active","false"))
+                .andReturn();
+        assertReturnIsDouble(result);
 
+
+        //All reservations by Item Type
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/itemType-1")
+                        .param("active","false"))
+                .andReturn();
+        assertReturnIsDouble(result);;
+
+        //All reservations by Item Model
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/1")
+                        .param("active","false"))
+                .andReturn();
+        assertReturnIsDouble(result);
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
+    public void searchActiveReservationPagesAsUser() throws Exception{
+        //All reservations
+        MvcResult result = mockMvc.perform(get("/ajax/filterReservationsGetPages/-")
+                        .param("active","true"))
+                .andReturn();
+        assertReturnIsDouble(result);
+
+
+        //All reservations by Item Type
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/itemType-1")
+                        .param("active","true"))
+                .andReturn();
+        assertReturnIsDouble(result);;
+
+        //All reservations by Item Model
+        result = mockMvc.perform(get("/ajax/filterReservationsGetPages/1")
+                        .param("active","true"))
+                .andReturn();
+        assertReturnIsDouble(result);
+    }
+
+    @Test
+    public void buttonClickRegisterForGrafanaAsAnonymous() throws Exception {
+        long numClicks = buttonClickDao.countButtonClicks();
+        MvcResult result = mockMvc.perform(get("/ajax/registerGrafana/10")).andReturn();
+        assertEquals(numClicks + 1, buttonClickDao.countButtonClicks());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
+    public void buttonClickRegisterForGrafanaAsUser() throws Exception{
+        long numClicks = buttonClickDao.countButtonClicks();
+        MvcResult result = mockMvc.perform(get("/ajax/registerGrafana/10")).andReturn();
+        assertEquals(numClicks + 1, buttonClickDao.countButtonClicks());
+    }
+
+    private void assertReturnIsDouble(MvcResult result) throws UnsupportedEncodingException {
+        String pageStr = result.getResponse().getContentAsString();
+        assertDoesNotThrow(() -> {
+            Double.parseDouble(pageStr);
+        }, NumberFormatException.class.toString());
     }
 }
