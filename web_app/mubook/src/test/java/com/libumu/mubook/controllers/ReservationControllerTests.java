@@ -48,6 +48,14 @@ public class ReservationControllerTests {
 
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
+    public void testViewGet() throws Exception {
+        mvc.perform(get("/reservations/3/view"))
+                .andExpect(model().attributeExists("reserve"))
+                .andExpect(view().name("reservation"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void testReservationByWorker() throws Exception {
         mvc.perform(get("/reservations/1/create"))
                 .andExpect(model().attributeExists("reserve"))
@@ -70,7 +78,7 @@ public class ReservationControllerTests {
         mvc.perform(post("/reservations/edit").with(csrf())
                 .param("reservationId", String.valueOf(reservationDao.getTopId()))
                 .param("user.userId", "1")
-                .param("item.itemId", "1")
+                .param("item.itemId", "10")
                 .param("initDate", "2022-01-25")
                 .param("endDate", "2022-01-30")
                 .param("returnDate", "2022-01-30"));

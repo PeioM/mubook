@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static String[] ANY_USER_MATCHERS = {
             "/","/index","/home","/search","/search/**","/itemModel/{itemModelId}/view","/faq","/aboutUs","/login","/login_process","/logout",
-            "/css/**","/images/**","/js/**","/templates/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**", "/ajax/registerGrafana/*",
+            "/css/**","/images/**","/js/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**", "/ajax/registerGrafana/*",
             "/user/add"};
 
     @Autowired
@@ -52,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(USER_MATCHERS).hasRole("USER")
                 .antMatchers(ADMIN_WORKER_MATCHERS).hasAnyRole("ADMIN", "WORKER")
                 .antMatchers(ADMIN_MATCHERS).hasRole("ADMIN")
-                .anyRequest().denyAll()
+                .anyRequest().permitAll()
                 .and()
                 //Login control
                 .formLogin()
