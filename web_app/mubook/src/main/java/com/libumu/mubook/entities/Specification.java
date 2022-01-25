@@ -19,6 +19,8 @@ public class Specification implements Comparable<Specification>{
 
     @Column(name = "desccription")
     private String description;
+    @Column(name = "filter")
+    private boolean filter;
 
     @JsonBackReference
     @OneToMany(mappedBy = "specification")
@@ -60,5 +62,13 @@ public class Specification implements Comparable<Specification>{
     @Override
     public int compareTo(Specification o) {
         return this.description.compareTo(o.description);
+    }
+
+    public boolean isFilter() {
+        return filter;
+    }
+
+    public void setFilter(boolean filter) {
+        this.filter = filter;
     }
 }

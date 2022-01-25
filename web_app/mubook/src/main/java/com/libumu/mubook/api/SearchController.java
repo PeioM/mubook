@@ -61,13 +61,15 @@ public class SearchController {
         Specification key = specificationDao.getSpecification(keyId);
         String value = (String) row[1];
 
-        if(map.containsKey(key)){
-            map.get(key).add(value);
-        }
-        else{
-            List<String> values = new ArrayList<>();
-            values.add(value);
-            map.put(key, values);
+        if(key.isFilter()){
+            if(map.containsKey(key)){
+                map.get(key).add(value);
+            }
+            else{
+                List<String> values = new ArrayList<>();
+                values.add(value);
+                map.put(key, values);
+            }
         }
     }
 }
