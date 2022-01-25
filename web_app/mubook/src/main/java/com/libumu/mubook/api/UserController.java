@@ -31,8 +31,7 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
-    public final static String LOCAL_UPLOAD_DIR = "C:/IMAGENES_DNI_PRUEBA/";
-    public final static String SERVER_UPLOAD_DIR = "/home/dniImg/";
+    public final static String SERVER_UPLOAD_DIR = "src/main/resources/static/images/userProfilesCreated/";
 
     private final IncidenceSeverityDao incidenceSeverityDao;
     private final IncidenceDao incidenceDao;
@@ -64,7 +63,7 @@ public class UserController {
         @RequestParam(value = "dniImg", required = false) MultipartFile file,
         WebRequest request) {
         //Return to user form in case there is any error
-        String returnStr = "register";
+        String returnStr = "/register";
         String error = checkUserDuplicated(user);
         if (error.length() == 0) {
             if (file == null || file.isEmpty() || file.getOriginalFilename() == null
@@ -77,13 +76,14 @@ public class UserController {
                 String filename = file.getOriginalFilename();
                 String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
                 try {
-                    String pathStr = SERVER_UPLOAD_DIR + user.getName() + "_" + user.getSurname() + extension;
+                    String pathStr = SERVER_UPLOAD_DIR + user.getName().replace(" ", "_") + "_" + user.getSurname().replace(" ", "_") + extension;
                     new File(pathStr); // Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    user.setDniImgPath(path.toString());
+                    String imagePath = "/images/userProfilesCreated/" + user.getName().replace(" ", "_") + "_" + user.getSurname().replace(" ", "_") + extension;
+                    user.setDniImgPath(imagePath);
                     // In case there is no error redirect to home
-                    returnStr = "index";
+                    returnStr = "/index";
                 } catch (IOException e) {
                     error = "Error uploading file";
                 }

@@ -14,11 +14,11 @@
                 <div class="row">
                     <div class="col-lg-3 border-right">
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <h4 th:text="${action}"></h4>
+                            <h4 th:text="${#strings.toUpperCase(action)}"></h4>
                             <div class="user-img-div">
                                 <img class="rounded mt-5 img-fluid" src="/images/userProfiles/1.png"
                                     alt="User image">
-                                <a th:href="@{userEdit.dniImgPath}" target="_blank">See user DNI</a>
+                                <a th:href="@{${userEdit.dniImgPath}}" class="mt-2" target="_blank">See user DNI</a>
                             </div>
                             <span class="font-weight-bold" th:text="${userEdit.username}"></span>
                             <span class="text-black-50" th:text="${userEdit.userId}"><span class="user-id"></span>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="col-lg-9 border-right">
-                        <div class="p-3 py-5">
+                        <div class="p-3 py-2">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="text-right" th:text="#{editCreateUser.profileSettings}"></h4>
                             </div>
