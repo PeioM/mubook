@@ -13,7 +13,7 @@
             <div class="accordion col border-right-0 col-lg-6" id="accordionExample">
 
                 <div th:each="listFaq, iterator: ${faqs}" class="accordion-item">
-                    <h2 class="accordion-header"  th:attr="id='heading'+${iterator.index}">
+                    <h2 class="accordion-header text-primary"  th:attr="id='heading'+${iterator.index}">
                         <button class="accordion-button" th:classappend="${!iterator.first}? collapsed" type="button" data-bs-toggle="collapse"
                         th:attr="data-bs-target='#collapse'+${iterator.index} ,
                                 aria-expanded=${iterator.first}?'true' : 'false' ,

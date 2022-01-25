@@ -63,7 +63,7 @@ public class NewsController implements ServletContextAware {
                     new File(pathStr);  //Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    String imagePath = "images/news/" + news.getTitle().replace(" ", "_") + extension;
+                    String imagePath = "/images/news/" + news.getTitle().replace(" ", "_") + extension;
                     news.setImage(imagePath);
                     //In case there is no error redirect to home
                 } catch (IOException e) {

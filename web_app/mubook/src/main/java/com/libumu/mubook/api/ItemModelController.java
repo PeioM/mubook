@@ -157,7 +157,7 @@ public class ItemModelController {
                 new File(pathStr); // Create dest file to save
                 Path path = Paths.get(pathStr);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                String imagePath = "images/createdItems/" + itemModel.getName().replace(" ", "_") + extension;
+                String imagePath = "/images/createdItems/" + itemModel.getName().replace(" ", "_") + extension;
                 itemModel.setImg(imagePath);
                 // In case there is no error redirect to home
             } catch (IOException e) {
@@ -359,7 +359,7 @@ public class ItemModelController {
                 new File(pathStr); // Create dest file to save
                 Path path = Paths.get(pathStr);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                String imagePath = "images/createdItems/" + itemModelEdited.getName().replace(" ", "_") + extension;
+                String imagePath = "/images/createdItems/" + itemModelEdited.getName().replace(" ", "_") + extension;
                 itemModelEdited.setImg(imagePath);
         }
 

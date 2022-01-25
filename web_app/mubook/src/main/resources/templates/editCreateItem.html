@@ -14,10 +14,9 @@
                 <div class="row">
                     <div class="col-lg-3 border-right">
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <h4 th:text="${action}"></h4>
+                            <h4 th:text="${#strings.toUpperCase(action)}"></h4>
                             <div class="user-img-div">
-                                <img class="rounded mt-5 img-fluid" th:src="${itemModel.img}"
-                                    alt="Item image">
+                                <img class="rounded mt-5 img-fluid" th:attr="src=@{${itemModel.img}},alt=${itemModel.name} + ' image'">
                             </div>
                             <span class="text-black-50"><span class="user-id" th:text="${itemModel.itemModelId}"></span>
                             </span>

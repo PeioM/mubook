@@ -14,7 +14,7 @@
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <h5 th:text="${itemModel.name}" th:value="${itemModel.itemModelId}" th:name="itemModelId"></h5>
                     <div class="item-img-div">
-                        <img class="mt-5 img-fluid" th:attr="src=@{${itemModel.img}},alt=${itemModel.name} + ' image'">
+                        <img class="mt-5 img-fluid" th:attr="src=@{${itemModel.img}},alt=${itemModel.name} + ' image'"> 
                     </div>
                 </div>
                 <div class="leave-comment d-flex justify-content-center" sec:authorize="hasAnyRole('USER')">
