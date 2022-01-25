@@ -199,7 +199,7 @@ public class AjaxController {
         User loggedUser = userDao.getUserByUsername(authentication.getName());
         long loggedUserId = userDao.getUserByUsername(authentication.getName()).getUserId();
         //If its admin
-        if(loggedUser.getUserType().getUserTypeId().equals("ADMIN")){
+        if(loggedUser.getUserType().getUserTypeId().equals("ADMIN") || loggedUser.getUserType().getUserTypeId().equals("WORKER")){
             if(itemModel.equals("-")){
                 if(active){
                     reservations = reservationDao.getActiveReservationsBetween(page);
@@ -281,7 +281,7 @@ public class AjaxController {
         User loggedUser = userDao.getUserByUsername(authentication.getName());
         long loggedUserId = userDao.getUserByUsername(authentication.getName()).getUserId();
         //If its admin
-        if(loggedUser.getUserType().getUserTypeId().equals("ADMIN")){
+        if(loggedUser.getUserType().getUserTypeId().equals("ADMIN") || loggedUser.getUserType().getUserTypeId().equals("WORKER")){
             if(active) {
                 if (itemModel.equals("-")){
                     totalReservations = reservationDao.getTotalActiveReservationCount();

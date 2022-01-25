@@ -20,10 +20,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static int REMEMBER_ME_TIME = 86400;  //1 day
     public final static int ENCRYPT_STRENGTH = 10;
-    private final static String[] ADMIN_MATCHERS = {"/data/**", "/ajax/filterUsers/**", "/ajax/filterUsersGetPages/**"};
+    private final static String[] ADMIN_MATCHERS = {"/data/**"};
 
     private final static String[] ADMIN_WORKER_MATCHERS = {"/user/**", "/news/**","/itemModel/{itemModelId}/edit", "/itemModel/add",
-            "/itemModel/create","/itemModel/addSpecification","/itemModel/addItem","/itemModel/deleteSpec","/itemModel/disableItem", "/itemModel/edit"};
+            "/itemModel/create","/itemModel/addSpecification","/itemModel/addItem","/itemModel/deleteSpec","/itemModel/disableItem",
+            "/itemModel/edit", "/ajax/filterUsers/**", "/ajax/filterUsersGetPages/**"};
 
     private final static String[] AUTHENTICATED_MATCHERS = {"/reservations/**","/user/profile"
             ,"/ajax/filterReservationsGetPages/**","/ajax/filterReservations/**"};
