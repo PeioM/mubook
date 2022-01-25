@@ -49,7 +49,7 @@ function ajaxCallGetUsers(actionUrl, containStr){
             for (let user of users){
                 let usersHTML =
                     '<div class="userCard card col mb-4 shadow bg-light p-0"> ' +
-                    '    <a href="/user/'+user.userId+'/edit" class="text-decoration-none text-dark"> ' +
+                    '    <a href="/user/'+user.userId+'/edit" class="text-decoration-none text-dark trackGrafana" grafanaId="18"> ' +
                     '       <img class="card-img-top img-fluid" src="/images/userProfiles/1.png" alt="User '+user.userId+' profile image">' +
                     '       <div class="card-body text-center"> ' +
                     '           <h5 class="card-title">ID: '+user.userId+'</h5> ' +

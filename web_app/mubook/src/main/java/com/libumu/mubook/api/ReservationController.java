@@ -174,6 +174,7 @@ public class ReservationController {
         reservation.setInitDate(new java.sql.Date(initDate.getTime()));
 
         model.addAttribute("reserve", reservation);
+        model.addAttribute("offer", "offer");
 
         return new ModelAndView("reservation", new ModelMap(model));
     }

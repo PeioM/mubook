@@ -51,15 +51,15 @@ function ajaxCallGetReservations(actionUrl, data){
                 let cancelHTML ='';
                 if(reservation.initDate > today.getTime()){
                     cancelHTML = '<div class="card-bottom d-flex justify-content-center m-2"> ' +
-                        '    <form action="/reservations/delete?id='+reservation.reservationId+'/edit" method="post"> ' +
-                        '        <button type="submit">Cancel Reservation</button> ' +
+                        '    <form action="/reservations/delete?id='+reservation.reservationId+'" method="post"> ' +
+                        '        <button type="submit" class="btn btn-secondary trackGrafana" grafanaId="23">Cancel Reservation</button> ' +
                         '    </form> ' +
                         '</div> ';
                 }
 
                 let reservationHTML =
                     '     <div class="reservationCard card col mb-4 shadow bg-light p-0" style="max-width: 540px;"> ' +
-                    '         <a href="/reservations/' + reservation.reservationId + '/view" class="text-decoration-none text-dark"> ' +
+                    '         <a href="/reservations/' + reservation.reservationId + '/view" class="text-decoration-none text-dark trackGrafana" grafanaId="22"> ' +
                     '             <div class="row no-gutters m-2"> ' +
                     '                 <div class="col-md-4 "> ' +
                     '                     <h5 class="card-title mb-2">ID: ' + reservation.reservationId+ '</h5> ' +
