@@ -146,7 +146,7 @@ public class ItemModelController {
                 || file.getOriginalFilename().equals("")) {
             error = error + " Please upload the item model image";
         }
-        if (error.length() == 0) {
+        if (error.length() == 0 && file != null) {
             String filename = file.getOriginalFilename();
             String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
             try {
@@ -217,9 +217,12 @@ public class ItemModelController {
             item.setStatus(status);
             itemDao.addItem(item);
             returnStr = "redirect:/itemModel/" + itemModel.getItemModelId() + "/edit";
-        } else {
+        } if(itemModel != null && (status == null || item.getSerialNum().equals(""))) {
             error = "Incorrect item values";
             returnStr = "redirect:/itemModel/" + itemModel.getItemModelId() + "/edit?error=" + error;
+        }else{
+            System.out.println("ItenModel is null");
+            returnStr = "redirect:/index";
         }
 
         return returnStr;

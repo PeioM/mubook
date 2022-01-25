@@ -1,6 +1,5 @@
 package com.libumu.mubook.mt;
 
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,13 +14,12 @@ public class DateResultMap {
     Map<String, Long> results = new HashMap<String, Long>();
     Lock mutex;
 
-    public DateResultMap () {
+    public DateResultMap () throws InterruptedException {
         mutex = new ReentrantLock();
         results = new HashMap<String, Long>();
         initialize();
     }
-    public void initialize(){
-        try {
+    public void initialize() throws InterruptedException{
             Date date = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(date);
@@ -38,10 +35,6 @@ public class DateResultMap {
                 format = formatter.format(date);
                 put(format,0L);
             }
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
     public void put(String key,Long value) throws InterruptedException {
         mutex.lock();

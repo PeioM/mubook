@@ -6,8 +6,8 @@
 </head>
 
 <body>
-<header th:replace="include.html :: headercontent"></header>
-<h4 th:text="${error}" class="container errorMsg"></h4>
+    <header th:replace="include.html :: headercontent"></header>
+    <h4 th:text="${error}" class="container errorMsg"></h4>
     <div class="container rounded bg-white mt-3 mb-3 border center">
         <div class="row justify-content-center">
             <div class="col-10 border-right">
@@ -16,29 +16,33 @@
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                             <h4 th:text="${action}"></h4>
                             <div class="user-img-div">
-                                <img class="rounded mt-5 img-fluid" src="/static/images/ItemImages/userIcon.png" alt="User exmaple image">
+                                <img class="rounded mt-5 img-fluid" src="/static/images/ItemImages/userIcon.png"
+                                    alt="User exmaple image">
                             </div>
                             <span class="font-weight-bold" th:text="${userEdit.username}"></span>
-                            <span class="text-black-50" th:text="${userEdit.userId}"><span class="user-id"></span> </span>
+                            <span class="text-black-50" th:text="${userEdit.userId}"><span class="user-id"></span>
+                            </span>
                             <span> </span>
                         </div>
                     </div>
                     <div class="col-lg-9 border-right">
                         <div class="p-3 py-5">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="text-right">Profile Settings</h4>
-                                </div>
-                            <form name="user-profile-form" th:action="@{'/user/'+${action}}" th:object="${userEdit}" method="post">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="text-right">Profile Settings</h4>
+                            </div>
+                            <form name="user-profile-form" th:action="@{'/user/'+${action}}" th:object="${userEdit}"
+                                method="post">
                                 <div class="select-role">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="USER" id="flexRadioDefault1"
-                                               checked>
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            value="USER" id="flexRadioDefault1" checked>
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             User
                                         </label>
                                     </div>
-                                    <div sec:authorize= "hasRole('ADMIN')" class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="WORKER" id="flexRadioDefault2">
+                                    <div sec:authorize="hasRole('ADMIN')" class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            value="WORKER" id="flexRadioDefault2">
                                         <label class="form-check-label" for="flexRadioDefault2">
                                             Librarian
                                         </label>
@@ -46,62 +50,81 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col-md-12 d-none"><label class="labels">ID</label><input type="text"
-                                                                                                   class="form-control" placeholder="Name" th:field="*{userId}" th:value="${userEdit.userId}"></div>
+                                            class="form-control" placeholder="Name" th:field="*{userId}"
+                                            th:value="${userEdit.userId}"></div>
                                     <div class="col-md-6"><label class="labels">Name</label><input type="text"
-                                            class="form-control" placeholder="Name" th:field="*{name}" th:value="${userEdit.name}"></div>
+                                            class="form-control" placeholder="Name" th:field="*{name}"
+                                            th:value="${userEdit.name}"></div>
                                     <div class="col-md-6"><label class="labels">Surnames</label><input type="text"
-                                            class="form-control" th:value="${userEdit.surname}" th:field="*{surname}" placeholder="Example1 Example2"></div>
+                                            class="form-control" th:value="${userEdit.surname}" th:field="*{surname}"
+                                            placeholder="Example1 Example2"></div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-12"><label class="labels">Email</label><input type="email"
-                                            class="form-control" placeholder="example@example.com" th:field="*{email}" th:value="${userEdit.email}"></div>
+                                            class="form-control" placeholder="example@example.com" th:field="*{email}"
+                                            th:value="${userEdit.email}"></div>
                                     <div class="col-md-12"><label class="labels">Username*</label><input type="text"
-                                            class="form-control" placeholder="username" value="" th:field="*{username}"></div>
+                                            class="form-control" placeholder="username" value="" th:field="*{username}">
+                                    </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6"><label class="labels">DNI</label><input type="text"
-                                                                                                     class="form-control" placeholder="12345678N" th:field="*{DNI}" th:value="${userEdit.DNI}"></div>
-                                    <div class="col-md-6"><label class="labels">Fecha nacimiento*</label><input type="date"
-                                                                                                         class="form-control" placeholder="username" th:value="${userEdit.bornDate}" th:field="*{bornDate}" required></div>
+                                            class="form-control" placeholder="12345678N" th:field="*{DNI}"
+                                            th:value="${userEdit.DNI}"></div>
+                                    <div class="col-md-6"><label class="labels">Fecha nacimiento*</label><input
+                                            type="date" class="form-control" placeholder="username"
+                                            th:value="${userEdit.bornDate}" th:field="*{bornDate}" required></div>
                                 </div>
                                 <div class="row mt-3">
                                     <h5>Change Password</h5>
                                     <div class="col-md-6"><label class="labels">Password</label><input type="password"
                                             class="form-control" placeholder="" value="" name="password"></div>
-                                    <div class="col-md-6"><label class="labels">Repeat Password</label><input type="password"
-                                            class="form-control" value="" placeholder="" name="passwordRep"></div>
+                                    <div class="col-md-6"><label class="labels">Repeat Password</label><input
+                                            type="password" class="form-control" value="" placeholder=""
+                                            name="passwordRep"></div>
                                 </div>
                                 <div class="mt-5 text-center">
                                     <button class="btn salmon" type="submit">Save User</button>
                                 </div>
                             </form>
-                                <hr>
-                                <div th:if="${action} eq 'edit'">
-                                    <form th:action="@{'/user/incidenceAdd'}" th:object="${incidence}" method="post">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h5 class="text-right">Incidents History</h5>
-                                        </div>
+                            <hr>
+                            <div th:if="${action} eq 'edit'">
+                                <form th:action="@{'/user/incidenceAdd'}" th:object="${incidence}" method="post">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="text-right">Incidents History</h5>
+                                    </div>
 
-                                        <div class="container">
-                                            <div id="data" class="row">
-                                                <label class="col">Incidence severity
-                                                    <select class="col form-control" name="severity">
-                                                        <optgroup label="Select Incidence severity">
-                                                            <option selected> - </option>
-                                                            <option name="severity" th:value="${severity.description}" th:text="${severity.description}" th:each="severity:${incidenceSeverities}"></option>
-                                                        </optgroup>
-                                                    </select>
-                                                </label>
-                                                <label class="labels col">Description<input type="text" id="description" placeholder="Enter description" class="col form-control" th:value="${incidence.description}" th:field="*{description}"></label>
-                                                <label class="labels col">Incidence date<input type="date" id="date" placeholder="Enter date" class="col form-control" th:value="${incidence.initDate}" th:field="*{initDate}" required></label>
-                                                <label class="labels d-none col"><input type="text" id="user_id" th:value="${userEdit.userId}" name="userId"></label>
-                                                <button type="submit" id="addButton" class="btn btn-primary salmon col-2 p-1">Add</button>
-                                            </div>
+                                    <div class="container">
+                                        <div id="data" class="row">
+                                            <label class="col">Incidence severity
+                                                <select class="col form-control" name="severity">
+                                                    <optgroup label="Select Incidence severity">
+                                                        <option selected> - </option>
+                                                        <option name="severity" th:value="${severity.description}"
+                                                            th:text="${severity.description}"
+                                                            th:each="severity:${incidenceSeverities}"></option>
+                                                    </optgroup>
+                                                </select>
+                                            </label>
+                                            <label class="labels col">Description<input type="text" id="description"
+                                                    placeholder="Enter description" class="col form-control"
+                                                    th:value="${incidence.description}"
+                                                    th:field="*{description}"></label>
+                                            <label class="labels col">Incidence date<input type="date" id="date"
+                                                    placeholder="Enter date" class="col form-control"
+                                                    th:value="${incidence.initDate}" th:field="*{initDate}"
+                                                    required></label>
+                                            <label class="labels d-none col"><input type="text" id="user_id"
+                                                    th:value="${userEdit.userId}" name="userId"></label>
+                                            <button type="submit" id="addButton"
+                                                class="btn btn-primary salmon col-2 p-1">Add</button>
                                         </div>
-                                    </form>
-                                    <div class="incidents-div" style="overflow-x:auto">
-                                        <table class="table table-striped">
-                                            <thead>
+                                    </div>
+                                </form>
+                                <div class="incidents-div" style="overflow-x:auto">
+                                    <table class="table table-striped">
+                                        <caption>User incidents table</caption>
+                                        <thead>
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Severity</th>
@@ -109,42 +132,44 @@
                                                 <th class="w-25" scope="col">End Date</th>
                                                 <th scope="col"></th>
                                             </tr>
-                                            </thead>
-                                            <tbody>
+                                        </thead>
+                                        <tbody>
                                             <tr th:each="incidence : ${incidences}">
-                                                <form th:action="'/user/incidenceDelete?id=' + ${incidence.incidenceId}" method="post">
+                                                <form th:action="'/user/incidenceDelete?id=' + ${incidence.incidenceId}"
+                                                    method="post">
                                                     <td th:text="${incidence.incidenceId}"></td>
                                                     <td th:text="${incidence.incidenceSeverity.description}"></td>
                                                     <td th:text="${incidence.description}"></td>
                                                     <td th:text="${incidence.endDate}"></td>
-                                                    <td> <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                                      class="bi bi-trash" viewBox="0 0 16 16">
-                                                        <path
-                                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                                                        <path fill-rule="evenodd"
-                                                              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                                                    </svg></button></td>
+                                                    <td> <button type="submit"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="16" height="16" fill="currentColor"
+                                                                class="bi bi-trash" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                                <path fill-rule="evenodd"
+                                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                            </svg></button></td>
                                                 </form>
                                             </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-                    </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div> 
-			<div class="col-lg-2 border-right">
-            <!--<div class="d-flex align-items-center justify-content-center text-center p-3 py-5">
+            </div>
+            <div class="col-lg-2 border-right">
+                <!--<div class="d-flex align-items-center justify-content-center text-center p-3 py-5">
                 <div class="reservation-btn-div m-1">
                     <a href="reservationHistory.html" class="btn salmon">Reservation History</a>
                 </div>
             </div>-->
             </div>
-		</div>
+        </div>
     </div>
-	<script src="../static/js/addSpecifications.js"></script>
-<footer th:replace="include.html :: footercontent"></footer>
+    <script src="../static/js/addSpecifications.js"></script>
+    <footer th:replace="include.html :: footercontent"></footer>
 </body>
 
 </html>

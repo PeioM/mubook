@@ -30,7 +30,12 @@ public class OpinionId implements Serializable{
     @Override
     public boolean equals(Object obj) {
         OpinionId sl = (OpinionId) obj;
-        return (sl.getUser()==this.user && sl.getItemModel()==this.itemModel);
+        if(sl!=null){
+            return (sl.getUser()==this.user && sl.getItemModel()==this.itemModel);
+        }else{
+            return (Boolean) false;
+        }
+        
     }
 
     public Long getUser() {
