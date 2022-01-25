@@ -29,12 +29,13 @@ public class OpinionId implements Serializable{
 
     @Override
     public boolean equals(Object obj) {
+        
+        if (obj == null) return false;
+    
+        if (this.getClass() != obj.getClass()) return false;
+
         OpinionId sl = (OpinionId) obj;
-        if(obj==null){
-            return false;
-        }else{
-            return (sl.getUser()==this.user && sl.getItemModel()==this.itemModel);
-        }
+        return (sl.getUser()==this.user && sl.getItemModel()==this.itemModel);
         
     }
 
