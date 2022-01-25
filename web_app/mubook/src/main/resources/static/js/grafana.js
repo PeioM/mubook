@@ -1,11 +1,21 @@
 
 $(document).ready(function() {
-    let buttons = document.getElementsByClassName("trackGrafana");
+    let grafanaElement = document.getElementsByClassName("trackGrafana");
 
-    for (let button of buttons) {
-        button.addEventListener("click", function(){
-            ajaxCallRegisterButtonClick(button.getAttribute("grafanaId"));
-        });
+    for (let element of grafanaElement) {
+        let tag = element.tagName.toLowerCase();
+
+        if(tag === "button" || tag === "a" || (tag === "input" && element.getAttribute("type") === "submit" )){
+            element.addEventListener("click", function(){
+                ajaxCallRegisterButtonClick(element.getAttribute("grafanaId"));
+            });
+        }
+        else {
+            //Checkbox active in reservation filters
+            element.addEventListener("change", function(){
+                ajaxCallRegisterButtonClick(element.getAttribute("grafanaId"));
+            });
+        }
     }
 });
 

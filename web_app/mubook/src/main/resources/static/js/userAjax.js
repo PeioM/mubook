@@ -48,8 +48,9 @@ function ajaxCallGetUsers(actionUrl, containStr){
 
             for (let user of users){
                 let usersHTML =
-                    '<div class="userCard card col mb-4 shadow bg-light p-0"> ' +
-                    '    <a href="/user/'+user.userId+'/edit" class="text-decoration-none text-dark trackGrafana" grafanaId="18"> ' +
+                    '<div class="card col mb-4 shadow bg-light p-0"> ' +
+                    '    <a href="/user/'+user.userId+'/edit" ' +
+                    '           class="userCardLink text-decoration-none text-dark trackGrafana" grafanaId="18"> ' +
                     '       <img class="card-img-top img-fluid" src="/images/userProfiles/1.png" alt="User '+user.userId+' profile image">' +
                     '       <div class="card-body text-center"> ' +
                     '           <h5 class="card-title">ID: '+user.userId+'</h5> ' +
@@ -66,6 +67,13 @@ function ajaxCallGetUsers(actionUrl, containStr){
             }
             $('#resultBlock').html(innerHTML);
             toggleFilters(document.getElementsByClassName("filterOption"));
+
+            let itemModelCards = document.getElementsByClassName("userCardLink");
+            for(let card of itemModelCards){
+                card.addEventListener("click", function(){
+                    ajaxCallRegisterButtonClick(card.getAttribute("grafanaId"));
+                });
+            }
         }
     });
 }
