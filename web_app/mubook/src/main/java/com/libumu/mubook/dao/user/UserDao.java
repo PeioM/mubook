@@ -29,6 +29,7 @@ import java.util.List;
      int countUserByEmailAndUserIdIsNot(String email, Long userId);
      int countUsersByUsername(String username);
      int countUsersByEmail(String email);
+     Long getTopId();
 
 
      int getuserCountContaining(String containStr);
