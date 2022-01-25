@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="include.html :: headerfiles">
-        <title id="Ptitle">About Us</title>
+        <title id="Ptitle" th:text="#{aboutUs.htmlTitle}"></title>
     </head>
 
 <body>
@@ -17,55 +17,30 @@
                         <img src="/images/logo_web.png" alt="MUBook logo with text"
                             class="bi img-fluid img-about-us" />
                     </div>
-                    <p class="mbr-text mbr-fonts-style display-7 mt-3">
-                        We are a company founded in 2021...
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-                        molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-                        numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
-                        optio, eaque rerum!
-                        It's the ability to think outside the box. We make decisions, create something new and generate
-                        a lot of ideas.
-                    </p>
+                    <p class="mbr-text mbr-fonts-style display-7 mt-3" th:text="#{aboutUs.mubookText}"></p>
                 </div>
             </div>
             <div class="card col p-3 col-12 col-md-6 col-lg-4 bg-white">
                 <div class="card-box">
-                    <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-break text-center">
-                        Social Engagement</h4>
+                    <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-break text-center" th:text="#{aboutUs.socialEngTitle}"></h4>
                     <div class="card-img pb-3 d-flex justify-content-center">
                         <img src="/images/aboutUs/social_engagement.jpg" alt="Social Engagement images"
                             class="bi img-fluid img-about-us" />
                     </div>
-                    <p class="mbr-text mbr-fonts-style display-7 mt-3">
-                        Mubook has always been characterised by its commitment to the educational development...
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-                        molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-                        numquam.
-                        All sites you make with Mobirise are mobile-friendly. You don't have to create a special mobile
-                        version of your site.
-                    </p>
+                    <p class="mbr-text mbr-fonts-style display-7 mt-3" th:text="#{aboutUs.socialEngText}"></p>
                 </div>
             </div>
             <div class="card col p-3 col-12 col-md-6 col-lg-4 bg-white">
                 <div class="card-box">
                     <div class="card-title">
-                        <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center">
-                            Offered Services
-                        </h4>
+                        <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center" th:text="#{aboutUs.offeredServicesTitle}"></h4>
                     </div>
                     <div class="card-img pb-3 d-flex justify-content-center mw-90">
                         <img src="/images/aboutUs/services.jpg" alt="Services images"
                             class="bi img-fluid img-about-us" />
                     </div>
                     <div class="card-content-text">
-                        <p class="mbr-text mbr-fonts-style display-7 mt-3">
-                            We offer different services such us...
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-                            molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-                            numquam.
-                            Mobirise offers many site blocks in several themes, and though these blocks are pre-made,
-                            they are flexible.
-                        </p>
+                        <p class="mbr-text mbr-fonts-style display-7 mt-3" th:text="#{aboutUs.offeredServicesText}"></p>
                     </div>
                 </div>
             </div>

@@ -62,14 +62,14 @@
           <img src="/images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile trackGrafana">
-          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item trackGrafana" grafanaId="10" href="/reservations/all">My Reservations</a></li>
-          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item trackGrafana" grafanaId="10" href="/reservations/all">Reservations</a></li>
-          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item trackGrafana" grafanaId="11" href="/user/profile">My Profile</a></li>
-          <li sec:authorize= "hasRole('ADMIN')"><a class="dropdown-item trackGrafana" grafanaId="" href="/data">Data charts</a></li>
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item trackGrafana" grafanaId="10" href="/reservations/all" th:text="#{menu.myReservations}"></a></li>
+          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item trackGrafana" grafanaId="10" href="/reservations/all" th:text="#{menu.reservations}"></a></li>
+          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item trackGrafana" grafanaId="11" href="/user/profile" th:text="#{menu.myProfile}"></a></li>
+          <li sec:authorize= "hasRole('ADMIN')"><a class="dropdown-item trackGrafana" grafanaId="" href="/data" th:text="#{menu.dataCharts}"></a></li>
           <li sec:authorize= "isAuthenticated()">
             <hr class="dropdown-divider">
           </li>
-          <li sec:authorize= "isAnonymous()"><a class="dropdown-item trackGrafana"  grafanaId="8" th:href="@{/login}">Sign in</a></li>
+          <li sec:authorize= "isAnonymous()"><a class="dropdown-item trackGrafana"  grafanaId="8" th:href="@{/login}" th:text="#{menu.signIn}"></a></li>
           <li sec:authorize= "isAuthenticated()">
             <form th:action="@{/logout}" method = "post">
             <input type = "submit" value = "Sign Out" class="dropdown-item trackGrafana" grafanaId="9"/>
@@ -93,29 +93,29 @@
           <!-- this list contains the "menu options (items)" such as download, contact, pricing, etc. -->
           <ul id="my-ul" class="navbar-nav w-100">
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="1" th:classappend="${true}? active"  th:href="@{/}" >Home</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="1" th:classappend="${true}? active"  th:href="@{/}" th:text="#{menu.home}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="2" th:classappend="${false}? active" th:href="@{/search}">Search</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="2" th:classappend="${false}? active" th:href="@{/search}" th:text="#{menu.search}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="3" th:classappend="${false}? active" th:href="@{/faq}">FAQ</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="3" th:classappend="${false}? active" th:href="@{/faq}" th:text="#{menu.faq}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="4" th:classappend="${false}? active" th:href="@{/aboutUs}">About Us</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="4" th:classappend="${false}? active" th:href="@{/aboutUs}" th:text="#{menu.aboutUs}"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white trackGrafana" grafanaId="5" th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}">Users</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="5" th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}" th:text="#{menu.users}"></a>
             </li>
             <hr>
-            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">My Reservations</a></li>
-            <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">Reservations</a></li>
-            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
-            <li sec:authorize= "hasRole('ADMIN')"><a class="nav-link text-white d-lg-none" href="/data">Data charts</a></li>
+            <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/all" th:text="#{menu.myReservations}"></a></li>
+            <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all" th:text="#{menu.reservations}"></a></li>
+            <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile" th:text="#{menu.myProfile}"></a></li>
+            <li sec:authorize= "hasRole('ADMIN')"><a class="nav-link text-white d-lg-none" href="/data" th:text="#{menu.dataCharts}"></a></li>
             <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
             </li>
-            <li sec:authorize= "isAnonymous()"><a class="nav-link text-white d-lg-none" th:href="@{/login}">Sign in</a></li>
+            <li sec:authorize= "isAnonymous()"><a class="nav-link text-white d-lg-none" th:href="@{/login}" th:text="#{menu.signIn}"></a></li>
             <li sec:authorize= "isAuthenticated()" class="nav-link text-white d-lg-none" >
               <form th:action="@{/logout}" method = "post">
               <input type = "submit" value = "Sign Out" class="nav-link text-white d-lg-none bg-transparent border-0"/>
@@ -125,9 +125,9 @@
           </ul>
           <ul class="navbar-nav float-right">
             <li class="nav-item language float-right">
-              <a class="nav-link text-white active" href="#">en</a>
-              <a class="nav-link text-white" href="#">es</a>
-              <a class="nav-link text-white" href="#">eu</a>
+              <a class="nav-link text-white active" href="#" th:text="#{lang.en}"></a>
+              <a class="nav-link text-white" href="#" th:text="#{lang.es}"></a>
+              <a class="nav-link text-white" href="#" th:text="#{lang.eu}"></a>
             </li>
           </ul>
         </div>
@@ -143,9 +143,7 @@
         <!-- Grid column -->
         <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4 text-center">
           <!-- Content -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            <em class="fas fa-envelope me-3"></em>Contact us:
-          </h6>
+          <h6 class="text-uppercase fw-bold mb-4" th:text="#{footer.contactUs}"></h6>
           <a href="mailto:mubook@mondragon.edu" class="text-white">
             mubook@mondragon.edu
           </a>
@@ -157,15 +155,13 @@
             MuBook
           </h6>
           <hr/>
-            <em>"Access to culture for every one"</em>
+            <h6 th:text="#{footer.engagement}"></h6>
         </div>
         <!-- Grid column -->
 
         <!-- Grid column -->
         <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <h6 class="text-uppercase fw-bold mb-4 text-center">
-            Social Networks
-          </h6>
+          <h6 class="text-uppercase fw-bold mb-4 text-center" th:text="#{footer.socialNetworks}"></h6>
           <div class="d-flex justify-content-center">
             <!-- Section: Social media -->
             <div class="d-flex justify-content-lg-center">

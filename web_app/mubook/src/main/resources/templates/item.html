@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">Item</title>
+    <title id="Ptitle" th:text="#{item.htmlTitle}"></title>
 </head>
 
 <body>
@@ -26,17 +26,15 @@
                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
                                     th:attr="alt=${username} + ' avatar'" width="40" height="40" />
                                 <div class="form-outline w-100">
-                                    <p class="text-secondary"><label class="text-primary"
-                                            th:text="${#authentication.getPrincipal().getUsername()}"></label> Leave
-                                        your
-                                        comment</p>
+                                    <p class="text-secondary" th:text="#{item.leaveComment}"><label class="text-primary"
+                                            th:text="${#authentication.getPrincipal().getUsername()}"></label></p>
                                     <textarea class="form-control" id="textAreaComment" rows="4"
                                         style="background: #fff;" name="textAreaComment" th:field="*{content}"
                                         th:attr="value=${commentItem.content}" required></textarea>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end mt-2 pt-1">
-                                <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+                                <button type="submit" class="btn btn-primary btn-sm" th:text="#{item.postComment}"></button>
                             </div>
                         </div>
                     </form>
@@ -46,12 +44,12 @@
                 <div sec:authorize="hasAnyRole('ADMIN','WORKER')"
                     class="row m-2 d-md-flex justify-content-center admin-actions-div">
                     <a class="col-2 btn salmon m-2 " th:href="@{'/itemModel/'+${itemModel.itemModelId}+'/edit'}"
-                        role="button">Edit Item</a>
+                        role="button" th:text="#{item.editItem}"></a>
                     <a class="col-2 btn salmon m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
-                        role="button">Create Reservation</a>
+                        role="button" th:text="#{item.createReserve}"></a>
                 </div>
                 <div class="row m-4 specifications-div">
-                    <h3 class="mb-2">Specifications</h3>
+                    <h3 class="mb-2" th:text="#{item.specifications}"></h3>
                     <div class="col each-specification-div shadow-sm p-1 mb-2 bg-body rounded"
                         th:each="specificationList: ${itemModel.specificationLists}">
                         <label class="text-dark" th:text="${specificationList.specification.description}"></label>
@@ -59,22 +57,20 @@
                     </div>
                 </div>
                 <div class="row m-4 descripion-div">
-                    <h3>Description</h3>
+                    <h3 th:text="#{item.description}"></h3>
                     <textarea class="form-control mt-2" id="textAreaDescription" rows="10"
-                        style="min-height:100px;height:100%;width:100%;" disabled th:text="${itemModel.description}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
-                    </textarea>
+                        style="min-height:100px;height:100%;width:100%;" disabled th:text="${itemModel.description}"></textarea>
                 </div>
                 <hr>
                 <div class="d-flex justify-content-center" sec:authorize="hasRole('USER')">
                     <a class="col-2 btn salmon m-2 d-flex justify-content-center"
-                        th:href="@{'/reservations/'+${itemModel.itemModelId}+'/offer' }" role="button">BOOK NOW</a>
+                        th:href="@{'/reservations/'+${itemModel.itemModelId}+'/offer' }" role="button" th:text="#{item.bookNow}"></a>
                 </div>
                 <div class="row m-4 accordion" id="accordionExample">
                     <div class="accordion-item p-0">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button text-primary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Comments
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" th:text="#{item.comments}">
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"

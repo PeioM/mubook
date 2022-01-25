@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">Main Page</title>
+    <title id="Ptitle" th:text="#{home.htmlTitle}"></title>
 </head>
 
 <body class=" justify-content-center">
@@ -24,9 +24,8 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" th:id="'heading'+${iterator.index}">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            aria-expanded="true" th:attr="aria-controls='collapse'+${iterator.index}, data-bs-target='#collapse'+${iterator.index}">
-                                                More info
-                                            </button>
+                                            aria-expanded="true" th:attr="aria-controls='collapse'+${iterator.index}, data-bs-target='#collapse'+${iterator.index}" 
+                                            th:text="#{home.moreInfo}"></button>
                                         </h2>
                                         <div th:id="'collapse'+${iterator.index}" class="accordion-collapse collapse " th:attr="aria-labelledby='heading'+${iterator.index},
                                             data-bs-parent='#accordion'+${iterator.index}">
@@ -64,7 +63,7 @@
     </div>
 
     <div class="createNew-div d-flex justify-content-center mt-2">
-        <a sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="btn btn-primary salmon trackGrafana" grafanaId="14" id="create-new-btn" href="/news/add">Create new</a>
+        <a sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="btn btn-primary salmon trackGrafana" grafanaId="14" id="create-new-btn" href="/news/add" th:text="#{home.createNew}"></a>
     </div>
 
     <footer th:replace="include.html :: footercontent"></footer>
