@@ -83,16 +83,6 @@ public class ItemModelControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
-    public void testUpdateItem() throws Exception {
-        mvc.perform(post("/itemModel/disableItem").with(csrf())
-                .param("id", "1"));
-
-        Item item = itemDao.getItem(1);
-        assertNotNull(item);
-    }
-
-    @Test
     @WithMockUser(username = "user", password = "user", authorities = "ROLE_USER")
     public void testCommentAndDelete() throws Exception {
         mvc.perform(post("/itemModel/comment").with(csrf())
@@ -115,13 +105,6 @@ public class ItemModelControllerTests {
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void testCreateEditItemModel() throws Exception {
-        mvc.perform(post("/itemModel/create").with(csrf())
-                .param("description", "")
-                .param("name", "")
-                .param("identifier", "")
-                .param("img", "")
-                .param("itemType.itemTypeId", "2"));
-
 
         MockMultipartFile file;
         file = new MockMultipartFile(
@@ -153,13 +136,8 @@ public class ItemModelControllerTests {
         ItemModel itemModelEdit = itemModelDao.getItemModel(itemModelDao.getTopId());
         assertEquals(itemModelEdit.getDescription(), "testingEdit");
 
-        mvc.perform(post("/itemModel/edit").with(csrf())
-                .param("itemModelId", String.valueOf(id))
-                .param("description", "")
-                .param("name", "")
-                .param("identifier", "")
-                .param("img", "")
-                .param("itemType.itemTypeId", "2"));
+        itemModelDao.deleteItemModel(itemModelEdit);
+
     }
 
     @Test
@@ -174,6 +152,14 @@ public class ItemModelControllerTests {
 
         Item item = itemDao.getItem(id);
         assertEquals(item.getStatus().getDescription(), "Available");
+
+        mvc.perform(post("/itemModel/disableItem").with(csrf())
+                .param("id", String.valueOf(id)));
+
+        item = itemDao.getItem(id);
+        assertNotNull(item);
+
+        itemDao.deleteItem(item);
     }
 
     @Test
