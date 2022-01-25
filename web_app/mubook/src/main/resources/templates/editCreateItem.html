@@ -31,7 +31,7 @@
                                     <hr>
                                     <div class="row mt-2">
                                         <div class="col-md-4">
-                                            <span class="labels" th:text="#{editCreateItem.type}">
+                                            <span class="labels" th:text="#{editCreateItem.type}"></span>
                                                 <select class="form-select" name="type">
                                                     <optgroup label="Select Item Model type">
                                                         <option selected
@@ -42,20 +42,17 @@
                                                             th:each="itemType : ${itemTypes}"></option>
                                                     </optgroup>
                                                 </select>
-                                            </span>
                                         </div>
                                         <div class="col-md-4">
-                                            <span class="labels" th:text="#{editCreateItem.name}">
+                                            <span class="labels" th:text="#{editCreateItem.name}"></span>
                                                 <input type="text" class="form-control" th:value="${itemModel.name}" th:field="*{name}" placeholder="Name">
-                                            </span>
                                         </div>
                                         <div class="col-md-4 xs-m-2">
-                                            <span class="labels" th:text="#{editCreateItem.serialNum}">
+                                            <span class="labels" th:text="#{editCreateItem.serialNum}"></span>
                                                 <input type="text" class="form-control" th:value="${itemModel.identifier}" th:field="*{identifier}" placeholder="Item serial number">
+                                                <label class="labels d-none col">
                                                     <input type="text" id="model" th:value="${itemModel.itemModelId}" name="itemModelId">
-                                                <label class="labels d-none col" th:text="#{editCreateItem.itemModel}">
                                                 </label>
-                                            </span>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
@@ -153,7 +150,7 @@
                                                         </optgroup>
                                                     </select>
                                                 </label>
-                                                <label class="labels d-none col" th:text="#{editCreateItem.itemModel}"><input type="text" id="item_model_id" th:value="${itemModel.itemModelId}" name="itemModelId"></label>
+                                                <label class="labels d-none col"><input type="text" id="item_model_id" th:value="${itemModel.itemModelId}" name="itemModelId"></label>
                                                 <button type="submit" id="addButton" class="btn btn-primary salmon col-2 p-1" th:text="#{editCreateItem.add}"></button>
                                             </div>
                                         </div>

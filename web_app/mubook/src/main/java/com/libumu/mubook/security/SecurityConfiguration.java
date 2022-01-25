@@ -22,9 +22,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public final static int ENCRYPT_STRENGTH = 10;
     private final static String[] ADMIN_MATCHERS = {"/data/**"};
 
-    private final static String[] ADMIN_WORKER_MATCHERS = {"/user/**", "/news/**","/itemModel/{itemModelId}/edit", "/itemModel/add",
-            "/itemModel/create","/itemModel/addSpecification","/itemModel/addItem","/itemModel/deleteSpec","/itemModel/disableItem",
-            "/itemModel/edit", "/ajax/filterUsers/**", "/ajax/filterUsersGetPages/**", "/faq/**", "/userType/**"};
+    private final static String[] ADMIN_WORKER_MATCHERS = {"/user/**", "/news/**","/itemModel/**",
+            "/ajax/**", "/faq/**", "/userType/**"};
 
     private final static String[] AUTHENTICATED_MATCHERS = {"/reservations/**","/user/profile"
             ,"/ajax/filterReservationsGetPages/**","/ajax/filterReservations/**"};
@@ -33,7 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static String[] ANY_USER_MATCHERS = {
             "/","/index","/home","/search","/search/**","/itemModel/{itemModelId}/view","/faq","/aboutUs","/login","/login_process","/logout",
-            "/css/**","/images/**","/js/**","/templates/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**", "/ajax/registerGrafana/*"};
+            "/css/**","/images/**","/js/**","/templates/**","/ajax/filterItemModels/**","/ajax/filterItemModelsGetPages/**", "/ajax/registerGrafana/*",
+            "/user/add"};
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -47,11 +47,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 //Filter pages based on the authority or role the user has
-                .antMatchers(ADMIN_MATCHERS).hasRole("ADMIN")
-                .antMatchers(ADMIN_WORKER_MATCHERS).hasAnyRole("ADMIN", "WORKER")
-                .antMatchers(USER_MATCHERS).hasRole("USER")
-                .antMatchers(AUTHENTICATED_MATCHERS).authenticated()
                 .antMatchers(ANY_USER_MATCHERS).permitAll()
+                .antMatchers(AUTHENTICATED_MATCHERS).authenticated()
+                .antMatchers(USER_MATCHERS).hasRole("USER")
+                .antMatchers(ADMIN_WORKER_MATCHERS).hasAnyRole("ADMIN", "WORKER")
+                .antMatchers(ADMIN_MATCHERS).hasRole("ADMIN")
                 .anyRequest().denyAll()
                 .and()
                 //Login control

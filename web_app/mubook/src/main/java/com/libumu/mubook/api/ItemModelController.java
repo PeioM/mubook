@@ -350,7 +350,8 @@ public class ItemModelController {
             error = error + " Item model description is empty";
         }
 
-        if (file == null) {
+        if (file == null || file.isEmpty() || file.getOriginalFilename() == null
+                || file.getOriginalFilename().equals("")) {
             itemModelEdited.setImg((itemModelDao.getItemModel(itemModelEdited.getItemModelId())).getImg());
         } else {
             String filename = file.getOriginalFilename();
