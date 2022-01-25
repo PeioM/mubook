@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end mt-2 pt-1">
-                                <button type="submit" class="btn btn-primary btn-sm" th:text="#{item.postComment}"></button>
+                                <button type="submit" class="btn btn-primary btn-sm trackGrafana" grafanaId="25" th:text="#{item.postComment}"></button>
                             </div>
                         </div>
                     </form>
@@ -43,9 +43,9 @@
             <div class="col-lg-8 align-items-center border-right">
                 <div sec:authorize="hasAnyRole('ADMIN','WORKER')"
                     class="row m-2 d-md-flex justify-content-center admin-actions-div">
-                    <a class="col-sm-3 p-0  btn salmon m-2 d-flex align-items-center justify-content-center" th:href="@{'/itemModel/'+${itemModel.itemModelId}+'/edit'}"
+                    <a class="col-sm-3 p-0  btn salmon m-2 d-flex align-items-center justify-content-center trackGrafana" grafanaId="26" th:href="@{'/itemModel/'+${itemModel.itemModelId}+'/edit'}"
                         role="button" th:text="#{item.editItem}"></a>
-                    <a class="col-sm-3 p-0  btn salmon m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
+                    <a class="col-sm-3 p-0  btn salmon m-2  trackGrafana" grafanaId="27" th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
                         role="button" th:text="#{item.createReserve}"></a>
                 </div>
                 <div class="row m-4 specifications-div">
@@ -63,8 +63,8 @@
                 </div>
                 <hr>
                 <div class="d-flex justify-content-center" sec:authorize="hasRole('USER')">
-                    <a class="col-2 btn salmon m-2 d-flex justify-content-center"
-                        th:href="@{'/reservations/'+${itemModel.itemModelId}+'/offer' }" role="button" th:text="#{item.bookNow}"></a>
+                    <a class="col-2 btn salmon m-2 d-flex justify-content-center trackGrafana" grafanaId="24"
+                        th:href="@{'/reservations/'+${itemModel.itemModelId}+'/offer' }" role="button" th:text="#{item.bookNow}" ></a>
                 </div>
                 <div class="row m-4 accordion" id="accordionExample">
                     <div class="accordion-item p-0">
