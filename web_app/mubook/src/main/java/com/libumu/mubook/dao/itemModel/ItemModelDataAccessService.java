@@ -68,6 +68,12 @@ public class ItemModelDataAccessService implements ItemModelDao {
     public int countItemModelByIdentifier(String identifier) {
         return repository.countItemModelByIdentifier(identifier);
     }
+
+    @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
+
     @Override
     public List<ItemModel> getItemModelsBySpecificationRowsBetween(List<Integer> specIds, List<String> specValues, int page) {
         int start = (page-1)* AjaxController.ITEMS_PER_PAGE;

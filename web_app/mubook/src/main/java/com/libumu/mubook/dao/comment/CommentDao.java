@@ -13,4 +13,6 @@ public interface CommentDao {
     void deleteComment(long commentId);
     void deleteComent(Comment comment);
     void addComent(Comment comment);
+    Comment findCommentByContent(String content);
+    Long getTopId();
 }

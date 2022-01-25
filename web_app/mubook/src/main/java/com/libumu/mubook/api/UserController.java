@@ -62,7 +62,7 @@ public class UserController {
     @PostMapping(path="/add")
     public ModelAndView createNewUser (Model model,
         @ModelAttribute User user,
-        @RequestParam("dniImg") MultipartFile file,
+        @RequestParam(value = "dniImg", required = false) MultipartFile file,
         WebRequest request) {
         //Return to user form in case there is any error
         String returnStr = "register";
@@ -291,9 +291,21 @@ public class UserController {
     public String addIncidence(Model model,
                                      @ModelAttribute Incidence incidence,
                                      WebRequest request){
-        IncidenceSeverity incidenceSeverity = incidenceSeverityDao.getIncidenceSeverityByDescription(request.getParameter("severity"));
+        String isId = request.getParameter("severity");
+        IncidenceSeverity incidenceSeverity;
+        incidenceSeverity = incidenceSeverityDao.getIncidenceSeverityByDescription(isId);
+        if(isId == null){
+            isId = String.valueOf(incidence.getIncidenceSeverity().getIncidenceSeverityId());
+            incidenceSeverity = incidenceSeverityDao.getIncidenceSeverity(Integer.parseInt(isId));
+        }
         String userId = request.getParameter("userId");
-        User user = userDao.findUserByUserId(Long.parseLong(userId));
+        User user;
+        if(userId == null){
+            user = userDao.getUser(incidence.getUser().getUserId());
+        }else{
+            user = userDao.findUserByUserId(Long.parseLong(userId));
+        }
+
         String error = "";
         String returnStr = "";
 

@@ -20,6 +20,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByItemItemModelNameAndUserUsername(String item_itemModel_name, String user_username);
     List<Reservation> findAllByItemItemModelNameAndEndDateIsAfterAndUserUsername(String item_itemModel_name, Date endDate, String user_username);
 
+    @Query(value = "SELECT MAX(r.reservation_id) FROM reservation r ", nativeQuery =  true)
+    Long getTopId();
+
     @Query(value = "SELECT MAX(r2.end_date) fecha, i2.item_id " +
             "    FROM reservation r2 "+
             "        JOIN item i2 on i2.item_id = r2.item_id " +

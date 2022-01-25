@@ -15,4 +15,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                     "   JOIN item_model im on im.item_model_id = i.item_model_id "+
                     "WHERE im.item_model_id = ?1", nativeQuery = true)
     public List<Object[]> getItemWithModelId(long itemModelId);
+
+    @Query(value = "SELECT MAX(i.item_id) FROM item i ", nativeQuery =  true)
+    Long getTopId();
 }

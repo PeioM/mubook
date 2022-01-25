@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final static String[] ADMIN_MATCHERS = {"/data/**", "/ajax/filterUsers/**", "/ajax/filterUsersGetPages/**"};
 
     private final static String[] ADMIN_WORKER_MATCHERS = {"/user/**", "/news/**","/itemModel/{itemModelId}/edit", "/itemModel/add",
-            "/itemModel/create","/itemModel/addSpecification","/itemModel/addItem","/itemModel/deleteSpec","/itemModel/disableItem", "/itemModel/edit"};
+            "/itemModel/create","/itemModel/addSpecification","/itemModel/addItem","/itemModel/deleteSpec","/itemModel/disableItem", "/itemModel/edit", "/faq/**", "/userType/**"};
 
     private final static String[] AUTHENTICATED_MATCHERS = {"/reservations/**","/user/profile"
             ,"/ajax/filterReservationsGetPages/**","/ajax/filterReservations/**"};

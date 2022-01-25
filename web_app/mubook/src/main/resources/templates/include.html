@@ -120,6 +120,7 @@
             <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">My Reservations</a></li>
             <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">Reservations</a></li>
             <li sec:authorize= "isAuthenticated()"><a class="nav-link text-white d-lg-none" href="/user/profile">My Profile</a></li>
+            <li sec:authorize= "hasRole('ADMIN')"><a class="nav-link text-white d-lg-none" href="/data">Data charts</a></li>
             <li sec:authorize= "isAuthenticated()">
               <hr class="dropdown-divider ">
             </li>
