@@ -287,7 +287,7 @@ public class ItemModelController {
     public String editItemModel(Model model,
             @ModelAttribute ItemModel itemModelEdited,
             @RequestParam("itemImg") MultipartFile file,
-            WebRequest request) {
+            WebRequest request) throws IOException {
         String error = "";
         String returnStr = "";
         ItemType it = itemTypeDao.getItemTypeByDesc(request.getParameter("type"));
@@ -314,20 +314,14 @@ public class ItemModelController {
         if (file.getOriginalFilename().equals("")) {
             itemModelEdited.setImg((itemModelDao.getItemModel(itemModelEdited.getItemModelId())).getImg());
         } else {
-            String filename = "";
-            filename = file.getOriginalFilename();
+            String filename = file.getOriginalFilename();
             String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
-            try {
                 String pathStr = ITEMS_IMAGES_DIR + itemModelEdited.getName() + extension;
                 new File(pathStr); // Create dest file to save
                 Path path = Paths.get(pathStr);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                 String imagePath = "images/createdItems/" + itemModelEdited.getName() + extension;
                 itemModelEdited.setImg(imagePath);
-                // In case there is no error redirect to home
-            } catch (IOException e) {
-                error = error + " Error uploading file";
-            }
         }
 
         if (error.length() == 0) {

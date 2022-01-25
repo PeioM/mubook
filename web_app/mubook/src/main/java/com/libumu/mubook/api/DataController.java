@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class DataController {
 
     //ItemType
     @GetMapping(path="/reservations/itemType")
-    public String countReservationByType(Model model){
+    public String countReservationByType(Model model) throws IOException, InterruptedException{
         long start = System.currentTimeMillis();
         List<Object[]> itemTypeId = itemTypeDao.getAllItemTypeId();
         ResultMap results= new ResultMap();
@@ -57,11 +58,7 @@ public class DataController {
         Buffer buffer = new Buffer(itemTypeId.size());
 
         for(int i = 0; i < itemTypeId.size(); i++){
-            try {
                 buffer.put((int) itemTypeId.get(i)[0]);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         int numThreads;
         for(numThreads=0; numThreads < itemTypeId.size() && numThreads < MAXNUMTHREADS_RESERVATIONS; numThreads++){
@@ -72,11 +69,7 @@ public class DataController {
             rbt[i].start();
         }
         for (int i = 0; i<numThreads; i++) {
-            try {
                 rbt[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         model.addAttribute("key", results.getKeys().toArray(new String[0]));
@@ -148,7 +141,7 @@ public class DataController {
 
     //ItemModel
     @GetMapping(path="/reservations/itemModel")
-    public String countReservationByModel(Model model){
+    public String countReservationByModel(Model model) throws InterruptedException{
         long start = System.currentTimeMillis();
         List<Object[]> itemModelId = itemModelDao.getAllItemModelId();
         ResultMap results= new ResultMap();
@@ -158,11 +151,7 @@ public class DataController {
         Buffer buffer = new Buffer(itemModelId.size());
 
         for(int i = 0; i < itemModelId.size(); i++){
-            try {
                 buffer.put(((BigInteger) itemModelId.get(i)[0]).intValue());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         int numThreads;
         for(numThreads=0; numThreads < itemModelId.size() && numThreads < MAXNUMTHREADS_RESERVATIONS; numThreads++){
@@ -173,11 +162,7 @@ public class DataController {
             rbm[i].start();
         }
         for (int i = 0; i<numThreads; i++) {
-            try {
                 rbm[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         tmpResult.putAll(results.getMap());
         sortedResult.putAll(sortByValue(tmpResult));
@@ -273,7 +258,7 @@ public class DataController {
 
     //ItemMonth
     @GetMapping(path="/reservations/itemMonth")
-    public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model){
+    public String countReservationOfModelByMonth(@RequestParam("itemModelId") long itemModelId, Model model) throws InterruptedException{
         long start = System.currentTimeMillis();
         List<Object[]> itemId = itemDao.getItemWithModelId(itemModelId);
         DateResultMap results = new DateResultMap();
@@ -282,11 +267,7 @@ public class DataController {
         Buffer buffer = new Buffer(itemId.size());
 
         for(int i = 0; i < itemId.size(); i++){
-            try {
                 buffer.put(((BigInteger) itemId.get(i)[0]).intValue());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         int numThreads;
@@ -298,14 +279,8 @@ public class DataController {
             rbi[i].start();
         }
         for (int i = 0; i<numThreads; i++) {
-            try {
                 rbi[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
-
-
 
 
         sortedResult.putAll(results.getMap());
@@ -374,16 +349,15 @@ public class DataController {
                         Long valueLong =((BigInteger)result.get(i)[0]).longValue();
                         results.put(keyStr, valueLong);
                     }
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | ParseException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        public String getDate(String month,String year){
+        public String getDate(String month,String year) throws ParseException{
             String dateStr=year + "-";
             SimpleDateFormat format = new SimpleDateFormat("MM");
-            try {
                 Date date = format.parse(month);
                 if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue() < 10){
                     String newMonth = "0" + month.substring(0);
@@ -391,10 +365,6 @@ public class DataController {
                 }else{
                     dateStr = dateStr + month;
                 }
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
 
             return dateStr;
         }
@@ -403,19 +373,14 @@ public class DataController {
 
     //User Age
     @GetMapping(path="/user/age")
-    public String countUsersByAge(Model model){
+    public String countUsersByAge(Model model) throws InterruptedException{
         long start = System.currentTimeMillis();
         ResultMap results= new ResultMap();
         Map<String, Long> sortedResult = new TreeMap<String, Long>();
         UsersByAge uba[] = new UsersByAge[MAXNUMTHREADS_RESERVATIONS];
         Buffer buffer=new Buffer(ageList.length);
         for(int i = 0; i < ageList.length; i++){
-            try {
                 buffer.put(ageList[i]);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         int numThreads;
         for(numThreads=0; numThreads < ageList.length && numThreads < MAXNUMTHREADS_RESERVATIONS; numThreads++){
@@ -426,11 +391,7 @@ public class DataController {
             uba[i].start();
         }
         for (int i = 0; i<numThreads; i++) {
-            try {
                 uba[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         sortedResult.putAll(results.getMap());
         List<String> key = new ArrayList<String>(sortedResult.keySet());
@@ -506,19 +467,14 @@ public class DataController {
 
     //User incidence
     @GetMapping(path="/user/incidence")
-    public String countUsersByIncidence(Model model){
+    public String countUsersByIncidence(Model model) throws InterruptedException{
         long start = System.currentTimeMillis();
         ResultMap results = new ResultMap();
         UsersByIncidence ubi[] = new UsersByIncidence[MAXNUMTHREADS_RESERVATIONS];
         Buffer buffer=new Buffer(MAXINCIDENCES);
 
         for(int i = 0; i < MAXINCIDENCES; i++){
-            try {
                 buffer.put(i);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
 
         int numThreads;
@@ -530,11 +486,7 @@ public class DataController {
             ubi[i].start();
         }
         for (int i = 0; i<numThreads; i++) {
-            try {
                 ubi[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         model.addAttribute("key", results.getKeys().toArray(new String[0]));
