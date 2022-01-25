@@ -118,6 +118,11 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
+
+    @Override
     public int countUserByDNIAndUserIdIsNot(String DNI, Long userId) {
         return repository.countUserByDNIAndUserIdIsNot(DNI, userId);
     }
