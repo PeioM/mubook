@@ -43,6 +43,7 @@ public class FaqController {
         List<Faq> faqs=faqDao.getAllFaqs();
         model.addAttribute("faqs", faqs);
         model.addAttribute("faq", new Faq());
+        model.addAttribute("navPage", "faq");
         
         // This returns a JSON or XML with the users
         return "faq";

@@ -32,6 +32,7 @@ public class SearchController {
     public String searchPage(Model model){
         model.addAttribute("itemTypes", itemTypeDao.getAllItemTypes());
         model.addAttribute("itemModels", itemModelDao.getAllItemModels());
+        model.addAttribute("navPage", "search");
         return "searchItems";
     }
 

@@ -32,6 +32,7 @@ public class HomeController implements ServletContextAware {
             updateNews(servletContext, newsDao);
         }
         model.addAttribute("news", servletContext.getAttribute("news"));
+        model.addAttribute("navPage", "index");
         return "index";
     }
 
@@ -39,7 +40,10 @@ public class HomeController implements ServletContextAware {
     public String login(){ return "login"; }
 
     @GetMapping("/aboutUs")
-    public String aboutUs(){ return "aboutUs"; }
+    public String aboutUs(Model model){
+        model.addAttribute("navPage", "aboutUs");
+        return "aboutUs";
+    }
 
     @GetMapping("/data")
     public String dataChart(Model model){ 
