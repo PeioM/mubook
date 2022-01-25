@@ -16,8 +16,9 @@
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                             <h4 th:text="${action}"></h4>
                             <div class="user-img-div">
-                                <img class="rounded mt-5 img-fluid" src="/static/images/ItemImages/userIcon.png"
-                                    alt="User exmaple image">
+                                <img class="rounded mt-5 img-fluid" src="/images/userProfiles/1.png"
+                                    alt="User image">
+                                <a th:href="@{userEdit.dniImgPath}" target="_blank">See user DNI</a>
                             </div>
                             <span class="font-weight-bold" th:text="${userEdit.username}"></span>
                             <span class="text-black-50" th:text="${userEdit.userId}"><span class="user-id"></span>
