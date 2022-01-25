@@ -21,17 +21,7 @@ public class HttpRequestTest {
     @Test
     public void indexRequest() {
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/",
-                String.class)).contains("This is the Index");
+                String.class)).contains("Home");
     }
 
-    @Test
-    public void mainPageRequest() {
-        //It should be redirected to /login
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/mainPage",
-                String.class)).doesNotContain("Hello");
-
-        //The redirected html (login)
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/mainPage",
-                String.class)).contains("Log in with a username");
-    }
 }

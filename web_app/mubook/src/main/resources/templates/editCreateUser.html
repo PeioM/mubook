@@ -47,6 +47,10 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div class="checkbox-validate">
+                                    <input type="checkbox" id="validated" name="validate-check" value="validated" th:checked="${userEdit.validated}">
+                                    <span th:text="#{editCreateUser.validated}"></span>
+                                </div>
                                 <div class="row mt-2">
                                     <div class="col-md-12 d-none"><label class="labels" th:text="#{editCreateUser.id}">ID</label><input type="text"
                                             class="form-control" placeholder="Name" th:field="*{userId}"
@@ -95,7 +99,8 @@
 
                                     <div class="container">
                                         <div id="data" class="row">
-                                            <label class="col" th:text="#{editCreateUser.incidenceSeverity}">
+                                            <span th:text="#{editCreateUser.incidenceSeverity}"></span>
+                                            <label class="col">
                                                 <select class="col form-control" name="severity">
                                                     <optgroup label="Select Incidence severity">
                                                         <option selected value="0"> - </option>
@@ -105,11 +110,13 @@
                                                     </optgroup>
                                                 </select>
                                             </label>
-                                            <label class="labels col" th:text="#{editCreateUser.description}"><input type="text" id="description"
+                                            <span th:text="#{editCreateUser.description}"></span>
+                                            <label class="labels col"><input type="text" id="description"
                                                     placeholder="Enter description" class="col form-control"
                                                     th:value="${incidence.description}"
                                                     th:field="*{description}"></label>
-                                            <label class="labels col" th:text="#{editCreateUser.incidenceDate}"><input type="date" id="date"
+                                            <span th:text="#{editCreateUser.incidenceDate}"></span>
+                                            <label class="labels col"><input type="date" id="date"
                                                     placeholder="Enter date" class="col form-control"
                                                     th:value="${incidence.initDate}" th:field="*{initDate}"
                                                     required></label>

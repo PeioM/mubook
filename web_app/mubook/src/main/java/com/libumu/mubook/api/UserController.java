@@ -140,7 +140,12 @@ public class UserController {
             BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder(SecurityConfiguration.ENCRYPT_STRENGTH);
             user.setPassword(encrypt.encode(request.getParameter("password")));
             user.setUserType(userTypeDao.getUserType(request.getParameter("flexRadioDefault")));
-            user.setValidated(true);
+            String validated = request.getParameter("validate-check");
+            if(validated == null){
+                user.setValidated(false);
+            }else{
+                user.setValidated(true);
+            }
             UserActivity ua = userActivityDao.getUserActivity(1);
             user.setUserActivity(ua);
             userDao.addUser(user);
@@ -205,7 +210,12 @@ public class UserController {
                 String type = request.getParameter("flexRadioDefault");
                 user.setUserType(userTypeDao.getUserType(type));
             }
-            user.setValidated(true);
+            String validated = request.getParameter("validate-check");
+            if(validated == null){
+                user.setValidated(false);
+            }else{
+                user.setValidated(true);
+            }
             userDao.editUser(user);
             returnStr = "redirect:/index";
         }
