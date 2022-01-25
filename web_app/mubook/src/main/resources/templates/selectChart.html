@@ -2,45 +2,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">Select chart</title>
+    <title id="Ptitle" th:text="#{selectChart.htmlTitle}"></title>
 </head>
 
 <body>
     <header th:replace="include.html :: headercontent"></header>
     <div class="container bg-white">
-        <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center">Charts</h4><br>
+        <h4 class="card-title py-3 mbr-fonts-style display-5 text-uppercase text-center" th:text="#{selectChart.charts}"></h4><br>
         <div
             class="charts-selection row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <h6 class="text-center">Reservations by item type</h6>
+                    <h6 class="text-center" th:text="#{selectChart.aa}"></h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/data/reservations/itemType" method="get">
-                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1" th:text="#{selectChart.chart}"></button>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <h6 class="text-center">Most/Less reserved items</h6>
+                    <h6 class="text-center" th:text="#{selectChart.mostLessReservedItems}"></h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/data/reservations/itemModel" method="get">
-                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1" th:text="#{selectChart.chart}"></button>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <h6 class="text-center">Item reservation flow</h6>
+                    <h6 class="text-center" th:text="#{selectChart.itemReserveFlow}"></h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/data/reservations/itemMonth" method="get">
-                        <span>Select a Item to generate the chart</span>
+                        <span th:text="#{selectChart.itemSelect}"></span>
                         <select class="col form-control" name="itemModelId">
                             <optgroup label="Select Incidence severity">
                                 
@@ -50,7 +50,7 @@
                             </optgroup>
                         </select>
                         <div class="center-button d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary mt-1 text-center">Chart</button>
+                            <button type="submit" class="btn btn-primary mt-1 text-center" th:text="#{selectChart.chart}"></button>
                         </div>
                     </form>
                 </div>
@@ -58,23 +58,23 @@
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <h6 class="text-center">Users by age range</h6>
+                    <h6 class="text-center" th:text="#{selectChart.ageRangeUsers}"></h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/data/user/age" method="get">
-                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1" th:text="#{selectChart.chart}"></button>
                     </form>
                 </div>
             </div>
 
             <div class="card rounded border p-2 m-2">
                 <div class="card-title">
-                    <h6 class="text-center">Users by penalty points</h6>
+                    <h6 class="text-center" th:text="#{selectChart.penaltyPointsUsers}"></h6>
                 </div>
                 <div class="card-body d-flex justify-content-center">
                     <form action="/data/user/incidence" method="get">
                         <div class="card-title"></div>
-                        <button type="submit" class="btn btn-primary mt-1">Chart</button>
+                        <button type="submit" class="btn btn-primary mt-1" th:text="#{selectChart.chart}"></button>
                     </form>
                 </div>
             </div>

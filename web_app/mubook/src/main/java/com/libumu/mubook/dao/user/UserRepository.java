@@ -19,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int countUserByEmail(String email);
     int countUserByDNI(String DNI);
 
+    @Query(value = "SELECT MAX(u.user_id) FROM user u ", nativeQuery =  true)
+    Long getTopId();
+
     @Query(value =  "SELECT DISTINCT u.* " +
                     "FROM user u " +
                     "WHERE name LIKE ?3 OR surname LIKE ?3 " +

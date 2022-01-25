@@ -15,8 +15,8 @@
                     <div class="user-img-div">
                         <img class="rounded mt-5 img-fluid" src="/images/userExample.jpg" alt="user profile image">
                     </div>
-                    <span class="font-weight-bold" th:text="${userEdit.username}">Your user</span>
-                    <span class="text-black-50">ID: <span class="user-id" th:text="${userEdit.userId}"></span> </span>
+                    <span class="font-weight-bold" th:text="${userEdit.username}" th:text="#{profile.yourUser}"></span>
+                    <span class="text-black-50" th:text="#{profile.id}"><span class="user-id" th:text="${userEdit.userId}"></span> </span>
                     <span> </span>
                 </div>
             </div>
@@ -25,59 +25,59 @@
                     <form name="user-profile-form" th:action="@{'/user/edit'}" th:object="${userEdit}" method="post">
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="text-right">Profile Settings</h4>
+                            <h4 class="text-right" th:text="#{profile.settings}"></h4>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Id</label><input type="text"
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.id}"></label><input type="text"
                                     class="form-control" th:field="*{userId}"
                                     th:attr="value=${userEdit.userId != null? userEdit.userId:''}" readonly></div>
-                            <div class="col-md-6"><label class="labels">User type</label><input type="text"
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.userType}"></label><input type="text"
                                     name="flexRadioDefault" class="form-control"
                                     th:attr="value=${userEdit.userType.userTypeId != null? userEdit.userType.userTypeId:''}"
                                     readonly></div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-md-6"><label class="labels">Name</label><input type="text"
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.name}"></label><input type="text"
                                     class="form-control" th:field="*{name}"
                                     th:attr="value=${userEdit.name != null? userEdit.name:''}" readonly></div>
-                            <div class="col-md-6"><label class="labels">Surnames</label><input type="text"
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.surname}"></label><input type="text"
                                     class="form-control" th:field="*{surname}"
                                     th:attr="value=${userEdit.surname != null? userEdit.surname:''}" readonly></div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-12"><label class="labels">Email</label><input type="email"
+                            <div class="col-md-12"><label class="labels" th:text="#{profile.email}"></label><input type="email"
                                     class="form-control" th:field="*{email}"
                                     th:attr="value=${userEdit.email != null? userEdit.email:''}" autofocus></div>
-                            <div class="col-md-12"><label class="labels">Username</label><input type="text"
+                            <div class="col-md-12"><label class="labels" th:text="#{profile.username}"></label><input type="text"
                                     class="form-control" th:field="*{username}"
                                     th:attr="value=${userEdit.username != null? userEdit.username:''}"></div>
                         </div>
                         <div class="row mt-3">
                             <h5>Change Password</h5>
-                            <div class="col-md-6"><label class="labels">Password</label><input type="password"
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.password}"></label><input type="password"
                                     class="form-control" placeholder="" value="" id="password" name="password"></div>
-                            <div class="col-md-6"><label class="labels">Repeat Password</label><input type="password"
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.repeatPassword}"></label><input type="password"
                                     class="form-control" value="" placeholder="" id="passwordRep" name="passwordRep">
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-6"><input type="checkbox" id="validate" name="validate"
-                                    th:checked="${userEdit.validated}" disabled><label for="validate">Validated</label>
+                                    th:checked="${userEdit.validated}" disabled><label for="validate" th:text="#{profile.validated}"> </label>
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <button class="btn salmon" type="submit">Save Profile</button>
+                            <button class="btn salmon" type="submit" th:text="#{profile.saveProfile}"></button>
                         </div>
                     </form>
                     <div class="incidents-div" style="overflow-x:auto">
                         <table class="table table-striped">
-                            <caption>Incidents div</caption>
+                            <caption th:text="#{profile.incidences}"></caption>
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Severity</th>
-                                    <th scope="col">Description</th>
-                                    <th class="w-25" scope="col">Date</th>
+                                    <th scope="col" th:text="#{profile.severity}"></th>
+                                    <th scope="col" th:text="#{profile.description}"></th>
+                                    <th class="w-25" scope="col" th:text="#{profile.date}"></th>
                                 </tr>
                             </thead>
                             <tbody>

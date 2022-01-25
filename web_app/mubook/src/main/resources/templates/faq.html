@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">FAQ</title>
+    <title id="Ptitle" th:text="#{faq.htmlTitle}"></title>
 </head>
 
 <body>
     <header th:replace="include.html :: headercontent"></header>
     <div class="container bg-white mt-3 mb-3 p-3 border">
         <div class="row justify-content-center ">
-            <h3 class="p-3">FREQUENTLY ASKED QUESTIONS</h3>
+            <h3 class="p-3" th:text="#{faq.faq}"></h3>
             <div class="accordion col border-right-0 col-lg-6" id="accordionExample">
 
                 <div th:each="listFaq, iterator: ${faqs}" class="accordion-item">
@@ -43,16 +43,16 @@
             <div sec:authorize= "hasAnyRole('ADMIN','WORKER')" class="faq-creation-form col-lg mt-4 mt-lg-0">
                 <form name="faq-form" th:action="@{/faq/add}" th:object="${faq}" method="post">
                     <div class="form-group mb-3">
-                        <label for="questionInput">Question</label>
+                        <label for="questionInput" th:text="#{faq.question}"></label>
                         <input type="text" class="form-control" id="questionInput" placeholder="Write a new question..." th:field="*{question}"
                             required autofocus>
                     </div>
                     <div class="form-group mt-3 mb-3">
-                        <label for="answerInput">Answer</label>
+                        <label for="answerInput" th:text="#{faq.answer}"></label>
                         <textarea class="form-control" id="answerInput" rows="3" placeholder="Write here the answer" th:field="*{answer}"
                             required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary salmon" id="create-faq-btn">Create FAQ</button>
+                    <button type="submit" class="btn btn-primary salmon" id="create-faq-btn" th:text="#{faq.createFaq}"></button>
                 </form>
             </div>
         </div>

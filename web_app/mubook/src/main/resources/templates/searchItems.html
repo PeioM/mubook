@@ -13,7 +13,7 @@
 <!--ITEM TYPE SELECTION-->
             <div>
                 <br/>
-                <h4 id="defaultSearchTitle" th:if="${itemTypes != null}">Filter by Item Type</h4>
+                <h4 id="defaultSearchTitle" th:if="${itemTypes != null}" th:text="#{searchItems.itemTypeFilter}"></h4>
                 <h4 id="itemTypeSearch" th:if="${actualItemType != null}" th:text="'Item Type: ' + ${actualItemType.description}"></h4>
                 <hr>
             </div>
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center">
-                <button class="btn btn-primary filterOption trackGrafana" grafanaId="16" th:if="${specifications!=null}" id="filterButton" style="font-size: 15px">Filter</button>
+                <button class="btn btn-primary filterOption trackGrafana" grafanaId="16" th:if="${specifications!=null}" id="filterButton" style="font-size: 15px" th:text="#{searchItems.filter}"></button>
             </div>
 <!----------------------->
 <!-----CREATE BUTTON----->
@@ -57,7 +57,7 @@
 <!----------------------->
 <!-----PAGE SELECTION---->
         <div class="form-group w-25 p-3 filterOption" id="pageSelector">
-            <label for="selectPage">Select Page: </label>
+            <label for="selectPage" th:text="#{searchItems.selectPage}"></label>
             <select class="form-control" name="page" id="selectPage"></select>
         </div>
 <!----------------------->

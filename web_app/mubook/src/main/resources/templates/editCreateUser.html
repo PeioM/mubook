@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include.html :: headerfiles">
-    <title id="Ptitle">Edit/Create user</title>
+    <title id="Ptitle" th:text="#{editCreateUser.htmlTitle}"></title>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                     <div class="col-lg-9 border-right">
                         <div class="p-3 py-5">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="text-right">Profile Settings</h4>
+                                <h4 class="text-right" th:text="#{editCreateUser.profileSettings}"></h4>
                             </div>
                             <form name="user-profile-form" th:action="@{'/user/'+${action}}" th:object="${userEdit}"
                                 method="post">
@@ -36,9 +36,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault"
                                             value="USER" id="flexRadioDefault1" checked>
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            User
-                                        </label>
+                                        <label class="form-check-label" for="flexRadioDefault1" th:text="#{editCreateUser.user}"></label>
                                     </div>
                                     <div sec:authorize="hasRole('ADMIN')" class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault"
@@ -49,54 +47,54 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col-md-12 d-none"><label class="labels">ID</label><input type="text"
+                                    <div class="col-md-12 d-none"><label class="labels" th:text="#{editCreateUser.id}">ID</label><input type="text"
                                             class="form-control" placeholder="Name" th:field="*{userId}"
                                             th:value="${userEdit.userId}"></div>
-                                    <div class="col-md-6"><label class="labels">Name</label><input type="text"
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.name}"></label><input type="text"
                                             class="form-control" placeholder="Name" th:field="*{name}"
                                             th:value="${userEdit.name}" autofocus></div>
-                                    <div class="col-md-6"><label class="labels">Surnames</label><input type="text"
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.surname}"></label><input type="text"
                                             class="form-control" th:value="${userEdit.surname}" th:field="*{surname}"
                                             placeholder="Example1 Example2"></div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-12"><label class="labels">Email</label><input type="email"
+                                    <div class="col-md-12"><label class="labels" th:text="#{editCreateUser.email}"></label><input type="email"
                                             class="form-control" placeholder="example@example.com" th:field="*{email}"
                                             th:value="${userEdit.email}"></div>
-                                    <div class="col-md-12"><label class="labels">Username*</label><input type="text"
+                                    <div class="col-md-12"><label class="labels" th:text="#{editCreateUser.username}"></label><input type="text"
                                             class="form-control" placeholder="username" value="" th:field="*{username}">
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-6"><label class="labels">DNI</label><input type="text"
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.idCard}"></label><input type="text"
                                             class="form-control" placeholder="12345678N" th:field="*{DNI}"
                                             th:value="${userEdit.DNI}"></div>
-                                    <div class="col-md-6"><label class="labels">Fecha nacimiento*</label><input
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.birthDate}"></label><input
                                             type="date" class="form-control" placeholder="username"
                                             th:value="${userEdit.bornDate}" th:field="*{bornDate}" required></div>
                                 </div>
                                 <div class="row mt-3">
                                     <h5>Change Password</h5>
-                                    <div class="col-md-6"><label class="labels">Password</label><input type="password"
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.password}"></label><input type="password"
                                             class="form-control" placeholder="" value="" name="password"></div>
-                                    <div class="col-md-6"><label class="labels">Repeat Password</label><input
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.repeatPassword}"></label><input
                                             type="password" class="form-control" value="" placeholder=""
                                             name="passwordRep"></div>
                                 </div>
                                 <div class="mt-5 text-center">
-                                    <button class="btn salmon" type="submit">Save User</button>
+                                    <button class="btn salmon" type="submit" th:text="#{editCreateUser.saveUser}"></button>
                                 </div>
                             </form>
                             <hr>
                             <div th:if="${action} eq 'edit'">
                                 <form th:action="@{'/user/incidenceAdd'}" th:object="${incidence}" method="post">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="text-right">Incidents History</h5>
+                                        <h5 class="text-right" th:text="#{editCreateUser.incidenceHistory}"></h5>
                                     </div>
 
                                     <div class="container">
                                         <div id="data" class="row">
-                                            <label class="col">Incidence severity
+                                            <label class="col" th:text="#{editCreateUser.incidenceSeverity}">
                                                 <select class="col form-control" name="severity">
                                                     <optgroup label="Select Incidence severity">
                                                         <option selected value="0"> - </option>
@@ -106,30 +104,30 @@
                                                     </optgroup>
                                                 </select>
                                             </label>
-                                            <label class="labels col">Description<input type="text" id="description"
+                                            <label class="labels col" th:text="#{editCreateUser.description}"><input type="text" id="description"
                                                     placeholder="Enter description" class="col form-control"
                                                     th:value="${incidence.description}"
                                                     th:field="*{description}"></label>
-                                            <label class="labels col">Incidence date<input type="date" id="date"
+                                            <label class="labels col" th:text="#{editCreateUser.incidenceDate}"><input type="date" id="date"
                                                     placeholder="Enter date" class="col form-control"
                                                     th:value="${incidence.initDate}" th:field="*{initDate}"
                                                     required></label>
                                             <label class="labels d-none col"><input type="text" id="user_id"
                                                     th:value="${userEdit.userId}" name="userId"></label>
                                             <button type="submit" id="addButton"
-                                                class="btnbtn btn-dark salmon col-md-2 col-sm-3 mt-sm-4">Add</button>
+                                                class="btn btn-primary salmon col-2 p-1" th:text="#{editCreateUser.add}"></button>
                                         </div>
                                     </div>
                                 </form>
                                 <div class="incidents-div" style="overflow-x:auto">
                                     <table class="table table-striped">
-                                        <caption>User incidents table</caption>
+                                        <caption th:text="#{editCreateUser.incidenceTable}"></caption>
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">Severity</th>
-                                                <th scope="col">Description</th>
-                                                <th class="w-25" scope="col">End Date</th>
+                                                <th scope="col" th:text="#{editCreateUser.severity}"></th>
+                                                <th scope="col" th:text="#{editCreateUser.description}"></th>
+                                                <th class="w-25" scope="col" th:text="#{editCreateUser.endDate}"></th>
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
