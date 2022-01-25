@@ -121,11 +121,14 @@ public class ItemModelController {
     @PostMapping(path = "/create")
     public String createItemModel(Model model,
             @ModelAttribute ItemModel itemModel,
-            @RequestParam("itemImg") MultipartFile file,
+            @RequestParam(value = "itemImg", required = false) MultipartFile file,
             WebRequest request) {
         String error = "";
         String type = request.getParameter("type");
         ItemType itemType = itemTypeDao.getItemTypeByDesc(type);
+        if(type == null){
+            itemType = itemTypeDao.getItemType(itemModel.getItemType().getItemTypeId());
+        }
         String returnStr = "redirect:/index";
 
         if (itemType == null) {
@@ -179,9 +182,21 @@ public class ItemModelController {
         String error = "";
         String returnStr = "";
 
-        ItemModel itemModel = itemModelDao.getItemModel(Long.parseLong(request.getParameter("itemModelId")));
-        int id = Integer.parseInt(request.getParameter("sp"));
-        Specification specification = specificationDao.findSpecificationBySpecificationIdIs(id);
+        String itemModelId = request.getParameter("itemModelId");
+        ItemModel itemModel;
+        if(itemModelId == null){
+            itemModel = itemModelDao.getItemModel(specificationList.getItemModel().getItemModelId());
+        }else{
+            itemModel = itemModelDao.getItemModel(Long.parseLong(itemModelId));
+        }
+        String id = request.getParameter("sp");
+        Specification specification;
+        if(id == null){
+            specification = specificationDao.getSpecification(specificationList.getSpecification().getSpecificationId());
+        }else{
+            specification = specificationDao.findSpecificationBySpecificationIdIs(Integer.parseInt(id));
+        }
+
         if (itemModel != null && specification != null && !specificationList.getValue().equals("")) {
             specificationList.setItemModel(itemModel);
             specificationList.setSpecification(specification);
@@ -208,10 +223,20 @@ public class ItemModelController {
 
         String error = "";
         String returnStr = "";
-
-        ItemModel itemModel = itemModelDao.getItemModel(Long.parseLong(request.getParameter("itemModelId")));
+        String itemModelId = request.getParameter("itemModelId");
+        ItemModel itemModel;
+        if(itemModelId == null){
+            itemModel = itemModelDao.getItemModel(item.getItemModel().getItemModelId());
+        }else{
+            itemModel = itemModelDao.getItemModel(Long.parseLong(itemModelId));
+        }
         String st = request.getParameter("st");
-        Status status = statusDao.getStatusByDescription(st);
+        Status status;
+        if(st == null){
+            status = statusDao.getStatusByDescription(item.getStatus().getDescription());
+        }else{
+            status = statusDao.getStatusByDescription(st);
+        }
         if (itemModel != null && status != null && !item.getSerialNum().equals("")) {
             item.setItemModel(itemModel);
             item.setStatus(status);
@@ -297,11 +322,14 @@ public class ItemModelController {
     @PostMapping(path = "/edit")
     public String editItemModel(Model model,
             @ModelAttribute ItemModel itemModelEdited,
-            @RequestParam("itemImg") MultipartFile file,
+            @RequestParam(value = "itemImg", required = false) MultipartFile file,
             WebRequest request) throws IOException {
         String error = "";
         String returnStr = "";
         ItemType it = itemTypeDao.getItemTypeByDesc(request.getParameter("type"));
+        if(it == null){
+            it = itemTypeDao.getItemType(itemModelEdited.getItemType().getItemTypeId());
+        }
         if (!itemModelEdited.getIdentifier().equals("")) {
             if (itemModelDao.countItemModelByIdentifierAndItemModelIdNotLike(itemModelEdited.getIdentifier(),
                     itemModelEdited.getItemModelId()) > 0) {
@@ -322,7 +350,7 @@ public class ItemModelController {
             error = error + " Item model description is empty";
         }
 
-        if (file.getOriginalFilename().equals("")) {
+        if (file == null) {
             itemModelEdited.setImg((itemModelDao.getItemModel(itemModelEdited.getItemModelId())).getImg());
         } else {
             String filename = file.getOriginalFilename();

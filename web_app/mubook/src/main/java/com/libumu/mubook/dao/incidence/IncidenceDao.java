@@ -18,4 +18,5 @@ public interface IncidenceDao {
     List<Incidence> getAllByUser(User user);
     List<Incidence> getIncidencesByEndDateIsAfterAndUser_UserId(Date endDate, Long user_userId);
     int countSumIncidenceByUserId(long userId);
+    Long getTopId();
 }

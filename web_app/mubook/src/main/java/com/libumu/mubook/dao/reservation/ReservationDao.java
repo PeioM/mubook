@@ -61,4 +61,5 @@ public interface ReservationDao {
     int getTotalActiveReservationCountForUser(long userId);
     int getActiveReservationCountByItemTypeForUser(int itemType, long userId);
     int getActiveReservationCountByItemModelForUser(long itemModel, long userId);
+    Long getTopId();
 }

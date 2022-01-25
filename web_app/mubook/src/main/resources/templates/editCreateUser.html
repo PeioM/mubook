@@ -99,7 +99,7 @@
                                             <label class="col">Incidence severity
                                                 <select class="col form-control" name="severity">
                                                     <optgroup label="Select Incidence severity">
-                                                        <option selected> - </option>
+                                                        <option selected value="0"> - </option>
                                                         <option name="severity" th:value="${severity.description}"
                                                             th:text="${severity.description}"
                                                             th:each="severity:${incidenceSeverities}"></option>

@@ -288,4 +288,9 @@ public class ReservationDataAccessService implements ReservationDao {
                 sqlDate, sqlDate, itemModel, userId);
     }
 
+    @Override
+    public Long getTopId() {
+        return repository.getTopId();
+    }
+
 }

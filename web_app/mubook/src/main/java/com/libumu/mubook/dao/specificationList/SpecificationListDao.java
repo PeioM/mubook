@@ -9,4 +9,5 @@ public interface SpecificationListDao {
     List<SpecificationList> getSpecificationListsByItemModel_ItemModelId(Long itemModel_itemModelId);
     SpecificationList findSpecificationListBySpecificationListId(Long specificationListId);
     void deleteSpecificationList(SpecificationList specificationList);
+    Long getTopId();
 }

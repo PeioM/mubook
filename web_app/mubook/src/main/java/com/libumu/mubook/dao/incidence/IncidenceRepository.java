@@ -20,4 +20,7 @@ public interface IncidenceRepository extends JpaRepository<Incidence, Long> {
                     "WHERE u.user_id = ?1 " +
                     "AND i.end_date > CURDATE() ", nativeQuery = true)
     int countSumIncidenceByUserId(long userId);
+
+    @Query(value = "SELECT MAX(i.incidence_id) FROM incidence i ", nativeQuery =  true)
+    Long getTopId();
 }
