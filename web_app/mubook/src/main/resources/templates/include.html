@@ -125,9 +125,9 @@
           </ul>
           <ul class="navbar-nav float-right">
             <li class="nav-item language float-right">
-              <a class="nav-link text-white active" href="#" th:text="#{lang.en}"></a>
-              <a class="nav-link text-white" href="#" th:text="#{lang.es}"></a>
-              <a class="nav-link text-white" href="#" th:text="#{lang.eu}"></a>
+              <a class="nav-link text-white" th:classappend="${#locale.language == 'en'}? active" th:href="|@{/}?language=en|" th:text="#{lang.en}"></a>
+              <a class="nav-link text-white" th:classappend="${#locale.language == 'es'}? active" th:href="|@{/}?language=es|" th:text="#{lang.es}"></a>
+              <a class="nav-link text-white" th:classappend="${#locale.language == 'eu'}? active" th:href="|@{/}?language=eu|" th:text="#{lang.eu}"></a>
             </li>
           </ul>
         </div>
