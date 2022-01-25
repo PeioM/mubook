@@ -153,10 +153,12 @@ public class ItemModelClass {
     public static class SpecificationClass {
         private Integer specificationId;
         private String description;
+        private boolean filter;
 
         public SpecificationClass(Specification specification) {
             this.specificationId = specification.getSpecificationId();
             this.description = specification.getDescription();
+            this.filter = specification.isFilter();
         }
 
         public String getDescription() {
@@ -173,6 +175,14 @@ public class ItemModelClass {
 
         public void setSpecificationId(Integer specificationId) {
             this.specificationId = specificationId;
+        }
+
+        public boolean isFilter() {
+            return filter;
+        }
+
+        public void setFilter(boolean filter) {
+            this.filter = filter;
         }
     }
 }
