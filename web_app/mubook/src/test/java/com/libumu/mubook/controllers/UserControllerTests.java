@@ -20,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -48,7 +49,7 @@ public class UserControllerTests {
                 .andExpect(view().name("searchUser"));
     }
 
-    /*@Test
+    @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void testRegister() throws Exception {
         MockMultipartFile file;
@@ -61,46 +62,62 @@ public class UserControllerTests {
         mvc.perform(multipart("/user/add").file(file).with(csrf())
                 .param("name", "Testing")
                 .param("surname", "Testing")
-                .param("DNI", "1234")
+                .param("DNI", "11111111")
                 .param("bornDate", "2001-04-17")
                 .param("email", "testing@gmail.com")
                 .param("password", "testing")
                 .param("username", "testing")
                 .param("userType.userTypeId", "USER")
-                .param("userActivity.userActivityId", "1"));
+                .param("userActivity.userActivityId", "1")
+                .param("password", "testing")
+                .param("passwordRep", "testing"));
 
         User userCreated = userDao.getUserByUsername("testing");
         assertEquals(userCreated.getUsername(), "testing");
-    }*/
 
-    //WebRequest como pasar parametros
+        userDao.deleteUser(userCreated.getUserId());
+    }
+
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
-    public void createUserWorker() throws Exception {
-        mvc.perform(post("/user/create").with(csrf())
-                .param("name", "Testing")
-                .param("surname", "Testing")
-                .param("DNI", "72599397N")
-                .param("bornDate", "2001-04-17")
-                .param("email", "jonastialo15@gmail.com")
-                .param("password", "testing")
-                .param("username", "jonastialo")
-                .param("userType.userTypeId", "USER")
-                .param("userActivity.userActivityId", "1"));
+    public void createAndEditUserWorker() throws Exception {
 
         mvc.perform(post("/user/create").with(csrf())
                 .param("name", "Testing")
                 .param("surname", "Testing")
-                .param("DNI", "123")
+                .param("DNI", "111111111")
                 .param("bornDate", "2001-04-17")
                 .param("email", "testing@gmail.com")
                 .param("password", "testing")
                 .param("username", "testing")
                 .param("userType.userTypeId", "USER")
-                .param("userActivity.userActivityId", "1"));
+                .param("userActivity.userActivityId", "1")
+                .param("password", "testing")
+                .param("passwordRep", "testing")
+                .param("flexRadioDefault", "USER"));
 
         User userCreated = userDao.getUserByUsername("testing");
         assertEquals(userCreated.getUsername(), "testing");
+
+        mvc.perform(post("/user/edit").with(csrf())
+                .param("userId", String.valueOf(userCreated.getUserId()))
+                .param("name", "Testing")
+                .param("surname", "Testing")
+                .param("DNI", "111111111")
+                .param("bornDate", "2001-04-17")
+                .param("email", "testing@gmail.com")
+                .param("password", "testing")
+                .param("username", "testingEdit")
+                .param("userType.userTypeId", "USER")
+                .param("userActivity.userActivityId", "1")
+                .param("password", "testing")
+                .param("passwordRep", "testing")
+                .param("flexRadioDefault", "USER"));
+
+        User userEdited = userDao.getUserByUsername("testingEdit");
+        assertEquals(userEdited.getUsername(), "testingEdit");
+
+        userDao.deleteUser(userEdited.getUserId());
     }
 
     @Test

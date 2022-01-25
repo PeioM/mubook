@@ -43,9 +43,9 @@
             <div class="col-lg-8 align-items-center border-right">
                 <div sec:authorize="hasAnyRole('ADMIN','WORKER')"
                     class="row m-2 d-md-flex justify-content-center admin-actions-div">
-                    <a class="col-2 btn salmon m-2 " th:href="@{'/itemModel/'+${itemModel.itemModelId}+'/edit'}"
+                    <a class="col-sm-3 p-0  btn salmon m-2 d-flex align-items-center justify-content-center" th:href="@{'/itemModel/'+${itemModel.itemModelId}+'/edit'}"
                         role="button" th:text="#{item.editItem}"></a>
-                    <a class="col-2 btn salmon m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
+                    <a class="col-sm-3 p-0  btn salmon m-2 " th:href="@{'/reservations/'+${itemModel.itemModelId}+'/create'}"
                         role="button" th:text="#{item.createReserve}"></a>
                 </div>
                 <div class="row m-4 specifications-div">
