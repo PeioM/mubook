@@ -150,11 +150,11 @@ public class ItemModelController {
             String filename = file.getOriginalFilename();
             String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
             try {
-                String pathStr = ITEMS_IMAGES_DIR + itemModel.getName() + extension;
+                String pathStr = ITEMS_IMAGES_DIR + itemModel.getName().replace(" ", "_") + extension;
                 new File(pathStr); // Create dest file to save
                 Path path = Paths.get(pathStr);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                String imagePath = "images/createdItems/" + itemModel.getName() + extension;
+                String imagePath = "images/createdItems/" + itemModel.getName().replace(" ", "_") + extension;
                 itemModel.setImg(imagePath);
                 // In case there is no error redirect to home
             } catch (IOException e) {
@@ -191,9 +191,11 @@ public class ItemModelController {
             itemModel.setSpecificationLists(specList);
             itemModelDao.editItemModel(itemModel);
             returnStr = "redirect:/itemModel/" + itemModel.getItemModelId() + "/edit";
-        } else {
+        }if(itemModel != null && (specification==null || specificationList.getValue().equals(""))){
             error = "Incorrect specification values";
             returnStr = "redirect:/itemModel/" + itemModel.getItemModelId() + "/edit?error=" + error;
+        }else{
+            error = "Major error, probably item model is null";
         }
 
         return returnStr;
@@ -229,9 +231,11 @@ public class ItemModelController {
 
         if (specificationList != null) {
             specificationListDao.deleteSpecificationList(specificationList);
+            return "redirect:/itemModel/" + specificationList.getItemModel().getItemModelId() + "/edit";
+        }else{
+            System.out.println("Specification list is null");
+            return "redirect:/index";
         }
-
-        return "redirect:/itemModel/" + specificationList.getItemModel().getItemModelId() + "/edit";
     }
 
     @PostMapping(path = "/disableItem")
@@ -246,9 +250,13 @@ public class ItemModelController {
                 item.setStatus(available);
             }
             itemDao.editItem(item);
+            return "redirect:/itemModel/" + item.getItemModel().getItemModelId() + "/edit";
+        }else{
+            System.out.println("Item is null");
+            return "redirect:/index";
         }
 
-        return "redirect:/itemModel/" + item.getItemModel().getItemModelId() + "/edit";
+        
     }
 
     @PostMapping(path = "/comment")
@@ -316,11 +324,11 @@ public class ItemModelController {
         } else {
             String filename = file.getOriginalFilename();
             String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
-                String pathStr = ITEMS_IMAGES_DIR + itemModelEdited.getName() + extension;
+                String pathStr = ITEMS_IMAGES_DIR + itemModelEdited.getName().replace(" ", "_") + extension;
                 new File(pathStr); // Create dest file to save
                 Path path = Paths.get(pathStr);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                String imagePath = "images/createdItems/" + itemModelEdited.getName() + extension;
+                String imagePath = "images/createdItems/" + itemModelEdited.getName().replace(" ", "_") + extension;
                 itemModelEdited.setImg(imagePath);
         }
 

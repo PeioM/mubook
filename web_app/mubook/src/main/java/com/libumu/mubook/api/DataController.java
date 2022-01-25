@@ -133,6 +133,7 @@ public class DataController {
                     results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -250,6 +251,7 @@ public class DataController {
                     results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -351,6 +353,7 @@ public class DataController {
                     }
                 } catch (InterruptedException | ParseException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -360,7 +363,7 @@ public class DataController {
             SimpleDateFormat format = new SimpleDateFormat("MM");
                 Date date = format.parse(month);
                 if(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue() < 10){
-                    String newMonth = "0" + month.substring(0);
+                    String newMonth = "0" + month;
                     dateStr = dateStr + newMonth;
                 }else{
                     dateStr = dateStr + month;
@@ -459,6 +462,7 @@ public class DataController {
                     results.put(range.get(0) +"-"+range.get(1), Long.valueOf(result));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -553,6 +557,7 @@ public class DataController {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }

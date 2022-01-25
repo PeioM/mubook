@@ -15,7 +15,6 @@ import java.util.*;
 
 import com.libumu.mubook.dao.item.ItemDao;
 import com.libumu.mubook.dao.itemModel.ItemModelDao;
-import com.libumu.mubook.dao.itemType.ItemTypeDao;
 import com.libumu.mubook.dao.reservation.ReservationDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +112,7 @@ public class ReservationController {
             }
         }
 
-        if(error.length() == 0){
+        if(error.length() == 0 && initDate != null){
             Date actualDate = new Date();
             if(initDate.compareTo(actualDate) < 0){
                 initDate = actualDate;
