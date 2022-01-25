@@ -132,7 +132,7 @@ public class DataController {
                     List<Object[]>result = reservationDao.countReservationsByItemType(buffer.get());
                     results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -250,7 +250,7 @@ public class DataController {
                     List<Object[]>result = reservationDao.countReservationsByItemModel((long)buffer.get());
                     results.put((String)result.get(0)[0], ((BigInteger) result.get(0)[1]).longValue());
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -461,7 +461,7 @@ public class DataController {
                     int result = userDao.countUsersByAge(range.get(0),range.get(1));
                     results.put(range.get(0) +"-"+range.get(1), Long.valueOf(result));
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -556,7 +556,7 @@ public class DataController {
                         results.put(Integer.toString(peso), 0L);
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
