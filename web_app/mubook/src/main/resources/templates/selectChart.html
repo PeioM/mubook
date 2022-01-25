@@ -43,7 +43,7 @@
                         <span>Select a Item to generate the chart</span>
                         <select class="col form-control" name="itemModelId">
                             <optgroup label="Select Incidence severity">
-                                <option selected value="0"> - </option>
+                                
                                 <option th:value="${model.itemModelId}" th:text="${model.name}"
                                     th:each="model:${itemModels}">
                                 </option>
@@ -78,7 +78,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
     <footer th:replace="include.html :: footercontent"></footer>
