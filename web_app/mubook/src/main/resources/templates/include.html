@@ -49,7 +49,7 @@
   <header class="mb-3 border-bottom" th:fragment="headercontent">
     <div class="d-lg-flex align-items-center container">
       <div class="d-flex align-items-center justify-content-center justify-content-lg-start col">
-        <a href="/index" class="d-flex  justify-content-center">
+        <a href="/index" class="d-flex  justify-content-center trackGrafana" grafanaId="6">
           <img src="/images/logo_mubook.png" alt="Logo MUBook" class="bi me-2 w-50 d-none d-lg-flex"
             aria-label="Bootstrap" />
           <img src="/images/logo_web.png" alt="Logo MUBook"
@@ -57,22 +57,22 @@
         </a>
       </div>
       <div class="dropdown text-end d-none d-lg-flex justify-content-end col">
-        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownProfile"
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle trackGrafana" grafanaId="7" id="dropdownProfile"
           data-bs-toggle="dropdown" aria-expanded="false">
           <img src="/images/profile.png" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
-        <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile">
-          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item" href="/reservations/all">My Reservations</a></li>
-          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item" href="/reservations/all">Reservations</a></li>
-          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item" href="/user/profile">My Profile</a></li>
-          <li sec:authorize= "hasRole('ADMIN')"><a class="dropdown-item" href="/data">Data charts</a></li>
+        <ul class="dropdown-menu text-small" aria-labelledby="dropdownProfile trackGrafana">
+          <li sec:authorize= "hasRole('USER')"><a class="dropdown-item trackGrafana" grafanaId="10" href="/reservations/all">My Reservations</a></li>
+          <li sec:authorize= "hasAnyRole('ADMIN','WORKER')"><a class="dropdown-item trackGrafana" grafanaId="10" href="/reservations/all">Reservations</a></li>
+          <li sec:authorize= "isAuthenticated()"><a class="dropdown-item trackGrafana" grafanaId="11" href="/user/profile">My Profile</a></li>
+          <li sec:authorize= "hasRole('ADMIN')"><a class="dropdown-item trackGrafana" grafanaId="" href="/data">Data charts</a></li>
           <li sec:authorize= "isAuthenticated()">
             <hr class="dropdown-divider">
           </li>
-          <li sec:authorize= "isAnonymous()"><a class="dropdown-item" th:href="@{/login}">Sign in</a></li>
+          <li sec:authorize= "isAnonymous()"><a class="dropdown-item trackGrafana"  grafanaId="8" th:href="@{/login}">Sign in</a></li>
           <li sec:authorize= "isAuthenticated()">
             <form th:action="@{/logout}" method = "post">
-            <input type = "submit" value = "Sign Out" class="dropdown-item"/>
+            <input type = "submit" value = "Sign Out" class="dropdown-item trackGrafana" grafanaId="9"/>
             </form>
           </li>
         </ul>
@@ -96,16 +96,16 @@
               <a class="nav-link text-white trackGrafana" grafanaId="1" th:classappend="${true}? active"  th:href="@{/}" >Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/search}">Search</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="2" th:classappend="${false}? active" th:href="@{/search}">Search</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/faq}">FAQ</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="3" th:classappend="${false}? active" th:href="@{/faq}">FAQ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white"  th:classappend="${false}? active" th:href="@{/aboutUs}">About Us</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="4" th:classappend="${false}? active" th:href="@{/aboutUs}">About Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white"  th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}">Users</a>
+              <a class="nav-link text-white trackGrafana" grafanaId="5" th:classappend="${false}? active" sec:authorize= "hasAnyRole('ADMIN','WORKER')" th:href="@{/user}">Users</a>
             </li>
             <hr>
             <li sec:authorize= "hasRole('USER')"><a class="nav-link text-white d-lg-none" href="/reservations/all">My Reservations</a></li>
