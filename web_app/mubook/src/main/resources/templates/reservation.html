@@ -53,10 +53,10 @@
                                 </div>
                                 <div class="username-div col-md text-center">
                                     <h5 class="mb-2 text-center align-middle" th:text="#{reservation.userId}"></h5>
-                                    <input class="m-2 fluid w-75" th:field="*{user.userId}"
+                                    <input class="m-2 fluid w-75 text-center" th:field="*{user.userId}"
                                         th:attr="value=${reserve.user != null? reserve.user.userId:''}"
                                         sec:authorize="hasAnyRole('ADMIN','WORKER')" />
-                                    <input class="m-2 fluid w-75" th:field="*{user.userId}"
+                                    <input class="m-2 fluid w-75 text-center" th:field="*{user.userId}"
                                         th:attr="value=${reserve.user != null? reserve.user.userId:''}"
                                         sec:authorize="hasAnyRole('USER')" readonly />
                                 </div>
