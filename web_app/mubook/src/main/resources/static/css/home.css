@@ -1,0 +1,19 @@
+
+.carousel-item {
+    height: 32rem;
+    background: #3D5A80;
+    position: relative;
+    color: white;
+}
+
+/*.container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 50px;
+}*/
+
+.carousel-caption > img {
+    max-width: 200px;
+}

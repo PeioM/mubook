@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle">My profile</title>
+</head>
+
+<body>
+    <header th:replace="include.html :: headercontent"></header>
+    <h4 th:text="${error}" class="container errorMsg"></h4>
+    <div class="container rounded bg-white mt-5 mb-5 border center">
+        <div class="row justify-content-center">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <div class="user-img-div">
+                        <img class="rounded mt-5 img-fluid" src="/images/userExample.jpg" alt="user profile image">
+                    </div>
+                    <span class="font-weight-bold" th:text="${userEdit.username}"></span>
+                    <span class="text-black-50" th:text="#{profile.id}"><span class="user-id" th:text="${userEdit.userId}"></span> </span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <form name="user-profile-form" th:action="@{'/user/edit'}" th:object="${userEdit}" method="post">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right" th:text="#{profile.settings}"></h4>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.id}"></label><input type="text"
+                                    class="form-control" th:field="*{userId}"
+                                    th:attr="value=${userEdit.userId != null? userEdit.userId:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.userType}"></label><input type="text"
+                                    name="flexRadioDefault" class="form-control"
+                                    th:attr="value=${userEdit.userType.userTypeId != null? userEdit.userType.userTypeId:''}"
+                                    readonly></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.name}"></label><input type="text"
+                                    class="form-control" th:field="*{name}"
+                                    th:attr="value=${userEdit.name != null? userEdit.name:''}" readonly></div>
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.surname}"></label><input type="text"
+                                    class="form-control" th:field="*{surname}"
+                                    th:attr="value=${userEdit.surname != null? userEdit.surname:''}" readonly></div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12"><label class="labels" th:text="#{profile.email}"></label><input type="email"
+                                    class="form-control" th:field="*{email}"
+                                    th:attr="value=${userEdit.email != null? userEdit.email:''}" autofocus></div>
+                            <div class="col-md-12"><label class="labels" th:text="#{profile.username}"></label><input type="text"
+                                    class="form-control" th:field="*{username}"
+                                    th:attr="value=${userEdit.username != null? userEdit.username:''}"></div>
+                        </div>
+                        <div class="row mt-3">
+                            <h5>Change Password</h5>
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.password}"></label><input type="password"
+                                    class="form-control" placeholder="" value="" id="password" name="password"></div>
+                            <div class="col-md-6"><label class="labels" th:text="#{profile.repeatPassword}"></label><input type="password"
+                                    class="form-control" value="" placeholder="" id="passwordRep" name="passwordRep">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6"><input type="checkbox" id="validate" name="validate"
+                                    th:checked="${userEdit.validated}" disabled><label for="validate" th:text="#{profile.validated}"> </label>
+                            </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <button class="btn salmon" type="submit" th:text="#{profile.saveProfile}"></button>
+                        </div>
+                    </form>
+                    <div class="incidents-div" style="overflow-x:auto">
+                        <table class="table table-striped">
+                            <caption th:text="#{profile.incidences}"></caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" th:text="#{profile.severity}"></th>
+                                    <th scope="col" th:text="#{profile.description}"></th>
+                                    <th class="w-25" scope="col" th:text="#{profile.date}"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="incidence, iterator: ${incidences}">
+                                    <th scope="row" th:text="${iterator.index}"></th>
+                                    <td><input type="text" th:attr="value=${incidence.incidenceSeverity.description}"
+                                            disabled></td>
+                                    <td><input type="text" th:attr="value=${incidence.description}" disabled> </td>
+                                    <td><input type="date" th:attr="value=${incidence.endDate}" disabled></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <footer th:replace="include.html :: footercontent"></footer>
+</body>
+
+</html>

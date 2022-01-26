@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle" th:text="#{searchItems.htmlTitle}"></title>
+</head>
+
+<body class="searchBody">
+<header th:replace="include.html :: headercontent"></header>
+<div class="container border bg-white rounded">
+    <div class="filterMenu">
+        <div class="filters container">
+<!--ITEM TYPE SELECTION-->
+            <div>
+                <br/>
+                <h4 id="defaultSearchTitle" th:if="${itemTypes != null}" th:text="#{searchItems.itemTypeFilter}"></h4>
+                <h4 id="itemTypeSearch" th:if="${actualItemType != null}" th:text="'Item Type: ' + ${actualItemType.description}"></h4>
+                <hr>
+            </div>
+            <div class="d-flex justify-content-center row m-3">
+                <div class="mt-2 col-md-3 d-flex justify-content-center" th:each="itemType : ${itemTypes}">
+                    <a th:href="@{/search/} + ${itemType.description}" class="filterOption">
+                        <span class="btn btn-secondary" th:text="${itemType.description}" style="font-size: 15px"></span>
+                    </a>
+                </div>
+            
+<!----------------------->
+<!---FILTERS SELECTION--->
+            <div class="especification-filters d-md-flex justify-content-center row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-2">
+                <!--FOR EACH-->
+                <div class="d-flex flex-row justify-content-center align-items-baseline" th:each="entry : ${specifications}">
+                    <select class="m-3 selectpicker border border-secondary rounded" multiple
+                            th:attr="title=${entry.key.description}, data-actions-box=true, specid=${entry.key.specificationId}">
+                        <option class="filterCheckBox" th:each="especValue : ${entry.value}" th:text="${especValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary filterOption trackGrafana" grafanaId="16" th:if="${specifications!=null}" id="filterButton" style="font-size: 15px" th:text="#{searchItems.filter}"></button>
+            </div>
+<!----------------------->
+<!-----CREATE BUTTON----->
+            <div class="createButton d-flex justify-content-center p-2 col-md-3">
+                <a th:href="@{/itemModel/add}"  class="trackGrafana" grafanaId="15">
+                    <span sec:authorize="hasAnyRole('ADMIN','WORKER')"
+                            class="btn btn-lg btn-block salmon" th:text="#{searchItems.createItem}"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+<!----------------------->
+<!----ITEM MODEL SHOW---->
+        <div class="container py-5">
+            <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
+            </div>
+        </div>
+<!----------------------->
+<!-----PAGE SELECTION---->
+        <div class="form-group w-25 p-3" id="pageSelector">
+            <label for="selectPage" th:text="#{searchItems.selectPage}"></label>
+            <select class="form-control filterOption" name="page" id="selectPage"></select>
+        </div>
+<!----------------------->
+    </div>
+</div>
+
+<footer th:replace="include.html :: footercontent"></footer>
+
+</body>

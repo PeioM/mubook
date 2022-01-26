@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle" th:text="#{reservation.htmlTitle}"></title>
+</head>
+
+<body>
+    <header th:replace="include.html :: headercontent"></header>
+    <div class="container rounded bg-white mt-3 mb-3 border center">
+        <div class="d-flex justify-content-center">
+            <form name="reservation-form" th:action="@{/reservations/add}" th:object="${reserve}" method="post">
+                <h3 class="text-center m-2" th:text="#{reservation.details}"></h3>
+                <div class="row">
+                    <div class="d-flex justify-content-center border-right col-md-6">
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                            <div class="item-name-div">
+                                <h5 th:text="'Book: '+${reserve.item.itemModel.name}"></h5>
+                                <input class="form-group w-25 text-center fluid" th:field="*{item.itemId}" th:attr="value=${reserve.item.itemId}" readonly />
+                            </div>
+                            <div class="user-img-div">
+                                <img class="mt-5 img-fluid" th:src="${reserve.item.itemModel.img}" alt="Item image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center col-md-6">
+                        <div class="row m-4 details-div d-flex justify-content-center">
+                            <h4 class="mb-2 text-center mb-2" th:text="#{reservation.itemDetails}"></h4>
+                            <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex gap-3">
+                                <div class="col-6 flex-grow bg-grey each-specification-div shadow p-1 mb-2 bg-body border rounded d-flex">
+                                    <label class="text-dark" th:text="#{reservation.bookId}"></label> <label
+                                        th:text="${reserve.item.itemModel.itemModelId}"></label>
+                                </div>
+                                <div class="col-6 flex-grow each-specification-div shadow p-1 mb-2 bg-body rounded border d-flex"
+                                    th:each="specificationList: ${reserve.item.itemModel.specificationLists}">
+                                    <label class="text-dark"
+                                        th:text="${specificationList.specification.description}"></label><span>:  </span> <label
+                                        th:text="${specificationList.value}"></label>
+                                </div>
+                            </div>
+                            <div class="dates row mb-2">
+                                <hr/>
+                                <div class="start-date-div col-md text-center">
+                                    <h5 class="mb-2 text-center align-middle" th:text="#{reservation.startDate}"></h5>
+                                    <input class="m-2 text-center fluid w-75" th:field="*{initDate}" th:attr="value=${reserve.initDate}" readonly />
+                                </div>
+                                <div class="end-date-div col-md text-center">
+                                    <h5 class="mb-2 text-center align-middle" th:text="#{reservation.endDate}"></h5>
+                                    <input class="m-2 text-center fluid w-75" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
+                                        sec:authorize="hasAnyRole('ADMIN','WORKER')" />
+                                    <input class="m-2 text-center fluid w-75" th:field="*{endDate}" th:attrappend="value=${reserve.endDate}"
+                                        sec:authorize="hasRole('USER')" readonly />
+                                </div>
+                                <div class="username-div col-md text-center">
+                                    <h5 class="mb-2 text-center align-middle" th:text="#{reservation.userId}"></h5>
+                                    <input class="m-2 fluid w-75 text-center" th:field="*{user.userId}"
+                                        th:attr="value=${reserve.user != null? reserve.user.userId:''}"
+                                        sec:authorize="hasAnyRole('ADMIN','WORKER')" />
+                                    <input class="m-2 fluid w-75 text-center" th:field="*{user.userId}"
+                                        th:attr="value=${reserve.user != null? reserve.user.userId:''}"
+                                        sec:authorize="hasAnyRole('USER')" readonly />
+                                </div>
+                            </div>      
+                        <div class="d-flex justify-content-center" th:if="${offer == 'offer'}">
+                            <button type="submit" class="btn btn-primary salmon trackGrafana" grafanaId="28" id="create-reservation-btn" th:text="#{reservation.confirm}"></button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer th:replace="include.html :: footercontent"></footer>
+</body>
+
+</html>

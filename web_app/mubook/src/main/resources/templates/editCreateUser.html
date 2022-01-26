@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle" th:text="#{editCreateUser.htmlTitle}"></title>
+</head>
+
+<body>
+    <header th:replace="include.html :: headercontent"></header>
+    <h4 th:text="${error}" class="container errorMsg"></h4>
+    <div class="container rounded bg-white mt-3 mb-3 border center">
+        <div class="row justify-content-center">
+            <div class="col-10 border-right">
+                <div class="row">
+                    <div class="col-lg-3 border-right">
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                            <h4 th:text="${#strings.toUpperCase(action)}"></h4>
+                            <div class="user-img-div">
+                                <img class="rounded mt-5 img-fluid" th:src="${userEdit.profileImg}"
+                                    alt="User image">
+                                <a th:if="${userEdit.dniImgPath != null}" th:href="@{${userEdit.dniImgPath}}" class="mt-2" target="_blank">See user DNI</a>
+                            </div>
+                            <span class="font-weight-bold" th:text="${userEdit.username}"></span>
+                            <span class="text-black-50" th:text="${userEdit.userId}"><span class="user-id"></span>
+                            </span>
+                            <span> </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 border-right">
+                        <div class="p-3 py-2">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="text-right" th:text="#{editCreateUser.profileSettings}"></h4>
+                            </div>
+                            <form name="user-profile-form" th:action="@{'/user/'+${action}}" th:object="${userEdit}"
+                                method="post">
+                                <div class="select-role">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            value="USER" id="flexRadioDefault1" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1" th:text="#{editCreateUser.user}"></label>
+                                    </div>
+                                    <div sec:authorize="hasRole('ADMIN')" class="form-check">
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            value="WORKER" id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Librarian
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="checkbox-validate">
+                                    <input type="checkbox" id="validated" name="validate-check" value="validated" th:checked="${userEdit.validated}">
+                                    <span th:text="#{editCreateUser.validated}"></span>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-12 d-none"><label class="labels" th:text="#{editCreateUser.id}">ID</label><input type="text"
+                                            class="form-control" placeholder="Name" th:field="*{userId}"
+                                            th:value="${userEdit.userId}"></div>
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.name}"></label><input type="text"
+                                            class="form-control" placeholder="Name" th:field="*{name}"
+                                            th:value="${userEdit.name}" autofocus></div>
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.surname}"></label><input type="text"
+                                            class="form-control" th:value="${userEdit.surname}" th:field="*{surname}"
+                                            placeholder="Example1 Example2"></div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-12"><label class="labels" th:text="#{editCreateUser.email}"></label><input type="email"
+                                            class="form-control" placeholder="example@example.com" th:field="*{email}"
+                                            th:value="${userEdit.email}"></div>
+                                    <div class="col-md-12"><label class="labels" th:text="#{editCreateUser.username}"></label><input type="text"
+                                            class="form-control" placeholder="username" value="" th:field="*{username}">
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.idCard}"></label><input type="text"
+                                            class="form-control" placeholder="12345678N" th:field="*{DNI}"
+                                            th:value="${userEdit.DNI}"></div>
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.birthDate}"></label><input
+                                            type="date" class="form-control" placeholder="username"
+                                            th:value="${userEdit.bornDate}" th:field="*{bornDate}" required></div>
+                                </div>
+                                <div class="row mt-3">
+                                    <h5>Change Password</h5>
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.password}"></label><input type="password"
+                                            class="form-control" placeholder="" value="" name="password"></div>
+                                    <div class="col-md-6"><label class="labels" th:text="#{editCreateUser.repeatPassword}"></label><input
+                                            type="password" class="form-control" value="" placeholder=""
+                                            name="passwordRep"></div>
+                                </div>
+                                <div class="mt-5 text-center">
+                                    <button class="btn salmon" type="submit" th:text="#{editCreateUser.saveUser}"></button>
+                                </div>
+                            </form>
+                            <hr>
+                            <div th:if="${action} eq 'edit'">
+                                <form th:action="@{'/user/incidenceAdd'}" th:object="${incidence}" method="post">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="text-right" th:text="#{editCreateUser.incidenceHistory}"></h5>
+                                    </div>
+
+                                    <div class="container">
+                                        <div id="data" class="row">
+                                            <span th:text="#{editCreateUser.incidenceSeverity}"></span>
+                                            <label class="col">
+                                                <select class="col form-control" name="severity">
+                                                    <optgroup label="Select Incidence severity">
+                                                        <option selected value="0"> - </option>
+                                                        <option name="severity" th:value="${severity.description}"
+                                                            th:text="${severity.description}"
+                                                            th:each="severity:${incidenceSeverities}"></option>
+                                                    </optgroup>
+                                                </select>
+                                            </label>
+                                            <span th:text="#{editCreateUser.description}"></span>
+                                            <label class="labels col"><input type="text" id="description"
+                                                    placeholder="Enter description" class="col form-control"
+                                                    th:value="${incidence.description}"
+                                                    th:field="*{description}"></label>
+                                            <span th:text="#{editCreateUser.incidenceDate}"></span>
+                                            <label class="labels col"><input type="date" id="date"
+                                                    placeholder="Enter date" class="col form-control"
+                                                    th:value="${incidence.initDate}" th:field="*{initDate}"
+                                                    required></label>
+                                            <label class="labels d-none col"><input type="text" id="user_id"
+                                                    th:value="${userEdit.userId}" name="userId"></label>
+                                            <button type="submit" id="addButton"
+                                                class="btn btn-primary salmon col-2 p-1" th:text="#{editCreateUser.add}"></button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="incidents-div" style="overflow-x:auto">
+                                    <table class="table table-striped">
+                                        <caption th:text="#{editCreateUser.incidenceTable}"></caption>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col" th:text="#{editCreateUser.severity}"></th>
+                                                <th scope="col" th:text="#{editCreateUser.description}"></th>
+                                                <th class="w-25" scope="col" th:text="#{editCreateUser.endDate}"></th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="incidence : ${incidences}">
+                                                <form th:action="'/user/incidenceDelete?id=' + ${incidence.incidenceId}"
+                                                    method="post">
+                                                    <td th:text="${incidence.incidenceId}"></td>
+                                                    <td th:text="${incidence.incidenceSeverity.description}"></td>
+                                                    <td th:text="${incidence.description}"></td>
+                                                    <td th:text="${incidence.endDate}"></td>
+                                                    <td> <button type="submit"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                width="16" height="16" fill="currentColor"
+                                                                class="bi bi-trash" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                                <path fill-rule="evenodd"
+                                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                            </svg></button></td>
+                                                </form>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 border-right">
+            </div>
+        </div>
+    </div>
+    <script src="../static/js/addSpecifications.js"></script>
+    <footer th:replace="include.html :: footercontent"></footer>
+</body>
+
+</html>

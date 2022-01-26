@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle" th:text="#{myReservations.htmlTitle}"></title>
+</head>
+
+<body class="reservationBody">
+    <header th:replace="include.html :: headercontent"></header>
+    <div class="container rounded bg-white mt-3 mb-3 border center">
+        <div class="d-flex align-items-end filterMenu container filters d-md-flex justify-content-right flex-row p-2">
+<!--SELECT ITEM MODEL-->
+            <div class="m-3">
+                <label class="px-3" for="selectReservationItemModel" tth:text="#{myReservations.selectItemModel}"></label>
+                <select id="selectReservationItemModel" class="form-select form m-2 filterOption">
+                    <optgroup label="">
+                        <option value="-" selected th:text="#{myReservations.allModels}"></option>
+                    </optgroup>
+                    <optgroup th:each="entry, stat : ${filters}" th:label="${entry.key.description}">
+                        <option th:value="'itemType-' + ${entry.key.itemTypeId}"
+                                th:text="'All ' + ${entry.key.description} + ' models'"></option>
+                        <option th:each="itemModel : ${entry.value}" th:text="${itemModel.name}"
+                                th:value="${itemModel.itemModelId}"></option>
+                    </optgroup>
+                </select>
+            </div>
+<!--SELECT ACTIVE-->
+            <div class="m-3 p-3">
+                <label for="checkBoxActive" th:text="#{myReservations.active}"></label>
+                <input type="checkbox" id="checkBoxActive" class="filterOption trackGrafana" grafanaId="21" checked >
+            </div>
+        </div>
+
+
+        <div class="container py-5" style="position: relative;">
+            <div id="resultBlock" class="row row-cols-1 row-cols-xs-2 row-cols-sm-3 row-cols-lg-4 d-flex justify-content-center gap-3">
+            </div>
+        </div>
+        <!-----PAGE SELECTION---->
+        <div class="form-group w-25 p-3" id="pageSelector">
+            <label for="selectPage" th:text="#{myReservations.selectPage}"></label>
+            <select class="form-control filterOption" name="page" id="selectPage"></select>
+        </div>
+        <!----------------------->
+    </div>
+    <footer th:replace="include.html :: footercontent"></footer>
+</body>
+</html>

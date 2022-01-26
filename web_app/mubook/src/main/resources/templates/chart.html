@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include.html :: headerfiles">
+    <title id="Ptitle" th:text="#{chart.htmlTitle}"></title>
+</head>
+<body>
+    <header th:replace="include.html :: headercontent"></header>
+    <div class="container d-flex justify-content-center align-items-center mb-4 mt-4 table-responsive">
+        <canvas id="chart-can" height="400" width="700" class="d-flex justify-content-center"></canvas>
+    </div>
+    <footer th:replace="include.html :: footercontent"></footer>
+</body>
+<script th:inline="javascript">
+    var labels = /*[[${key}]]*/ [];
+    var data = /*[[${value}]]*/ [];
+    var name = '[[${name}]]';
+    name = name.replace(/["']/g, "");
+    var chartType = '[[${type}]]';
+    chartType = chartType.replace(/["']/g, "");
+    
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: name,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: data,
+            }]
+        };
+        
+        var config = {
+        type: chartType,
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            
+            responsive: false,
+            maintainAspectRatio: true
+        }
+        };
+    
+        var myChart = new Chart(
+            document.getElementById('chart-can'),
+            config
+        );
+</script>
+</html>
