@@ -158,6 +158,7 @@ public class UserController {
             }
             UserActivity ua = userActivityDao.getUserActivity(1);
             user.setUserActivity(ua);
+            setRandomProfile(user);
             userDao.addUser(user);
             returnStr = "redirect:/user";
         } else {
