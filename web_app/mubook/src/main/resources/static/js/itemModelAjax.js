@@ -27,6 +27,9 @@ function updateItemModelsWithFilters(checkSelectedPage){
     let options = document.getElementsByClassName("filterCheckBox");
     let dataMap = new Map();
 
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
+
     //Get filters map
     for(let option of options){
         if(option.className.includes("selected")){
@@ -51,8 +54,10 @@ function updateItemModelsWithFilters(checkSelectedPage){
     ajaxCallGetItemModels(actionUrl, mapAsJson);
 }
 function updateItemModelsWithoutFilters(checkSelectedPage) {
-
     let actionUrl = "/ajax/filterItemModels/all/" + getSelectedPage(checkSelectedPage);
+
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
 
     ajaxCallGetItemModels(actionUrl, null);
 }
@@ -108,16 +113,11 @@ function updateItemModelPageWithFilters() {
     let itemType = itemTypeHeader.substring(itemTypeHeader.indexOf(':') + 2, itemTypeHeader.length);
     let actionUrl = "/ajax/filterItemModelsGetPages/" + itemType;
 
-    toggleFilters(document.getElementsByClassName("filterOption"));
-    loadingSearch();
-
     ajaxCallGetPages(actionUrl, null)
 }
 function updateItemModelPageWithoutFilters() {
     let actionUrl = "/ajax/filterItemModelsGetPages/all";
 
-    toggleFilters(document.getElementsByClassName("filterOption"));
-    loadingSearch();
     ajaxCallGetPages(actionUrl,null)
 }
 

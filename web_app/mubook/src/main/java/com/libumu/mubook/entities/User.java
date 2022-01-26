@@ -34,6 +34,8 @@ public class User {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "profile_img")
+    private String profileImg;
 
     @ManyToOne
     @JoinColumn(name = "user_type_id", nullable = false)
@@ -141,5 +143,13 @@ public class User {
 
     public void setUserActivity(UserActivity userActivity) {
         this.userActivity = userActivity;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 }

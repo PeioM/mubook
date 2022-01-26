@@ -2,15 +2,14 @@ package com.libumu.mubook.api;
 
 import com.libumu.mubook.dao.faq.FaqDao;
 import com.libumu.mubook.entities.Faq;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,8 +19,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class FaqControllerTest {
@@ -31,6 +29,7 @@ public class FaqControllerTest {
     @Autowired
     private FaqDao faqDao;
 
+    @Order(1)
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void showFaqs() throws Exception {
@@ -41,6 +40,7 @@ public class FaqControllerTest {
                 .andExpect(model().attributeExists("faq"));
     }
 
+    @Order(2)
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void createFaq() throws Exception {
@@ -52,6 +52,7 @@ public class FaqControllerTest {
         assertEquals(faqCreated.getQuestion(), "Testing?");
     }
 
+    @Order(3)
     @Test
     @WithMockUser(username = "admin", password = "admin", authorities = "ROLE_ADMIN")
     public void deleteFaq() throws Exception {

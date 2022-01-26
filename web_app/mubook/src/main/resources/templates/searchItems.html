@@ -40,7 +40,7 @@
             </div>
 <!----------------------->
 <!-----CREATE BUTTON----->
-            <div class="createButton d-flex justify-content-center p-2 col-md-3 filterOption">
+            <div class="createButton d-flex justify-content-center p-2 col-md-3">
                 <a th:href="@{/itemModel/add}"  class="trackGrafana" grafanaId="15">
                     <span sec:authorize="hasAnyRole('ADMIN','WORKER')"
                             class="btn btn-lg btn-block salmon" th:text="#{searchItems.createItem}"></span>
@@ -56,9 +56,9 @@
         </div>
 <!----------------------->
 <!-----PAGE SELECTION---->
-        <div class="form-group w-25 p-3 filterOption" id="pageSelector">
+        <div class="form-group w-25 p-3" id="pageSelector">
             <label for="selectPage" th:text="#{searchItems.selectPage}"></label>
-            <select class="form-control" name="page" id="selectPage"></select>
+            <select class="form-control filterOption" name="page" id="selectPage"></select>
         </div>
 <!----------------------->
     </div>

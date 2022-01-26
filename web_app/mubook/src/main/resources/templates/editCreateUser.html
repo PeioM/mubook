@@ -16,7 +16,7 @@
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                             <h4 th:text="${#strings.toUpperCase(action)}"></h4>
                             <div class="user-img-div">
-                                <img class="rounded mt-5 img-fluid" src="/images/userProfiles/1.png"
+                                <img class="rounded mt-5 img-fluid" th:src="${userEdit.profileImg}"
                                     alt="User image">
                                 <a th:href="@{${userEdit.dniImgPath}}" class="mt-2" target="_blank">See user DNI</a>
                             </div>

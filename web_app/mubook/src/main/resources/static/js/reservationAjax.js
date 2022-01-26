@@ -22,6 +22,9 @@ function updateReservations(checkSelectedPage){
     let active = document.getElementById("checkBoxActive").checked;
     actionUrl += itemModel+"/"+getSelectedPage(checkSelectedPage);
 
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
+
     ajaxCallGetReservations(actionUrl, {active: active});
 }
 
@@ -29,9 +32,6 @@ function updateReservationPages(){
     let itemModel = document.getElementById("selectReservationItemModel").value;
     let actionUrl = "/ajax/filterReservationsGetPages/" + itemModel;
     let active = document.getElementById("checkBoxActive").checked;
-
-    toggleFilters(document.getElementsByClassName("filterOption"));
-    loadingSearch();
 
     ajaxCallGetPages(actionUrl, {active: active})
 }

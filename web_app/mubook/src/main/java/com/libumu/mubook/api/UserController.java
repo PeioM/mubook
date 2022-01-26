@@ -31,7 +31,7 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
-    public final static String SERVER_UPLOAD_DIR = "src/main/resources/static/images/userProfilesCreated/";
+    public final static String SERVER_UPLOAD_DIR = "src/main/resources/static/images/userDniImages/";
 
     private final IncidenceSeverityDao incidenceSeverityDao;
     private final IncidenceDao incidenceDao;
@@ -80,8 +80,9 @@ public class UserController {
                     new File(pathStr); // Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    String imagePath = "/images/userProfilesCreated/" + user.getName().replace(" ", "_") + "_" + user.getSurname().replace(" ", "_") + extension;
+                    String imagePath = "/images/userProfilesCreated/" + user.getDNI() + extension;
                     user.setDniImgPath(imagePath);
+                    setRandomProfile(user);
                     // In case there is no error redirect to home
                     returnStr = "/index";
                 } catch (IOException e) {
@@ -103,6 +104,12 @@ public class UserController {
             model.addAttribute("error", error);
 
         return new ModelAndView(returnStr, new ModelMap(model));
+    }
+
+    private void setRandomProfile(User user) {
+        Random rand = new Random(new Date().getTime());
+        int image = rand.nextInt(13);
+        user.setProfileImg("/images/userProfiles/"+image+".png");
     }
 
     @PostMapping(path = "/create")

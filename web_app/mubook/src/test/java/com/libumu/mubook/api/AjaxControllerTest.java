@@ -6,7 +6,7 @@ import com.libumu.mubook.dao.buttonClick.ButtonClickDao;
 import com.libumu.mubook.entities.User;
 import com.libumu.mubook.entitiesAsClasses.ItemModelClass;
 import com.libumu.mubook.entitiesAsClasses.ReservationClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
@@ -27,7 +27,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@RunWith(SpringRunner.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureMockMvc
