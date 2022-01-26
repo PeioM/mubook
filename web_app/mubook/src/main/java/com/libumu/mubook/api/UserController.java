@@ -20,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class UserController {
         @RequestParam(value = "dniImg", required = false) MultipartFile file,
         WebRequest request) {
         //Return to user form in case there is any error
-        String returnStr = "/register";
+        String returnStr = "register";
         String error = checkUserDuplicated(user);
         if (error.length() == 0) {
             if (file == null || file.isEmpty() || file.getOriginalFilename() == null
@@ -76,15 +77,15 @@ public class UserController {
                 String filename = file.getOriginalFilename();
                 String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
                 try {
-                    String pathStr = SERVER_UPLOAD_DIR + user.getName().replace(" ", "_") + "_" + user.getSurname().replace(" ", "_") + extension;
+                    String pathStr = SERVER_UPLOAD_DIR + user.getDNI() + extension;
                     new File(pathStr); // Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    String imagePath = "/images/userProfilesCreated/" + user.getDNI() + extension;
-                    user.setDniImgPath(imagePath);
+                    String imageSrc = "/images/userDniImages/"+user.getDNI() + extension;
+                    user.setDniImgPath(imageSrc);
                     setRandomProfile(user);
-                    // In case there is no error redirect to home
-                    returnStr = "/index";
+                    // In case there is no send to main page
+                    returnStr = "redirect:/index";
                 } catch (IOException e) {
                     error = "Error uploading file";
                 }
@@ -99,15 +100,17 @@ public class UserController {
         }
         // Si se añade usuario notificar informacion sobre el
         // Sino, rellenar campos con los valores introducidos
-        model.addAttribute("user", user);
-        if (error.length() != 0)
+
+        if (returnStr.equals("register")) {
+            model.addAttribute("user", user);
             model.addAttribute("error", error);
+        }
 
         return new ModelAndView(returnStr, new ModelMap(model));
     }
 
     private void setRandomProfile(User user) {
-        Random rand = new Random(new Date().getTime());
+        SecureRandom rand = new SecureRandom();
         int image = rand.nextInt(13);
         user.setProfileImg("/images/userProfiles/"+image+".png");
     }
