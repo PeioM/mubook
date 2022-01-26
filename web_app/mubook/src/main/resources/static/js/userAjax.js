@@ -22,6 +22,9 @@ function updateUsers(checkSelectedPage){
     let userTypeId = document.getElementById("selectUserType").value;
     actionUrl += userTypeId+"/"+getSelectedPage(checkSelectedPage);
 
+    toggleFilters(document.getElementsByClassName("filterOption"));
+    loadingSearch();
+
     ajaxCallGetUsers(actionUrl, containStr);
 }
 
@@ -29,9 +32,6 @@ function updateUserPages(){
     let containStr = document.getElementById("searchTextBox").value;
     let userTypeId = document.getElementById("selectUserType").value;
     let actionUrl = "/ajax/filterUsersGetPages/" + userTypeId;
-
-    toggleFilters(document.getElementsByClassName("filterOption"));
-    loadingSearch();
 
     ajaxCallGetPages(actionUrl, {containStr: containStr})
 }
@@ -51,7 +51,7 @@ function ajaxCallGetUsers(actionUrl, containStr){
                     '<div class="card col mb-4 shadow bg-light p-0"> ' +
                     '    <a href="/user/'+user.userId+'/edit" ' +
                     '           class="userCardLink text-decoration-none text-dark trackGrafana" grafanaId="18"> ' +
-                    '       <img class="card-img-top img-fluid" src="/images/userProfiles/1.png" alt="User '+user.userId+' profile image">' +
+                    '       <img class="card-img-top img-fluid" src="'+user.profileImg+'" alt="User '+user.userId+' profile image">' +
                     '       <div class="card-body text-center"> ' +
                     '           <h5 class="card-title">ID: '+user.userId+'</h5> ' +
                     '           <div class="p-1"> ' +
