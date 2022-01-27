@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Controller
 public class HomeController implements ServletContextAware {
-    public final static String IMAGE_UPLOAD_DIR = "../src/main/resources/static/images/";
+    public final static String IMAGE_UPLOAD_DIR = "src/main/resources/static/images/";
     private ServletContext servletContext;
     private final NewsDao newsDao;
     private final ItemModelDao itemModelDao;
