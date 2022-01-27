@@ -32,7 +32,7 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
-    public final static String SERVER_UPLOAD_DIR = "/home/dniImg/";
+    public final static String DNI_IMAGES_DIR = HomeController.IMAGE_UPLOAD_DIR + "dniImages/";
 
     private final IncidenceSeverityDao incidenceSeverityDao;
     private final IncidenceDao incidenceDao;
@@ -77,11 +77,11 @@ public class UserController {
                 String filename = file.getOriginalFilename();
                 String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
                 try {
-                    String pathStr = SERVER_UPLOAD_DIR + user.getDNI() + extension;
+                    String pathStr = DNI_IMAGES_DIR + user.getDNI() + extension;
                     new File(pathStr); // Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    String imageSrc = "~/home/dniImg/"+user.getDNI() + extension;
+                    String imageSrc = "/images/userDniImages/"+user.getDNI() + extension;
                     user.setDniImgPath(imageSrc);
                     setRandomProfile(user);
                     // In case there is no send to main page
