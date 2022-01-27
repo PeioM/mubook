@@ -13,7 +13,7 @@
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                     <div class="user-img-div">
-                        <img class="rounded mt-5 img-fluid" src="/images/userExample.jpg" alt="user profile image">
+                        <img class="rounded mt-5 img-fluid" th:src="${userEdit.profileImg}" alt="user profile image">
                     </div>
                     <span class="font-weight-bold" th:text="${userEdit.username}"></span>
                     <span class="text-black-50" th:text="#{profile.id}"><span class="user-id" th:text="${userEdit.userId}"></span> </span>
