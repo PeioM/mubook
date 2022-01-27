@@ -215,6 +215,8 @@ public class UserController {
             user.setDniImgPath(bdUser.getDniImgPath());
             user.setDNI(bdUser.getDNI());
             user.setBornDate(bdUser.getBornDate());
+            user.setProfileImg(bdUser.getProfileImg());
+
             if (bdUser.getUserType().getUserTypeId().equals("ADMIN")) {
                 user.setUserType(userTypeDao.getUserType("ADMIN"));
             } else {
