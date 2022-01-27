@@ -49,7 +49,7 @@ function ajaxCallGetReservations(actionUrl, data){
             for (let reservation of reservations){
                 let today = new Date();
                 let cancelHTML ='';
-                if(reservation.initDate > today.getTime()){
+                if(reservation.initDate + (1000*60*60*24) > today.getTime()){
                     cancelHTML = '<div class="card-bottom d-flex justify-content-center m-2"> ' +
                         '    <form action="/reservations/delete?id='+reservation.reservationId+'" method="post"> ' +
                         '        <button type="submit" class="btn btn-secondary trackGrafana" grafanaId="23">Cancel Reservation</button> ' +
