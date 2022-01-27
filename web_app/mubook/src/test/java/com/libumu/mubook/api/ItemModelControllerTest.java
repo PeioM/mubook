@@ -119,7 +119,7 @@ public class ItemModelControllerTest {
                 .param("img", "testing")
                 .param("itemType.itemTypeId", "2"));
 
-        ItemModel itemModelCreated = itemModelDao.getItemModel(itemModelDao.getTopId());
+        ItemModel itemModelCreated = itemModelDao.getItemModel(id);
         assertEquals(itemModelCreated.getDescription(), "testing");
 
         mvc.perform(multipart("/itemModel/edit").file(file).with(csrf())
@@ -130,7 +130,7 @@ public class ItemModelControllerTest {
                 .param("img", "testingEdit")
                 .param("itemType.itemTypeId", "2"));
 
-        ItemModel itemModelEdit = itemModelDao.getItemModel(itemModelDao.getTopId());
+        ItemModel itemModelEdit = itemModelDao.getItemModel(id);
         assertEquals(itemModelEdit.getDescription(), "testingEdit");
 
         itemModelDao.deleteItemModel(itemModelEdit);
