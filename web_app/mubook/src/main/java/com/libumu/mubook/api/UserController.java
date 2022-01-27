@@ -32,7 +32,7 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
-    public final static String DNI_IMAGES_DIR = HomeController.IMAGE_UPLOAD_DIR + "dniImages/";
+    public final static String DNI_IMAGES_DIR = HomeController.IMAGE_UPLOAD_DIR + "userDniImages/";
 
     private final IncidenceSeverityDao incidenceSeverityDao;
     private final IncidenceDao incidenceDao;
