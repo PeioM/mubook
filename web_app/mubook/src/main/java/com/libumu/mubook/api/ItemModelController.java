@@ -34,7 +34,7 @@ import java.util.Objects;
 @Controller
 @RequestMapping(path = "/itemModel")
 public class ItemModelController {
-    public final String ITEMS_IMAGES_DIR = "src/main/resources/static/images/createdItems/";
+    public final String ITEMS_IMAGES_DIR = HomeController.IMAGE_UPLOAD_DIR + "createdItems/";
 
     private final ItemModelDao itemModelDao;
     private final ItemTypeDao itemTypeDao;
