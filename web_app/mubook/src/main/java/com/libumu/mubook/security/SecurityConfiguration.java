@@ -20,7 +20,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final static int REMEMBER_ME_TIME = 86400;  //1 day
     public final static int ENCRYPT_STRENGTH = 10;
-    private final static String[] ADMIN_MATCHERS = {"/data/**", "/reservations/delete"};
+    private final static String[] ADMIN_MATCHERS = {"/data/**"};
 
     private final static String[] ADMIN_WORKER_MATCHERS = {"/user/**", "/news/**","/itemModel/**",
             "/ajax/**", "/faq/**", "/userType/**"};
