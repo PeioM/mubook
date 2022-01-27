@@ -87,8 +87,7 @@ public class ReservationControllerTest {
 
         Long id = reservationDao.getTopId();
 
-        mvc.perform(post("/reservations/delete").with(csrf())
-                .param("id", String.valueOf(id)));
+        mvc.perform(get("/reservations/"+String.valueOf(id)+"/delete").with(csrf()));
         Reservation reservationDeleted = reservationDao.getReservation(id);
         assertNull(reservationDeleted);
     }

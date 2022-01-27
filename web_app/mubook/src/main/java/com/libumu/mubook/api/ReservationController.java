@@ -196,11 +196,18 @@ public class ReservationController {
         return "redirect:/index";
     }
 
-    @PostMapping(path="/delete")
-    public String deleteReservation(@RequestParam("id") long reservationId){
-        reservationDao.deleteReservation(reservationId);
+    @GetMapping(path="/{id}/delete")
+    public String deleteReservation(@PathVariable("id") String reservationId){
 
-        return "redirect:/reservations/list?itemModelName=&active=true";
+        Reservation reservation = reservationDao.getReservation(Long.parseLong(reservationId));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userDao.getUserByUsername(username);
+        if(user.getUserType().getUserTypeId().equals("ADMIN") || reservation.getUser().getUserId().equals(user.getUserId())){
+            reservationDao.deleteReservation(Long.parseLong(reservationId));
+        }
+
+        return "redirect:/reservations/all";
     }
 
 }
