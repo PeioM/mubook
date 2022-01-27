@@ -76,7 +76,7 @@ public class DataController {
 
         model.addAttribute("key", results.getKeys().toArray(new String[0]));
         model.addAttribute(valueStr, results.getValues().toArray(new Long[0]));
-        model.addAttribute("name", "Reservations of item model each type");
+        model.addAttribute("name", "Reservations of items by type");
         model.addAttribute("type", "bar");
 
         return chartStr;
@@ -100,7 +100,7 @@ public class DataController {
 
         model.addAttribute("key", key.toArray(new String[0]));
         model.addAttribute(valueStr, value.toArray(new Long[0]));
-        model.addAttribute("name", "Reservations of item model each type");
+        model.addAttribute("name", "Reservations of items by type");
         model.addAttribute("type", "bar");
 
         return chartStr;
@@ -172,7 +172,7 @@ public class DataController {
 
         model.addAttribute("key", keyList.toArray(new String[0]));
         model.addAttribute(valueStr, valueList.toArray(new Long[0]));
-        model.addAttribute("name", "Reservations of item model each model");
+        model.addAttribute("name", "Reservations of item models");
         model.addAttribute("type", "bar");
 
         return chartStr;
@@ -206,7 +206,7 @@ public class DataController {
 
         model.addAttribute("key", key.toArray(new String[0]));
         model.addAttribute(valueStr, value.toArray(new Integer[0]));
-        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("name", "Reservations of item model by month");
         model.addAttribute("type", "bar");
 
         return chartStr;
@@ -270,7 +270,7 @@ public class DataController {
 
         model.addAttribute("key", key.toArray(new String[0]));
         model.addAttribute(valueStr, value.toArray(new Long[0]));
-        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("name", "Reservations of item model by month");
         model.addAttribute("type", "line");
 
         return chartStr;
@@ -294,7 +294,7 @@ public class DataController {
 
         model.addAttribute("key", key.toArray(new String[0]));
         model.addAttribute(valueStr, value.toArray(new Integer[0]));
-        model.addAttribute("name", "Reservations of item model each month");
+        model.addAttribute("name", "Reservations of item model by month");
         model.addAttribute("type", "line");
 
         return chartStr;
