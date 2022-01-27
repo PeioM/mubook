@@ -32,7 +32,7 @@ import java.nio.file.StandardCopyOption;
 @Controller
 @RequestMapping(path = "/user")
 public class UserController {
-    public final static String SERVER_UPLOAD_DIR = "src/main/resources/static/images/userDniImages/";
+    public final static String DNI_IMAGES_DIR = HomeController.IMAGE_UPLOAD_DIR + "userDniImages/";
 
     private final IncidenceSeverityDao incidenceSeverityDao;
     private final IncidenceDao incidenceDao;
@@ -77,7 +77,7 @@ public class UserController {
                 String filename = file.getOriginalFilename();
                 String extension = Objects.requireNonNull(filename).substring(filename.lastIndexOf("."));
                 try {
-                    String pathStr = SERVER_UPLOAD_DIR + user.getDNI() + extension;
+                    String pathStr = DNI_IMAGES_DIR + user.getDNI() + extension;
                     new File(pathStr); // Create dest file to save
                     Path path = Paths.get(pathStr);
                     Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -215,6 +215,8 @@ public class UserController {
             user.setDniImgPath(bdUser.getDniImgPath());
             user.setDNI(bdUser.getDNI());
             user.setBornDate(bdUser.getBornDate());
+            user.setProfileImg(bdUser.getProfileImg());
+
             if (bdUser.getUserType().getUserTypeId().equals("ADMIN")) {
                 user.setUserType(userTypeDao.getUserType("ADMIN"));
             } else {

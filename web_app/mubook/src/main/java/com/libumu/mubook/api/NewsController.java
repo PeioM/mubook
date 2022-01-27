@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 @Controller
 @RequestMapping("/news")
 public class NewsController implements ServletContextAware {
-    public final String NEWS_IMAGES_DIR = "src/main/resources/static/images/news/";
+    public final String NEWS_IMAGES_DIR = HomeController.IMAGE_UPLOAD_DIR + "news/";
     private ServletContext servletContext;
     @Autowired
     NewsDao newsDao;
