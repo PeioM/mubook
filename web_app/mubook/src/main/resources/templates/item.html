@@ -85,10 +85,13 @@
                                                 <img class="me-1"
                                                     src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
                                                     th:attr="alt=${username} + ' avatar'" width="40" height="40" />
-                                                <span><small class="font-weight-bold text-primary"
-                                                        th:text="${comentario.user.username}"></small>
+                                                <span>
+                                                    <a th:attr="href= ${#authorization.expression('hasRole(''ADMIN'')')}? '/user/'+${comentario.user.userId}+'/edit': '#'">
+                                                        <small class="font-weight-bold text-primary" th:text="${comentario.user.username}"></small>
+                                                    </a>
                                                     <small class="font-weight-bold"
-                                                        th:text="${comentario.content}"></small></span>
+                                                        th:text="${comentario.content}"></small>
+                                                </span>
                                             </div> <small
                                                 th:text="${#dates.format(comentario.date, 'yyyy-MM-dd')}"></small>
                                         </div>
